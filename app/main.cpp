@@ -22,8 +22,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "ActionHandler.hpp"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
