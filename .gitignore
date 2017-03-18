@@ -1,38 +1,38 @@
-# C++ objects and libs
+build/*
+lib/*
+bin/*
+.idea/*
+cmake-build-debug/*
+docs/html/*
+docs/latex/*
 
+# Compiled Object files
 *.slo
 *.lo
 *.o
-*.a
-*.la
-*.lai
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
 *.so
-*.dll
 *.dylib
+*.dll
 
-# Qt-es
+# Fortran module files
+*.mod
+*.smod
 
-/.qmake.cache
-/.qmake.stash
-*.pro.user
-*.pro.user.*
-*.qbs.user
-*.qbs.user.*
-*.moc
-moc_*.cpp
-qrc_*.cpp
-ui_*.h
-Makefile*
-*build-*
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
 
-# QtCreator
-
-*.autosave
-
-# QtCtreator Qml
-*.qmlproject.user
-*.qmlproject.user.*
-
-# QtCtreator CMake
-CMakeLists.txt.user
+# Executables
+*.exe
+*.out
+*.app
 
