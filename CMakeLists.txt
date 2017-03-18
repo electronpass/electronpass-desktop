@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.0)
 project(electronpass)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -21,7 +21,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 endif()
 
 # Find Qt5
-set(REQUIRED_QT_VERSION "5.8.0")
+set(REQUIRED_QT_VERSION "5.5.0")
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS
         Core Qml Quick Widgets QuickControls2)
 
