@@ -1,7 +1,7 @@
-file(GLOB_RECURSE SOURCES *.cpp *.hpp asdf.qrc "qml/*.qml")
+file(GLOB_RECURSE SOURCES *.cpp *.hpp electronpass.qrc "qml/*.qml")
 
-add_executable(asdf ${SOURCES} ActionHandler.cpp ActionHandler.hpp)
-target_link_libraries(asdf
+add_executable(electronpass ${SOURCES})
+target_link_libraries(electronpass
         Qt5::Core
         Qt5::Qml
         Qt5::Quick
