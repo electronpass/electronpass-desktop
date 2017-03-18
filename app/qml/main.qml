@@ -24,36 +24,27 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("ElectronPass")
 
-    Material.theme: Material.Dark
-    Material.accent: Material.Teal
+    Material.theme: Material.Light
+    Material.accent: Material.Cyan
 
-
-    SwipeView {
-        id: swipeView
-        anchors.fill: parent
-        currentIndex: tabBar.currentIndex
-
-        Page1 {
-        }
-
-        Page {
-            Label {
-                text: qsTr("Second page")
-                anchors.centerIn: parent
+    header: ToolBar {
+            Material.background: Material.color(Material.Blue, Material.Shade500)
+            RowLayout {
+                anchors.fill: parent
+                Label {
+                    text: "ElectronPass"
+                    elide: Label.ElideRight
+                    leftPadding: 16
+                    horizontalAlignment: Qt.AlignHLeft
+                    verticalAlignment: Qt.AlignVCenter
+                    Layout.fillWidth: true
+                }
+                ToolButton {
+                    text: qsTr("⋮")
+                    onClicked: menu.open()
+                }
             }
         }
-    }
-
-    footer: TabBar {
-        id: tabBar
-        currentIndex: swipeView.currentIndex
-        TabButton {
-            text: qsTr("First")
-        }
-        TabButton {
-            text: qsTr("Second")
-        }
-    }
 }
