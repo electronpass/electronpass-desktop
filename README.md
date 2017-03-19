@@ -9,7 +9,8 @@ Qt >= 5.8.0 with at least the following modules is required:
 - [qttools](http://code.qt.io/cgit/qt/qttools.git/)
 
 To install all dependencies on Arch Linux:
-```sudo pacman -S qt5-default qt5-declarative qt5-quickcontrols2```
+
+    sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols2
 
 ## Building
 
