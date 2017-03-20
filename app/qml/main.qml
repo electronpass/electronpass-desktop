@@ -30,13 +30,22 @@ ApplicationWindow {
     Material.accent: Material.Cyan
 
     header: ToolBar {
-            Material.background: Material.color(Material.Blue, Material.Shade500)
+            Material.background: Material.color(Material.Grey, Material.Shade800)
+            Image {
+                id: image
+                x: 8
+                y: 8
+                width: 32
+                height: 32
+                mipmap: true
+                source: "qrc:/res/logo_transparent_256.png"
+            }
             RowLayout {
                 anchors.fill: parent
                 Label {
                     text: "ElectronPass"
                     elide: Label.ElideRight
-                    leftPadding: 16
+                    leftPadding: 48
                     horizontalAlignment: Qt.AlignHLeft
                     verticalAlignment: Qt.AlignVCenter
                     Layout.fillWidth: true

@@ -12,7 +12,7 @@ set(APPLE_SUPPRESS_X11_WARNING ON)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -Wall -Wextra -Wold-style-cast -pedantic")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wold-style-cast -pedantic")
 
 # qCDebug() uses zero variadic arguments, so we need to disable this warning
 # as it would become an error with -Werror
