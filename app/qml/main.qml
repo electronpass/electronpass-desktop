@@ -56,4 +56,35 @@ ApplicationWindow {
                 }
             }
         }
+
+    RowLayout {
+        id: layout
+        anchors.fill: parent
+        spacing: 0
+        Rectangle {
+            color: Material.color(Material.Red, Material.Shade500)
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.minimumWidth: 250
+            Layout.preferredWidth: 250
+            Layout.maximumWidth: 250
+            Layout.minimumHeight: 150
+            Text {
+                anchors.centerIn: parent
+                text: parent.width + "x" + parent.height
+            }
+        }
+        Rectangle {
+            color: Material.color(Material.Blue, Material.Shade500)
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            Layout.minimumWidth: 100
+            Layout.preferredWidth: 200
+            Layout.preferredHeight: 100
+            Text {
+                anchors.centerIn: parent
+                text: parent.width + "x" + parent.height
+            }
+        }
+    }
 }
