@@ -57,30 +57,40 @@ ApplicationWindow {
             }
         }
 
+    // basic devider
     RowLayout {
-        id: layout
+        id: main_layout
         anchors.fill: parent
         spacing: 0
         Rectangle {
-            color: Material.color(Material.Red, Material.Shade500)
             Layout.fillWidth: true
             Layout.fillHeight: true
-            Layout.minimumWidth: 250
+            Layout.minimumWidth: 220
             Layout.preferredWidth: 250
-            Layout.maximumWidth: 250
-            Layout.minimumHeight: 150
+            Layout.maximumWidth: 300
+            Layout.minimumHeight: 250
             Text {
                 anchors.centerIn: parent
                 text: parent.width + "x" + parent.height
             }
         }
+
         Rectangle {
-            color: Material.color(Material.Blue, Material.Shade500)
+            color: Material.color(Material.Grey, Material.Shade400)
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.topMargin: 8
+            anchors.bottomMargin: 8
+            width: 1
+            x: 100
+        }
+
+        Rectangle {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumWidth: 100
-            Layout.preferredWidth: 200
-            Layout.preferredHeight: 100
+            Layout.preferredWidth: 390
+            Layout.minimumHeight: 250
             Text {
                 anchors.centerIn: parent
                 text: parent.width + "x" + parent.height
