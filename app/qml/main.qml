@@ -51,8 +51,32 @@ ApplicationWindow {
                     Layout.fillWidth: true
                 }
                 ToolButton {
+                    id: newButton
+                    Image {
+                        anchors.centerIn: parent
+                        source: "qrc:/res/ic_action_add.png"
+                        mipmap: true
+                    }
+                }
+                ToolButton {
+                    id: menuButton
                     text: qsTr("⋮")
                     onClicked: menu.open()
+
+                    //TODO: menu is probably too big, scale won't work and is a bad sollution anyway
+                    Menu {
+                        id: menu
+                        y: parent.height
+                        MenuItem {
+                            text: "Lock"
+                        }
+                        MenuItem {
+                            text: "Sync now"
+                        }
+                        MenuItem {
+                            text: "Settings"
+                        }
+                    }
                 }
             }
         }

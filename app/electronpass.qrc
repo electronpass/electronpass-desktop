@@ -21,5 +21,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/ItemsList.qml</file>
         <file>qml/ItemDetails.qml</file>
         <file>res/logo_transparent_256.png</file>
+        <file>res/ic_action_add.png</file>
     </qresource>
 </RCC>
