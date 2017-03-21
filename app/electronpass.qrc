@@ -18,6 +18,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 <RCC>
     <qresource prefix="/">
         <file>qml/main.qml</file>
+        <file>qml/ItemsList.qml</file>
+        <file>qml/ItemDetails.qml</file>
         <file>res/logo_transparent_256.png</file>
     </qresource>
 </RCC>

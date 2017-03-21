@@ -69,10 +69,7 @@ ApplicationWindow {
             Layout.preferredWidth: 250
             Layout.maximumWidth: 300
             Layout.minimumHeight: 250
-            Text {
-                anchors.centerIn: parent
-                text: parent.width + "x" + parent.height
-            }
+            ItemsList{}
         }
 
         Rectangle {
@@ -91,10 +88,7 @@ ApplicationWindow {
             Layout.minimumWidth: 100
             Layout.preferredWidth: 390
             Layout.minimumHeight: 250
-            Text {
-                anchors.centerIn: parent
-                text: parent.width + "x" + parent.height
-            }
+            ItemDetails {}
         }
     }
 }
