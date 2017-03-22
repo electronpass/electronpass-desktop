@@ -19,13 +19,17 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.8
+            - sources: 'ppa:beineri/opt-qt571-trusty'
           packages:
             - clang-3.8
+            - qt57base
+            - qt57graphicaleffects
+            - qt57quickcontrols2
+            - qt57svg
+            - qt57tools
+            - qt57declarative
       env: COMPILER=clang++-3.8
 before_install:
-  - sudo add-apt-repository --yes ppa:beineri/opt-qt571-trusty
-  - sudo apt-get update -qq
-  - sudo apt-get --force-yes install qt57base qt57graphicaleffects qt57quickcontrols2 qt57svg qt57tools qt57declarative
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
   - source $QT_ENV_SCRIPT
 
