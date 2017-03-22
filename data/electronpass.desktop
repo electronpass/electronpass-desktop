@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=ElectronPass
+Comment=Store your passwords securely.
+Keywords=encryption;secure;encrypt;password;passwords;pass
+Exec=electronpass
+Icon=electronpass
+Terminal=false
+Type=Application
+Categories=Utility;Security;Privacy;Qt;

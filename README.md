@@ -8,6 +8,8 @@ Qt >= 5.8.0 with at least the following modules is required:
 - [qtquickcontrols2](http://code.qt.io/cgit/qt/qtquickcontrols2.git)
 - [qttools](http://code.qt.io/cgit/qt/qttools.git/)
 
+[Extra CMake modules (>=1.7.0)](https://github.com/KDE/extra-cmake-modules) is required for building the project.
+
 To install all dependencies on Arch Linux:
 
     sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols2
@@ -22,7 +24,9 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos.
     mkdir build; cd build
     cmake ..
     make electronpass -j8
-
+    # optionally install electronpass
+    sudo make install
+ 
 Additional Ubuntu note: You might have to execute the binary from terminal.
 
 ## License

@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
+cmake_policy(VERSION 3.4.1)
 project(electronpass)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -9,6 +10,19 @@ set(CMAKE_AUTORCC ON)
 
 # Apple-specific configuration
 set(APPLE_SUPPRESS_X11_WARNING ON)
+
+# ECM
+find_package(ECM 1.7.0 REQUIRED NO_MODULE)
+list(APPEND CMAKE_MODULE_PATH
+        "${ECM_MODULE_PATH}"
+        "${ECM_KDE_MODULE_DIR}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
+        )
+
+# Macros
+include(KDEInstallDirs)
+include(KDECompilerSettings)
+include(KDECMakeSettings)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
@@ -26,3 +40,4 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS
         Core Qml Quick Widgets QuickControls2)
 
 add_subdirectory(app)
+add_subdirectory(data)

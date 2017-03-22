@@ -14,3 +14,6 @@ target_link_libraries(electronpass
         Qt5::Quick
         Qt5::Widgets
         Qt5::QuickControls2)
+
+install(TARGETS electronpass
+        DESTINATION ${BIN_INSTALL_DIR})
