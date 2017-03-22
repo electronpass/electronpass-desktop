@@ -1,4 +1,11 @@
-file(GLOB_RECURSE SOURCES *.cpp *.hpp electronpass.qrc "qml/*.qml")
+# file(GLOB_RECURSE SOURCES *.cpp *.hpp electronpass.qrc "qml/*.qml")
+set(SOURCES
+        main.cpp
+        action_handler.cpp
+        electronpass.qrc
+        qml/ItemDetails.qml
+        qml/ItemsList.qml
+        qml/main.qml)
 
 add_executable(electronpass ${SOURCES})
 target_link_libraries(electronpass

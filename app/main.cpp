@@ -20,7 +20,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QQmlContext>
 #include <QQuickStyle>
 
-#include "ActionHandler.hpp"
+#include "action_handler.hpp"
 
 int main(int argc, char *argv[]) {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -35,17 +35,18 @@ int main(int argc, char *argv[]) {
     // app.setDesktopFileName(QLatin1String("io.electronpass.desktop"));
 
     // Set the X11 WML_CLASS so X11 desktops can find the desktop file
-    qputenv("RESOURCE_NAME", "io.electronpass.desktop");
+    // TODO: actualy provide a desktop file
+    // qputenv("RESOURCE_NAME", "io.electronpass.desktop");
 
     if (QQuickStyle::name().isEmpty())
         QQuickStyle::setStyle("Material");
 
     QQmlApplicationEngine engine;
 
-    ActionHandler actionHandler(argv[0]);
+    ActionHandler action_handler(argv[0]);
 
     QQmlContext *ctx = engine.rootContext();
-    ctx->setContextProperty("actionHandler", &actionHandler);
+    ctx->setContextProperty("actionHandler", &action_handler);
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     return app.exec();

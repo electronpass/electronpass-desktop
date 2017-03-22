@@ -15,22 +15,14 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ACTION_HANDLER_HPP
-#define ACTION_HANDLER_HPP
+#include "action_handler.hpp"
 
-#include <QObject>
+#include <QProcess>
 
-class ActionHandler : public QObject {
-Q_OBJECT
-public:
-    explicit ActionHandler(QString action, QObject *parent = 0);
+ActionHandler::ActionHandler(QString action, QObject *parent) : QObject(parent), m_action(action) {
+    // Nothing needed here
+}
 
-public slots:
-
-    bool newWindow();
-
-private:
-    QString m_action;
-};
-
-#endif // ACTION_HANDLER_HPP
+bool ActionHandler::newWindow() {
+    return QProcess::startDetached(m_action);
+}
