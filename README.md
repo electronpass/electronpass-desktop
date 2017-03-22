@@ -1,4 +1,6 @@
 # ElectronPass
+[![Build Status](https://travis-ci.org/electronpass/electronpass-desktop.svg?branch=master)](https://travis-ci.org/electronpass/electronpass-desktop)
+
 Desktop client written in qml.
 
 ## Dependencies
