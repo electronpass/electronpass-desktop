@@ -25,7 +25,7 @@ matrix:
 before_install:
   - sudo add-apt-repository --yes ppa:beineri/opt-qt571-trusty
   - sudo apt-get update -qq
-  - sudo apt-get --force-yes install qt57-meta-full
+  - sudo apt-get --force-yes install qt57base qt57graphicaleffects qt57quickcontrols2 qt57svg qt57tools qt57declarative
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
   - source $QT_ENV_SCRIPT
 
@@ -35,12 +35,10 @@ install:
 
 script:
   - mkdir build
-  - mkdir build_cipher
   - cd build
   - cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
   - make
   - # AppImage generation
-  - cd ../build
   - sudo apt-get -y install checkinstall
   - sudo checkinstall --pkgname=app --pkgversion="1" --pkgrelease="1" --backup=no --fstrans=no --default --deldoc
   - mkdir appdir ; cd appdir
@@ -51,6 +49,6 @@ script:
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass-bundle-non-qt-libs
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -bundle-non-qt-libs
   - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -appimage
   # - curl --upload-file ./DB*.AppImage https://transfer.sh/sqlitebrowser-git.$(git rev-parse --short HEAD)-x86_64.AppImage
