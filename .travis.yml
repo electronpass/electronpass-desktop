@@ -15,9 +15,12 @@ addons:
       - ubuntu-toolchain-r-test
       - llvm-toolchain-precise-3.8
       - sourceline: 'ppa:beineri/opt-qt571-trusty'
+      - sourceline: 'deb http://cz.archive.ubuntu.com/ubuntu xenial main universe'
     packages:
       - clang-3.8
       - g++-5
+      - extra-cmake-modules
+      - checkinstall
       - qt57base
       - qt57graphicaleffects
       - qt57quickcontrols2
@@ -38,12 +41,11 @@ script:
   - cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
   - make
   - # AppImage generation
-  - sudo apt-get -y install checkinstall
   - sudo checkinstall --pkgname=app --pkgversion="1" --pkgrelease="1" --backup=no --fstrans=no --default --deldoc
   - mkdir appdir ; cd appdir
   - dpkg -x ../app_1-1_amd64.deb . ; find .
-  #- cp ./usr/share/applications/sqlitebrowser.desktop .
-  #- cp ./usr/share/icons/hicolor/256x256/apps/sqlitebrowser.png .
+  - cp ./usr/share/applications/electronpass.desktop .
+  - cp ./usr/share/icons/hicolor/scalable/apps/electronpass.png .
   - cd ..
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
