@@ -30,8 +30,6 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos.
 Optionally install ElectronPass:
 
     sudo make install
- 
-Additional Ubuntu note: You might have to execute the binary from terminal.
 
 ## License
 Code in this project is licensed under [GNU GPLv3 license](https://github.com/electronpass/electronpass-desktop/blob/master/LICENSE). Some third party files are subjective to their respective license.
