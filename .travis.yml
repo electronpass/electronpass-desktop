@@ -49,6 +49,5 @@ script:
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -bundle-non-qt-libs
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -appimage
+  - ./linuxdeployqt*.AppImage ../bin/electronpass -appimage -bundle-non-qt-libs -verbose=2
   # - curl --upload-file ./DB*.AppImage https://transfer.sh/sqlitebrowser-git.$(git rev-parse --short HEAD)-x86_64.AppImage
