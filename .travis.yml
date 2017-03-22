@@ -46,10 +46,10 @@ script:
   - mkdir appdir ; cd appdir
   - dpkg -x ../app_1-1_amd64.deb . ; find .
   - cp ./usr/share/applications/electronpass.desktop .
-  - cp ./usr/share/icons/hicolor/scalable/apps/electronpass.png .
+  - cp ./usr/share/icons/hicolor/scalable/apps/electronpass.svg .
   - cd ..
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
   - ./linuxdeployqt*.AppImage ../bin/electronpass -appimage -bundle-non-qt-libs -verbose=2
-  # - curl --upload-file ./DB*.AppImage https://transfer.sh/sqlitebrowser-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+  - curl --upload-file ./DB*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
