@@ -22,13 +22,10 @@ matrix:
           packages:
             - clang-3.8
       env: COMPILER=clang++-3.8
-addons:
-  apt:
-    sources:
-      - sourceline: 'ppa:beineri/opt-qt58-trusty'
-    packages:
-      - qt58-meta
 before_install:
+sudo add-apt-repository --yes ppa:beineri/opt-qt571-trusty
+  - sudo apt-get update -qq
+  - sudo apt-get --force-yes install qt57-meta-full
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
   - source $QT_ENV_SCRIPT
 
@@ -54,6 +51,6 @@ script:
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/sqlitebrowser -bundle-non-qt-libs
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/sqlitebrowser -appimage
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass-bundle-non-qt-libs
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -appimage
   # - curl --upload-file ./DB*.AppImage https://transfer.sh/sqlitebrowser-git.$(git rev-parse --short HEAD)-x86_64.AppImage
