@@ -40,6 +40,7 @@ script:
   - cd build
   - cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
   - make
+  - sudo make install
   - # AppImage generation
   - sudo checkinstall --pkgname=app --pkgversion="1" --pkgrelease="1" --backup=no --fstrans=no --default --deldoc
   - mkdir appdir ; cd appdir
