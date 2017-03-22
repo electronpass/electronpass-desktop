@@ -16,7 +16,6 @@ addons:
       - llvm-toolchain-precise-3.8
       - sourceline: 'ppa:beineri/opt-qt571-trusty'
       - sourceline: 'deb http://cz.archive.ubuntu.com/ubuntu xenial main universe'
-      - sourceline: 'ppa:george-edison55/cmake-3.x'
     packages:
       - clang-3.8
       - g++-5
