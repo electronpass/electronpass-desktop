@@ -26,7 +26,9 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos.
     mkdir build; cd build
     cmake ..
     make electronpass -j8
-    # optionally install electronpass
+    
+Optionally install ElectronPass:
+
     sudo make install
  
 Additional Ubuntu note: You might have to execute the binary from terminal.
