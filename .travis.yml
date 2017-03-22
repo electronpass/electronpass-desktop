@@ -19,7 +19,7 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-precise-3.8
-            - sources: 'ppa:beineri/opt-qt571-trusty'
+            - sourceline: 'ppa:beineri/opt-qt571-trusty'
           packages:
             - clang-3.8
             - qt57base
