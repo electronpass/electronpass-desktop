@@ -46,7 +46,7 @@ script:
   - mkdir -p ./appdir
   - mkdir build
   - cd build
-  - cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
+  - cmake -DCMAKE_INSTALL_PREFIX:PATH=../appdir/. ..
   - make -j4
   - sudo make INSTALL_ROOT=../appdir install ; sudo chown -R $USER ../appdir ; find ../appdir/
   - cd ../
