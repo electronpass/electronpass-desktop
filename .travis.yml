@@ -26,7 +26,6 @@ addons:
       - qt57quickcontrols2
       - qt57svg
       - qt57declarative
-      - qt57wayland
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
   - source $QT_ENV_SCRIPT
