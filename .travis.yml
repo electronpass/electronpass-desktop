@@ -2,10 +2,6 @@ language: cpp
 sudo: required
 dist: trusty
 
-cache:
-  directories:
-    - /var/cache/apt/archives/*.deb
-
 matrix:
   fast_finish: true
   include:
