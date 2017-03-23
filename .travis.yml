@@ -14,18 +14,18 @@ addons:
     sources:
       - ubuntu-toolchain-r-test
       - llvm-toolchain-precise-3.8
-      - sourceline: 'ppa:beineri/opt-qt571-trusty'
+      - sourceline: 'ppa:beineri/opt-qt58-trusty'
       - sourceline: 'deb http://cz.archive.ubuntu.com/ubuntu xenial main universe'
     packages:
       - clang-3.8
       - g++-5
       - extra-cmake-modules
       - checkinstall
-      - qt57base
-      - qt57graphicaleffects
-      - qt57quickcontrols2
-      - qt57svg
-      - qt57declarative
+      - qt58base
+      - qt58graphicaleffects
+      - qt58quickcontrols2
+      - qt58svg
+      - qt58declarative
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
   - source $QT_ENV_SCRIPT
@@ -59,5 +59,7 @@ script:
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -bundle-non-qt-libs -appimage -verbose=3 -qmldir=$(readlink -f /opt/qt5*/qml/)
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -bundle-non-qt-libs -appimage -verbose=1 -qmldir=$(readlink -f /opt/qt5*/qml/)
+
+  # upload image to transfer.sh
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
