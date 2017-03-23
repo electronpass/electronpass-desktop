@@ -25,7 +25,6 @@ addons:
       - qt57graphicaleffects
       - qt57quickcontrols2
       - qt57svg
-      - qt57tools
       - qt57declarative
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
@@ -60,5 +59,6 @@ script:
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -appimage -bundle-non-qt-libs
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -bundle-non-qt-libs
+  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -appimage
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
