@@ -24,7 +24,6 @@ addons:
       - clang-3.8
       - g++-5
       - extra-cmake-modules
-      - checkinstall
       - qt58base
       - qt58graphicaleffects
       - qt58quickcontrols2
@@ -46,24 +45,21 @@ script:
   - export PATH=${TRAVIS_BUILD_DIR}/cmake/bin:${PATH}
   - cmake --version
 
-  # build and install project
+  # build binaries and generate appimage
+  - mkdir -p ./appdir
   - mkdir build
   - cd build
   - cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr ..
-  - make
-  - sudo make install
-
-  # generate appimage
-  - sudo checkinstall --pkgname=app --pkgversion="1" --pkgrelease="1" --backup=no --fstrans=no --default --deldoc
-  - mkdir appdir ; cd appdir
-  - dpkg -x ../app_1-1_amd64.deb . ; find .
-  - cp ./usr/share/applications/electronpass.desktop .
-  - cp ./usr/share/icons/hicolor/scalable/apps/electronpass.svg .
-  - cd ..
-  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/3/linuxdeployqt-3-x86_64.AppImage"
+  - make -j4
+  - sudo make INSTALL_ROOT=../appdir install ; sudo chown -R $USER ../appdir ; find ../appdir/
+  - cd ../
+  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt*.AppImage ./appdir/usr/bin/electronpass -bundle-non-qt-libs -appimage -verbose=2 -qmldir=$(readlink -f /opt/qt5*/qml/)
+  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -qmldir=. -verbose=2
+  # - rm ./appdir/io.liri.Browser.png # Workaround for linuxedeloyqt bug
+  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=. -verbose=2
+  - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
 
   # upload image to transfer.sh
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
