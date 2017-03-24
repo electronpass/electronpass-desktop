@@ -3,7 +3,6 @@ sudo: required
 dist: trusty
 
 matrix:
-  fast_finish: true
   include:
     - compiler: gcc
       env: COMPILER=g++-5 CXX=g++-5
