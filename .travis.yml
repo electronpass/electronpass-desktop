@@ -25,6 +25,13 @@ addons:
       - qt58quickcontrols2
       - qt58svg
       - qt58declarative
+
+env:
+  - BINTRAY_USER=zigapk
+  - BINTRAY_REPO=electronpass-desktop
+  - BINTRAY_REPO_OWNER=electronpass
+  # API key is defined in Travis control panel to keep it secure
+
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
   - source $QT_ENV_SCRIPT
@@ -57,4 +64,11 @@ script:
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
 
   # upload image to transfer.sh
+  # NOTE: transfer.sh images are for testing purposes only, since they do not provide updates yet!
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+
+  # set up image updates via zsync and push image to Bintray
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then wget https://raw.githubusercontent.com/probonopd/AppImages/master/bintray.sh; fi
+  - if [ "$TRAVIS_BRANCH" = "master" ]; then ./bintray.sh "ElectronPass*.AppImage"; fi
+
+
