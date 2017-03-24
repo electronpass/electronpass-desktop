@@ -26,12 +26,6 @@ addons:
       - qt58svg
       - qt58declarative
 
-env:
-  - BINTRAY_USER=zigapk
-  - BINTRAY_REPO=electronpass-desktop
-  - BINTRAY_REPO_OWNER=electronpass
-  # API key is defined in Travis control panel to keep it secure
-
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
   - source $QT_ENV_SCRIPT
