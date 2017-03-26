@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop">
+    <id>electronpass.desktop</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>GPL-3.0+</project_license>
+    <name>ElectronPass</name>
+    <summary>Store your passwords securely.</summary>
+    <description>
+        <p>
+            <!-- TODO: Write a better description that isn't a copy of the summary -->
+            Store your passwords securely.
+        </p>
+    </description>
+    <screenshots>
+        <!-- TODO: Add screenshots -->
+    </screenshots>
+    <!--
+     Validate with `appstream-util validate *.appdata.xml`
+    -->
+    <releases>
+        <release version="0.0.1" timestamp="1490548514">
+            <description>
+                Test release of the app. Features include:
+
+                <ul>
+                    <li>Runs sometimes</li>
+                    <li>Doesn't do anything (bad)</li>
+                </ul>
+            </description>
+            ​    </release>
+    </releases>
+    <kudos>
+        <!-- TODO: add kudos -->
+    </kudos>
+    <url type="homepage">http://electronpass.github.io</url>
+</component>
