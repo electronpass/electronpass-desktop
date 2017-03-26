@@ -61,10 +61,7 @@ script:
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
 
   # set up image updates via zsync and push image to Bintray
-  - echo "$CXX" && echo "$TRAVIS_BRANCH"
-  - ls -al
   - if [ "$CXX" = "g++-5" ] && [ "$TRAVIS_BRANCH" = "master" ]; then wget https://raw.githubusercontent.com/probonopd/AppImages/master/bintray.sh && chmod +x bintray.sh; fi
-  - if [ "$CXX" = "g++-5" ] && [ "$TRAVIS_BRANCH" = "master" ]; then echo master && echo "$TRAVIS_BRANCH"; fi
   - if [ "$CXX" = "g++-5" ] && [ "$TRAVIS_BRANCH" = "master" ]; then ./bintray.sh "ElectronPass-x86_64.AppImage"; fi
   - ls -al
 
