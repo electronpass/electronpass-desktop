@@ -63,7 +63,7 @@ script:
 
   # set up image updates via zsync and push image to Bintray
   - if [ "$CXX" = "g++-5" ] && [ "$TRAVIS_BRANCH" = "master" ]; then wget https://raw.githubusercontent.com/probonopd/AppImages/master/bintray.sh && chmod +x bintray.sh; fi
-  - if [ "$CXX" = "g++-5" ] && [ "$TRAVIS_BRANCH" = "master" ]; then ./bintray.sh "ElectronPass-x86_64.AppImage"; fi
+  - if [ "$CXX" = "g++-5" ] && [ "$TRAVIS_BRANCH" = "master" ]; then bash -e bintray.sh "ElectronPass-x86_64.AppImage"; fi
   - ls -al
 
 
