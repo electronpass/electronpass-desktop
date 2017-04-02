@@ -3,7 +3,18 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Material 2.1
 
-Text {
-    anchors.centerIn: parent
-    text: "ITEMS\n" + parent.width + "x" + parent.height
+ListView {
+    id: listView
+    anchors.fill: parent
+    ScrollBar.vertical: ScrollBar {
+        id: scrollBar
+        active: true
+    }
+
+    model: 20
+
+    delegate: ItemDelegate {
+        text: modelData
+        width: listView.width - scrollBar.width
+    }
 }
