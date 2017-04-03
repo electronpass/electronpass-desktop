@@ -92,22 +92,23 @@ ApplicationWindow {
         }
 
     // basic devider
-    GridLayout {
+    RowLayout {
         id: main_layout
         anchors.fill: parent
-        rows: 1
-        columnSpacing: 0
+        spacing: 0
         ItemsList {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumWidth: 220
             Layout.preferredWidth: 250
-            Layout.maximumWidth: 300
+            Layout.maximumWidth: 250
             Layout.minimumHeight: 250
+            anchors.right: viewDivider.left
         }
 
         Rectangle {
-            color: (settings.theme == 1) ? Material.color(Material.Grey, Material.Shade800) : Material.color(Material.Grey, Material.Shade400)
+            id: viewDivider
+            color: Material.color(Material.Grey, Material.Shade400)
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.topMargin: 8

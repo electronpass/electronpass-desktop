@@ -5,7 +5,8 @@ import QtQuick.Controls.Material 2.1
 
 ListView {
     id: listView
-    anchors.fill: parent
+    anchors.left: parent.left
+    anchors.right: viewDivider.left
     ScrollBar.vertical: ScrollBar {
         id: scrollBar
         active: true
