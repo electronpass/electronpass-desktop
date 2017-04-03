@@ -35,21 +35,12 @@ ApplicationWindow {
     header: ToolBar {
             id: toolbar
             visible: false
-            Image {
-                id: image
-                x: 8
-                y: 8
-                width: 32
-                height: 32
-                mipmap: true
-                source: "qrc:/res/logo_transparent_256.png"
-            }
             RowLayout {
                 anchors.fill: parent
                 Label {
                     text: "ElectronPass"
                     elide: Label.ElideRight
-                    leftPadding: 48
+                    leftPadding: 16
                     horizontalAlignment: Qt.AlignHLeft
                     verticalAlignment: Qt.AlignVCenter
                     Layout.fillWidth: true
