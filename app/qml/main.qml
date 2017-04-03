@@ -33,6 +33,7 @@ ApplicationWindow {
 
 
     header: ToolBar {
+            visible: false
             Material.background: Material.color(Material.Grey, Material.Shade800)
             Image {
                 id: image
@@ -120,17 +121,12 @@ ApplicationWindow {
         }
     }
 
-    Rectangle {
-        width: window.width
-        height: 100
-        color: Material.color(Material.Red, Material.Shade500)
-        ItemsList{}
-    }
+    Lock {}
 
     Settings {
         id: settings
         // 1 for dark theme, anything else for light
-        property int theme: 1
+        property int theme: 0
     }
 
     SettingsDialog {
