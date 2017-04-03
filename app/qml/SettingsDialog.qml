@@ -18,6 +18,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 import QtQuick 2.2
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.1
+import Qt.labs.settings 1.0
 
 Dialog {
     title: qsTr("Settings")
@@ -30,12 +31,20 @@ Dialog {
     width: Math.min(parent.width * 0.7, 600)
     height: Math.min(parent.height * 0.7, 400)
 
-    onAccepted: {
-    }
-
     ColumnLayout {
         id: settingsList
 
+        Switch {
+            id: themeSwitch
+            text: qsTr("Dark theme (restart application to apply)")
+            checked: settings.theme
+        }
+
         width: parent.width
     }
+
+    Component.onDestruction: {
+        settings.theme = themeSwitch.checked
+    }
+
 }
