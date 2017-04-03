@@ -7,16 +7,15 @@ ListView {
     id: listView
     anchors.left: parent.left
     anchors.right: viewDivider.left
-    ScrollBar.vertical: ScrollBar {
-        id: scrollBar
+    ScrollIndicator.vertical: ScrollIndicator {
+        id: scrollIndicator
         active: true
-        visible: false
     }
 
     model: 20
 
     delegate: ItemDelegate {
         text: modelData
-        width: listView.width - scrollBar.width
+        width: listView.width - scrollIndicator.width
     }
 }
