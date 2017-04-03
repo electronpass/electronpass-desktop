@@ -22,7 +22,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/ItemDetails.qml</file>
         <file>qml/Lock.qml</file>
         <file>qml/SettingsDialog.qml</file>
+        <file>res/logo_transparent_64.png</file>
         <file>res/logo_transparent_256.png</file>
+        <file>res/logo_transparent_dark_64.png</file>
         <file>res/ic_action_add.png</file>
     </qresource>
 </RCC>

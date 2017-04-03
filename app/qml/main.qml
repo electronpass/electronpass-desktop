@@ -33,6 +33,7 @@ ApplicationWindow {
 
 
     header: ToolBar {
+            id: toolbar
             visible: false
             Image {
                 id: image
@@ -72,6 +73,11 @@ ApplicationWindow {
                         y: parent.height
                         MenuItem {
                             text: "Lock"
+                            onTriggered: {
+                                lock.visible = true;
+                                toolbar.visible = false;
+                                lock.setFocus();
+                            }
                         }
                         MenuItem {
                             text: "Sync now"
@@ -119,7 +125,7 @@ ApplicationWindow {
         }
     }
 
-    Lock {}
+    Lock { id: lock}
 
     Settings {
         id: settings

@@ -12,12 +12,32 @@ Rectangle {
 
     GridLayout {
         anchors.centerIn: parent
-        rows: 1
-        columnSpacing: 0
+        columns: 1
+        rowSpacing: 64
 
-        Text {
+        Image {
             anchors.centerIn: parent
-            text: "ElectronPass"
+            mipmap: true
+            source: (settings.theme == 1) ? "qrc:/res/logo_transparent_64.png" : "qrc:/res/logo_transparent_dark_64.png"
+        }
+
+        TextField {
+            id: passInput
+            focus: true
+            placeholderText: qsTr("Type password to unlock")
+            echoMode: TextInput.Password
+            horizontalAlignment: TextInput.AlignHCenter
+            Keys.onReturnPressed: {
+                // TODO: validate password
+                lock.visible = false;
+                toolbar.visible = true;
+                passInput.clear();
+            }
         }
     }
+
+    function setFocus(a) {
+        passInput.forceActiveFocus();
+    }
+
 }
