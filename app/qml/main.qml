@@ -18,6 +18,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
+import Qt.labs.settings 1.0
 import QtQuick.Controls.Material 2.1
 
 ApplicationWindow {
@@ -25,9 +26,12 @@ ApplicationWindow {
     width: 640
     height: 480
     title: qsTr("ElectronPass")
+    id: window
 
-    Material.theme: Material.Light
+//    Material.theme: Material.Light
+    Material.theme: (settings.theme == 1) ? Material.Dark : Material.Light
     Material.accent: Material.Cyan
+
 
     header: ToolBar {
             Material.background: Material.color(Material.Grey, Material.Shade800)
@@ -75,6 +79,7 @@ ApplicationWindow {
                         }
                         MenuItem {
                             text: "Settings"
+                            onTriggered: settingsDialog.open();
                         }
                     }
                 }
@@ -114,5 +119,22 @@ ApplicationWindow {
             Layout.minimumHeight: 250
             ItemDetails {}
         }
+    }
+
+    Rectangle {
+        width: window.width
+        height: 100
+        color: Material.color(Material.Red, Material.Shade500)
+        ItemsList{}
+    }
+
+    Settings {
+        id: settings
+        // 1 for dark theme, anything else for light
+        property int theme: 1
+    }
+
+    SettingsDialog {
+            id: settingsDialog
     }
 }

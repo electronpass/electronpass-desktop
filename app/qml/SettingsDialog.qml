@@ -1,4 +1,4 @@
-<!--
+/*
 This file is part of ElectronPass.
 
 ElectronPass is free software: you can redistribute it and/or modify
@@ -13,15 +13,29 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
--->
+*/
 
-<RCC>
-    <qresource prefix="/">
-        <file>qml/main.qml</file>
-        <file>qml/ItemsList.qml</file>
-        <file>qml/ItemDetails.qml</file>
-        <file>qml/SettingsDialog.qml</file>
-        <file>res/logo_transparent_256.png</file>
-        <file>res/ic_action_add.png</file>
-    </qresource>
-</RCC>
+import QtQuick 2.2
+import QtQuick.Layouts 1.0
+import QtQuick.Controls 2.1
+
+Dialog {
+    title: qsTr("Settings")
+
+    x: (parent.width - width) / 2
+    y: (parent.height - height) / 2
+
+    modal: true
+
+    width: Math.min(parent.width * 0.7, 600)
+    height: Math.min(parent.height * 0.7, 400)
+
+    onAccepted: {
+    }
+
+    ColumnLayout {
+        id: settingsList
+
+        width: parent.width
+    }
+}
