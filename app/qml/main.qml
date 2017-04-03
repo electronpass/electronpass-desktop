@@ -34,7 +34,6 @@ ApplicationWindow {
 
     header: ToolBar {
             visible: false
-            Material.background: Material.color(Material.Grey, Material.Shade800)
             Image {
                 id: image
                 x: 8
@@ -87,22 +86,22 @@ ApplicationWindow {
         }
 
     // basic devider
-    RowLayout {
+    GridLayout {
         id: main_layout
         anchors.fill: parent
-        spacing: 0
-        Rectangle {
+        rows: 1
+        columnSpacing: 0
+        ItemsList {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumWidth: 220
             Layout.preferredWidth: 250
             Layout.maximumWidth: 300
             Layout.minimumHeight: 250
-            ItemsList{}
         }
 
         Rectangle {
-            color: Material.color(Material.Grey, Material.Shade400)
+            color: (settings.theme == 1) ? Material.color(Material.Grey, Material.Shade800) : Material.color(Material.Grey, Material.Shade400)
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.topMargin: 8
@@ -111,13 +110,12 @@ ApplicationWindow {
             x: 100
         }
 
-        Rectangle {
+        ItemDetails {
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumWidth: 100
             Layout.preferredWidth: 390
             Layout.minimumHeight: 250
-            ItemDetails {}
         }
     }
 

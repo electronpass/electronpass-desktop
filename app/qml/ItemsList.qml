@@ -9,6 +9,7 @@ ListView {
     ScrollBar.vertical: ScrollBar {
         id: scrollBar
         active: true
+        visible: false
     }
 
     model: 20

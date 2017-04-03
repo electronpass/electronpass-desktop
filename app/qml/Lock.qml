@@ -7,5 +7,17 @@ Rectangle {
     width: window.width
     height: window.height
 
-    color: (settings.theme == 1) ? Material.color(Material.Grey, Material.Shade800): Material.color(Material.Grey, Material.Shade100)
+    // color has to be set manualy, because layouts are transparent and rectangle doesn't respect material theme
+    color: (settings.theme == 1) ? Material.color(Material.Grey, Material.Shade900) : Material.color(Material.Grey, Material.Shade100)
+
+    GridLayout {
+        anchors.centerIn: parent
+        rows: 1
+        columnSpacing: 0
+
+        Text {
+            anchors.centerIn: parent
+            text: "ElectronPass"
+        }
+    }
 }
