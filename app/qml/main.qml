@@ -28,7 +28,6 @@ ApplicationWindow {
     title: qsTr("ElectronPass")
     id: window
 
-//    Material.theme: Material.Light
     Material.theme: (settings.theme == 1) ? Material.Dark : Material.Light
     Material.accent: Material.Cyan
 
