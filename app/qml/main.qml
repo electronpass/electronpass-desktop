@@ -30,15 +30,18 @@ ApplicationWindow {
 
     Material.theme: (settings.theme == 1) ? Material.Dark : Material.Light
     Material.accent: Material.Cyan
+    Material.primary: (settings.theme == 1) ? Material.color(Material.Blue, Material.Shade900) : Material.color(Material.Blue, Material.Shade800)
 
 
     header: ToolBar {
             id: toolbar
             visible: false
+
             RowLayout {
                 anchors.fill: parent
                 Label {
                     text: "ElectronPass"
+                    color: "white"
                     elide: Label.ElideRight
                     leftPadding: 16
                     horizontalAlignment: Qt.AlignHLeft
@@ -55,7 +58,11 @@ ApplicationWindow {
                 }
                 ToolButton {
                     id: menuButton
-                    text: qsTr("⋮")
+                    Image {
+                        anchors.centerIn: parent
+                        source: "qrc:/res/ic_action_menu.png"
+                        mipmap: true
+                    }
                     onClicked: menu.open()
 
                     //TODO: menu is probably too big, scale won't work and is a bad sollution anyway
@@ -93,7 +100,6 @@ ApplicationWindow {
             Layout.minimumWidth: 220
             Layout.preferredWidth: 250
             Layout.maximumWidth: 250
-            Layout.minimumHeight: 250
             anchors.right: viewDivider.left
         }
 
@@ -113,7 +119,6 @@ ApplicationWindow {
             Layout.fillHeight: true
             Layout.minimumWidth: 100
             Layout.preferredWidth: 390
-            Layout.minimumHeight: 250
         }
     }
 
