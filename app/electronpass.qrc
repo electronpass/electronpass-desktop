@@ -22,10 +22,15 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/ItemDetails.qml</file>
         <file>qml/Lock.qml</file>
         <file>qml/SettingsDialog.qml</file>
+        <file>qml/DeleteConfirmationDialog.qml</file>
         <file>res/logo_transparent_64.png</file>
         <file>res/logo_transparent_256.png</file>
         <file>res/logo_transparent_dark_64.png</file>
         <file>res/ic_action_add.png</file>
         <file>res/ic_action_menu.png</file>
+        <file>res/ic_action_edit.png</file>
+        <file>res/ic_action_edit_dark.png</file>
+        <file>res/ic_action_delete.png</file>
+        <file>res/ic_action_delete_dark.png</file>
     </qresource>
 </RCC>
