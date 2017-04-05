@@ -34,13 +34,6 @@ install:
   - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.8" CC="clang-3.8"; fi
 
 script:
-  # Install a recent CMake
-  - CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
-  - mkdir cmake
-  - wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-  - export PATH=${TRAVIS_BUILD_DIR}/cmake/bin:${PATH}
-  - cmake --version
-
   # build binaries and generate appimage
   - mkdir -p ./appdir
   - mkdir build
@@ -59,6 +52,3 @@ script:
 
   # upload image to transfer.sh
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
-
-
-
