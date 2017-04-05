@@ -31,12 +31,10 @@ int main(int argc, char *argv[]) {
     app.setOrganizationDomain(QLatin1String("electronpass.github.io"));
     app.setApplicationName(QLatin1String("ElectronPass"));
 
-    // TODO: actualy provide a desktop file
-    // app.setDesktopFileName(QLatin1String("io.electronpass.desktop"));
+    app.setDesktopFileName(QLatin1String("electronpass.desktop"));
 
     // Set the X11 WML_CLASS so X11 desktops can find the desktop file
-    // TODO: actualy provide a desktop file
-    // qputenv("RESOURCE_NAME", "io.electronpass.desktop");
+    qputenv("RESOURCE_NAME", "electronpass.desktop");
 
     if (QQuickStyle::name().isEmpty())
         QQuickStyle::setStyle("Material");
