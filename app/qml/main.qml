@@ -96,11 +96,9 @@ ApplicationWindow {
         spacing: 0
         ItemsList {
             Layout.fillWidth: true
-            Layout.fillHeight: true
             Layout.minimumWidth: 220
             Layout.preferredWidth: 250
             Layout.maximumWidth: 250
-            anchors.right: viewDivider.left
         }
 
         Rectangle {
