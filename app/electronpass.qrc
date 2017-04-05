@@ -32,5 +32,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>res/ic_action_edit_dark.png</file>
         <file>res/ic_action_delete.png</file>
         <file>res/ic_action_delete_dark.png</file>
+        <file>res/lock_background_dark.jpg</file>
     </qresource>
 </RCC>

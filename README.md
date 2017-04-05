@@ -33,3 +33,5 @@ Optionally install ElectronPass:
 
 ## License
 Code in this project is licensed under [GNU GPLv3 license](https://github.com/electronpass/electronpass-desktop/blob/master/LICENSE). Some third party files are subjective to their respective license.
+
+Images, used in this project are either part of [Material design icons](https://github.com/google/material-design-icons) or obtained from free wallpaper site  [WallpaperStop](http://www.wallpaperstop.com). 
