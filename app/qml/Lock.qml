@@ -16,7 +16,7 @@ Image {
         width: window.width
         height: window.height
         color: "black"
-        opacity: 0.9
+        opacity: 0.85
 
         GridLayout {
             anchors.centerIn: parent
