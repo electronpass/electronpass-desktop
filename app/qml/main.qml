@@ -28,6 +28,9 @@ ApplicationWindow {
     title: qsTr("ElectronPass")
     id: window
 
+    // load icon font
+    FontLoader { id: materialIconsFont; source: "qrc:/res/fonts/MaterialIcons-Regular.ttf"}
+
     Material.theme: (settings.theme == 1) ? Material.Dark : Material.Light
     Material.accent: Material.Cyan
     Material.primary: (settings.theme == 1) ? Material.color(Material.Blue, Material.Shade900) : Material.color(Material.Blue, Material.Shade800)
@@ -36,33 +39,34 @@ ApplicationWindow {
     header: ToolBar {
             id: toolbar
             visible: false
+            Material.theme: Material.Dark
 
             RowLayout {
                 anchors.fill: parent
                 Label {
                     text: "ElectronPass"
-                    color: "white"
                     elide: Label.ElideRight
                     leftPadding: 16
                     horizontalAlignment: Qt.AlignHLeft
                     verticalAlignment: Qt.AlignVCenter
                     Layout.fillWidth: true
                 }
+                TextField {
+                    id: searchInput
+                    font.pixelSize: 14
+                    placeholderText: qsTr(" Search")
+                }
                 ToolButton {
                     id: newButton
-                    Image {
-                        anchors.centerIn: parent
-                        source: "qrc:/res/ic_action_add.png"
-                        mipmap: true
-                    }
+                    font.family: materialIconsFont.name
+                    font.pixelSize: 22
+                    text: qsTr("\uE145")
                 }
                 ToolButton {
                     id: menuButton
-                    Image {
-                        anchors.centerIn: parent
-                        source: "qrc:/res/ic_action_menu.png"
-                        mipmap: true
-                    }
+                    font.family: materialIconsFont.name
+                    font.pixelSize: 22
+                    text: qsTr("\uE5D4")
                     onClicked: menu.open()
 
                     //TODO: menu is probably too big, scale won't work and is a bad sollution anyway

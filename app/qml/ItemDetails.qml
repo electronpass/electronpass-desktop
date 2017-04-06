@@ -29,18 +29,14 @@ ColumnLayout {
                 Layout.fillWidth: true
             }
             ToolButton {
-                Image {
-                    anchors.centerIn: parent
-                    source: (settings.theme == 1) ? "qrc:/res/ic_action_edit_dark.png" : "qrc:/res/ic_action_edit.png"
-                    mipmap: true
-                }
+                font.family: materialIconsFont.name
+                font.pixelSize: 22
+                text: qsTr("\uE150")
             }
             ToolButton {
-                Image {
-                    anchors.centerIn: parent
-                    source: (settings.theme == 1) ? "qrc:/res/ic_action_delete_dark.png" : "qrc:/res/ic_action_delete.png"
-                    mipmap: true
-                }
+                font.family: materialIconsFont.name
+                font.pixelSize: 22
+                text: qsTr("\uE872")
                 onClicked: deleteConfirmationDialog.open()
             }
         }
