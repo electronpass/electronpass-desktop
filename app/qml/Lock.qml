@@ -40,6 +40,8 @@ Image {
                     lock.visible = false;
                     toolbar.visible = true;
                     passInput.clear();
+                    searchInput.forceActiveFocus();
+                    searchInput.selectAll();
                 }
             }
         }

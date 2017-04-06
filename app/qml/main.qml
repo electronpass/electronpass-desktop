@@ -35,6 +35,14 @@ ApplicationWindow {
     Material.accent: Material.Cyan
     Material.primary: (settings.theme == 1) ? Material.color(Material.Blue, Material.Shade900) : Material.color(Material.Blue, Material.Shade800)
 
+    // define shortcuts
+    Shortcut {
+        sequence: "Ctrl+F"
+        onActivated: {
+            searchInput.forceActiveFocus();
+            searchInput.selectAll();
+        }
+    }
 
     header: ToolBar {
             id: toolbar
