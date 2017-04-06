@@ -23,7 +23,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 class ActionHandler: public QObject {
 Q_OBJECT
 public:
-    explicit ActionHandler(QString action, QObject *parent = 0);
+    explicit ActionHandler(QString action, QObject *parent = 0): QObject(parent), m_action(action) {}
 
 public slots:
 

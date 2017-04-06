@@ -19,22 +19,37 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
+#include <QSettings>
+#include <QStandardPaths>
+
+#include <iostream>
 
 #include "action_handler.hpp"
+#include "settings.hpp"
+
+const char *ORGANIZATION_NAME = "ElectronPass";
+const char *APPLICATION_NAME = "ElectronPass";
+const char *DOMAIN_NAME = "electronpass.github.io";
+const char *DESKTOP_FILE_NAME = "electronpass.desktop";
+
+#ifdef Q_WS_MAC
+    delete ORGANIZATION_NAME[];
+    ORGANIZATION_NAME = DOMAIN_NAME;
+#endif
 
 int main(int argc, char *argv[]) {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QApplication app(argc, argv);
 
-    app.setOrganizationName(QLatin1String("ElectronPass"));
-    app.setOrganizationDomain(QLatin1String("electronpass.github.io"));
-    app.setApplicationName(QLatin1String("ElectronPass"));
+    app.setOrganizationName(QLatin1String(ORGANIZATION_NAME));
+    app.setOrganizationDomain(QLatin1String(DOMAIN_NAME));
+    app.setApplicationName(QLatin1String(APPLICATION_NAME));
 
-    app.setDesktopFileName(QLatin1String("electronpass.desktop"));
+    app.setDesktopFileName(QLatin1String(DESKTOP_FILE_NAME));
 
     // Set the X11 WML_CLASS so X11 desktops can find the desktop file
-    qputenv("RESOURCE_NAME", "electronpass.desktop");
+    qputenv("RESOURCE_NAME", DESKTOP_FILE_NAME);
 
     if (QQuickStyle::name().isEmpty()) QQuickStyle::setStyle("Material");
 
@@ -45,6 +60,13 @@ int main(int argc, char *argv[]) {
     QQmlContext *ctx = engine.rootContext();
     ctx->setContextProperty("actionHandler", &action_handler);
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+
+    QSettings qsettings(ORGANIZATION_NAME, APPLICATION_NAME);
+
+    SettingsManager settings(qsettings);
+    settings.init();
+
+    std::cout << "Data location: " << settings.get_data_location().toStdString() << std::endl;
 
     return app.exec();
 }
