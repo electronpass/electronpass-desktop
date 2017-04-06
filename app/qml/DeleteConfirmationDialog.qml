@@ -18,12 +18,14 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 import QtQuick 2.2
 import QtQuick.Layouts 1.0
 import QtQuick.Controls 2.1
-import Qt.labs.settings 1.0
 
 Dialog {
     title: "Are you sure you want to delet this item?"
     standardButtons: Dialog.Ok | Dialog.Cancel
     modal: true
+
+    x: (parent.width - width) / 2
+    y: (parent.height - height) / 2
 
     onAccepted: console.log("Ok clicked")
     onRejected: console.log("Cancel clicked")

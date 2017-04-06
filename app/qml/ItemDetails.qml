@@ -41,8 +41,4 @@ ColumnLayout {
             }
         }
     }
-
-    DeleteConfirmationDialog{
-        id: deleteConfirmationDialog
-    }
 }

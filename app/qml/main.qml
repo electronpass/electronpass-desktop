@@ -135,4 +135,8 @@ ApplicationWindow {
     SettingsDialog {
             id: settingsDialog
     }
+
+    DeleteConfirmationDialog{
+        id: deleteConfirmationDialog
+    }
 }
