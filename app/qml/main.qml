@@ -17,7 +17,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 import QtQuick 2.7
 import QtQuick.Controls 2.1
-import QtQuick.Layouts 1.0
+import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import QtQuick.Controls.Material 2.1
 
@@ -113,20 +113,8 @@ ApplicationWindow {
             Layout.maximumWidth: 250
         }
 
-        Rectangle {
-            id: viewDivider
-            color: Material.color(Material.Grey, Material.Shade400)
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.topMargin: 8
-            anchors.bottomMargin: 8
-            width: 1
-            x: 100
-        }
-
         ItemDetails {
             Layout.fillWidth: true
-            Layout.fillHeight: true
             Layout.minimumWidth: 100
             Layout.preferredWidth: 390
         }
@@ -146,5 +134,10 @@ ApplicationWindow {
 
     DeleteConfirmationDialog{
         id: deleteConfirmationDialog
+    }
+
+    Snackbar{
+        id: snackbar
+        fullWidth: true
     }
 }

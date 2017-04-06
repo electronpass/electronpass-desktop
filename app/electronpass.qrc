@@ -23,6 +23,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/Lock.qml</file>
         <file>qml/SettingsDialog.qml</file>
         <file>qml/DeleteConfirmationDialog.qml</file>
+        <file>qml/Snackbar.qml</file>
 
         <file>res/img/logo_transparent_dark_64.png</file>
         <file>res/img/lock_background_dark.jpg</file>

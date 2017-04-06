@@ -16,7 +16,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import QtQuick 2.2
-import QtQuick.Layouts 1.0
+import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 
 Dialog {
