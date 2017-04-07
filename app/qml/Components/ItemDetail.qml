@@ -6,7 +6,7 @@ import QtQuick.Controls.Material 2.1
 RowLayout {
     id: itemDetail
     property bool secure: false
-    property color contentColor: (settings.theme == 1) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
+    property color contentColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
     property string title
     property string content
     property string titlePostfix: ": "

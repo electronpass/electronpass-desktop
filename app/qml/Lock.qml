@@ -4,7 +4,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
 
 Image {
-    source: "qrc:/res/img/lock_background_dark.jpg"
+    source: "qrc:/res/img/lock_background.jpg"
     fillMode: Image.PreserveAspectCrop
 
     width: window.width
@@ -26,7 +26,7 @@ Image {
             Image {
                 anchors.centerIn: parent
                 mipmap: true
-                source: "qrc:/res/img/logo_transparent_dark_64.png"
+                source: "qrc:/res/img/logo_transparent.png"
             }
 
             TextField {

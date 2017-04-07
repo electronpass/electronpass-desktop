@@ -16,18 +16,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <RCC>
-    <qresource prefix="/">
-        <file>qml/main.qml</file>
-        <file>qml/ItemsList.qml</file>
-        <file>qml/Details.qml</file>
-        <file>qml/Lock.qml</file>
-
-        <!--components-->
-        <file>qml/Components/ItemDetail.qml</file>
-
-        <!--dialogs-->
-        <file>qml/Dialogs/SettingsDialog.qml</file>
-        <file>qml/Dialogs/DeleteConfirmationDialog.qml</file>
-        <file>qml/Dialogs/Snackbar.qml</file>
+    <qresource prefix="/res/fonts">
+        <file>MaterialIcons-Regular.ttf</file>
     </qresource>
 </RCC>

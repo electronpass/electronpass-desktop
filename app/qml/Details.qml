@@ -2,6 +2,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
+import "Components"
 
 Pane {
     anchors.verticalCenter: parent.verticalCenter
@@ -12,10 +13,10 @@ Pane {
     padding: 0
     leftPadding: 8
     Material.elevation: 1
-    Material.background: (settings.theme == 1) ? Material.color(Material.Grey, Material.Shade800) : parent.Material.background
+    Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : parent.Material.background
 
-    id: itemDetails
-    property color greyTextColor: (settings.theme == 1) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
+    id: details
+    property color greyTextColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
 
     ColumnLayout {
         anchors.left: parent.left

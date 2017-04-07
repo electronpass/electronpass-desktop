@@ -20,6 +20,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import QtQuick.Controls.Material 2.1
+import "Dialogs"
 
 ApplicationWindow {
     visible: true
@@ -33,7 +34,7 @@ ApplicationWindow {
 
     Material.theme: (settings.theme == 1) ? Material.Dark : Material.Light
     Material.accent: Material.Cyan
-    Material.primary: (settings.theme == 1) ? Material.color(Material.Blue, Material.Shade900) : Material.color(Material.Blue, Material.Shade800)
+    Material.primary: (Material.theme == Material.Dark) ? Material.color(Material.Blue, Material.Shade900) : Material.color(Material.Blue, Material.Shade800)
 
     // define shortcuts
     Shortcut {
@@ -113,7 +114,7 @@ ApplicationWindow {
             Layout.maximumWidth: 250
         }
 
-        ItemDetails {
+        Details {
             Layout.fillWidth: true
             Layout.minimumWidth: 100
             Layout.preferredWidth: 390
