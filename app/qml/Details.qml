@@ -27,8 +27,25 @@ Pane {
     leftPadding: 8
     Material.elevation: 1
     Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : "white"
+    opacity: opened ? 1 : 0
+    Behavior on opacity {
+        NumberAnimation { duration: detailsPane.opacityAnimationDuration }
+    }
+
+    //timer for destruction
+    Timer {
+        id: timer
+        interval: 0
+
+        onTriggered: {
+            if (!running) {
+                details.destroyDetails()
+            }
+        }
+    }
 
     property color greyTextColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
+    property bool opened: false
 
     function setTitle(title) {
         detailsTitleLabel.text = title;
@@ -44,6 +61,11 @@ Pane {
         for(var i = detailsContainer.children.length; i > 0 ; i--) {
             detailsContainer.children[i-1].destroy()
         }
+    }
+
+    function destroyDetailsWithDelay(delay){
+        timer.interval = delay;
+        timer.restart();
     }
 
     ColumnLayout {

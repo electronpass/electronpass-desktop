@@ -26,7 +26,7 @@ ListView {
     anchors.bottom: parent.bottom
     anchors.top: parent.top
     highlight: Rectangle {
-        color: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade700) : Material.color(Material.Grey, Material.Shade300)
+        color: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : Material.color(Material.Grey, Material.Shade300)
     }
     highlightMoveDuration: 0
     currentIndex: -1

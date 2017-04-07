@@ -121,7 +121,7 @@ ApplicationWindow {
 
         function onItemSelected(index) {
             if (index < 0) {
-                detailsPane.destroyDetails();
+                detailsPane.hideDetails();
             }else {
                 detailsPane.showDetails(index);
             }
@@ -147,35 +147,38 @@ ApplicationWindow {
             Layout.bottomMargin: 16
             Keys.onPressed: handleKeys(event)
 
+            property int opacityAnimationDuration: 100
+
             Details {
                 id: details
-                visible: false
             }
 
             function showDetails(index){
-                noItemSelectedLabel.visible = false;
+                noItemSelectedLabel.opened = false;
                 details.destroyDetails();
-                details.visible = true;
-                details.setTitle("title");
+                details.opened = true;
+                details.setTitle("Github " + index);
                 details.addDetail({title: "Username", content: "zigapk", secure: false, url: false});
                 details.addDetail({title: "Url", content: "https://github.com/login", secure: false, url: true});
                 details.addDetail({title: "Password", content: "asdfasdf", secure: false, url: false});
             }
 
-            function destroyDetails(){
-                noItemSelectedLabel.visible = true;
-                details.visible = false;
-                try {
-                    details.destroy();
-                }catch(e) {
-                    console.log("detailsPane: No details to hide.")
-                }
+            function hideDetails(){
+                details.opened = false;
+                noItemSelectedLabel.opened = true;
+                // details get destroyed when animation is finished (otherwise it looks wierd)
+                details.destroyDetailsWithDelay(detailsPane.opacityAnimationDuration);
             }
 
             Label {
                 id: noItemSelectedLabel
-                anchors.centerIn: parent
+                property bool opened: true
                 text: "No item selected."
+                anchors.centerIn: parent
+                opacity: opened ? 1 : 0
+                Behavior on opacity {
+                    NumberAnimation { duration: detailsPane.opacityAnimationDuration }
+                }
             }
         }
     }
