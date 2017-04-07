@@ -35,6 +35,7 @@ ApplicationWindow {
     Material.theme: (settings.theme == 1) ? Material.Dark : Material.Light
     Material.accent: Material.Cyan
     Material.primary: (Material.theme == Material.Dark) ? Material.color(Material.Blue, Material.Shade900) : Material.color(Material.Blue, Material.Shade800)
+    Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade900) : Material.color(Material.Grey, Material.Shade100)
 
     // define shortcuts
     Shortcut {

@@ -42,11 +42,10 @@ ListView {
     model: 20
 
     delegate: ItemDelegate {
-        text: "neki: " + modelData
+        text: modelData
         width: listView.width - scrollIndicator.width
         onClicked: {
             listView.currentIndex = modelData;
-            console.log("finished" + modelData);
         }
     }
 
