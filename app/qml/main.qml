@@ -204,6 +204,8 @@ ApplicationWindow {
     }
 
     function lockGUI(){
+        details.destroyDetails();
+        itemsList.setItemInxed(-1);
         lock.visible = true;
         toolbar.visible = false;
         lock.setFocus();
