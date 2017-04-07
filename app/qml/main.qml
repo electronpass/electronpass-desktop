@@ -24,7 +24,7 @@ import "Dialogs"
 
 ApplicationWindow {
     visible: true
-    width: 640
+    width: 680
     height: 480
     title: qsTr("ElectronPass")
     id: window
@@ -108,16 +108,25 @@ ApplicationWindow {
         anchors.fill: parent
         spacing: 0
         ItemsList {
+            id: itemsList
             Layout.fillWidth: true
             Layout.minimumWidth: 220
             Layout.preferredWidth: 250
             Layout.maximumWidth: 250
         }
 
-        Details {
+        Pane {
             Layout.fillWidth: true
-            Layout.minimumWidth: 100
-            Layout.preferredWidth: 390
+            Layout.fillHeight: true
+            Layout.minimumWidth: 220
+            Layout.preferredWidth: 280
+            Layout.topMargin: 16
+            Layout.leftMargin: 16
+            Layout.rightMargin: 16
+            Layout.bottomMargin: 16
+            Details {
+                width: Math.min(420, parent.width)
+            }
         }
     }
 

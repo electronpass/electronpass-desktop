@@ -5,11 +5,6 @@ import QtQuick.Controls.Material 2.1
 import "Components"
 
 Pane {
-    anchors.verticalCenter: parent.verticalCenter
-    Layout.leftMargin: 16
-    Layout.rightMargin: 16
-    Layout.topMargin: 16
-    Layout.bottomMargin: 16
     padding: 0
     leftPadding: 8
     Material.elevation: 1
