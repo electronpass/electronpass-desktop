@@ -16,17 +16,35 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
 import QtQuick 2.2
-import QtQuick.Layouts 1.0
+import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
+import Qt.labs.settings 1.0
 
 Dialog {
-    title: "Are you sure you want to delet this item?"
-    standardButtons: Dialog.Ok | Dialog.Cancel
-    modal: true
+    title: qsTr("Settings")
 
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
-    onAccepted: console.log("Ok clicked")
-    onRejected: console.log("Cancel clicked")
+    modal: true
+
+    width: Math.min(parent.width * 0.7, 600)
+    height: Math.min(parent.height * 0.7, 400)
+
+    ColumnLayout {
+        id: settingsList
+
+        Switch {
+            id: themeSwitch
+            text: qsTr("Dark theme (restart application to apply)")
+            checked: settings.theme
+        }
+
+        width: parent.width
+    }
+
+    Component.onDestruction: {
+        settings.theme = themeSwitch.checked
+    }
+
 }
