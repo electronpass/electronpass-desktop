@@ -52,6 +52,14 @@ ApplicationWindow {
             Qt.quit();
         }
     }
+    Shortcut {
+        //TODO: pick a better shortcut
+        sequence: "Ctrl+Q"
+        onActivated: {
+            //TODO: check whether any item is chosen and tell cpp part to copy password
+            onClicked: snackbar.open("Password copied to clipboard.")
+        }
+    }
     function handleKeys(event) {
         if (event.key == Qt.Key_Down) {
             itemsList.nextItem();
