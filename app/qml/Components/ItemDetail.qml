@@ -6,6 +6,7 @@ import QtQuick.Controls.Material 2.1
 RowLayout {
     id: itemDetail
     property bool secure: false
+    property bool url: false
     property color contentColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
     property string title
     property string content
@@ -25,6 +26,13 @@ RowLayout {
         }
     }
 
+    // called when ItemDetail is created, won't work after toggleVisibility is called
+    function getDisplayableContent(){
+        if(itemDetail.secure) return itemDetail.secureMask;
+        if(itemDetail.url) return "<a href='" + itemDetail.content + "'>" + itemDetail.content + "</a>";
+        return itemDetail.content;
+    }
+
     Layout.topMargin: -24
     Item {
         width: 108
@@ -41,13 +49,17 @@ RowLayout {
     Label {
         id: itemDetailContent
         Layout.fillWidth: true
-        text: itemDetail.secure ? itemDetail.secureMask : itemDetail.content
-        font.pixelSize: secure ? 18 : 14
+        text: getDisplayableContent()
+        textFormat: itemDetail.url ? Text.StyledText : Text.PlainText
+        font.pixelSize: itemDetail.secure ? 18 : 14
+        onLinkActivated: {
+            Qt.openUrlExternally(link)
+        }
     }
     ToolButton {
         font.pixelSize: 14
         text: qsTr("\uE417")
-        visible: parent.secure
+        visible: itemDetail.secure
         font.family: materialIconsFont.name
         Material.foreground: itemDetail.contentColor
         onClicked: toggleVisibility()

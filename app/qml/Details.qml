@@ -45,9 +45,14 @@ Pane {
         }
 
         ItemDetail {
-            secure: false
             title: "Username"
             content: "zigapk"
+        }
+
+        ItemDetail {
+            url: true
+            title: "Url"
+            content: "https://github.com/login"
         }
 
         ItemDetail {
