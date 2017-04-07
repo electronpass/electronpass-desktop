@@ -37,19 +37,15 @@ Image {
                 horizontalAlignment: TextInput.AlignHCenter
                 Keys.onReturnPressed: {
                     // TODO: validate password
-                    lock.visible = false;
-                    toolbar.visible = true;
                     passInput.clear();
-                    searchInput.forceActiveFocus();
-                    searchInput.selectAll();
+                    unlockGUI();
                 }
             }
         }
+    }
 
-        function setFocus() {
-            passInput.forceActiveFocus();
-        }
-
+    function setFocus(a) {
+        passInput.forceActiveFocus();
     }
 
 }

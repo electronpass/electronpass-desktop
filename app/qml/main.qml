@@ -98,11 +98,7 @@ ApplicationWindow {
                         y: parent.height
                         MenuItem {
                             text: "Lock"
-                            onTriggered: {
-                                lock.visible = true;
-                                toolbar.visible = false;
-                                lock.setFocus();
-                            }
+                            onTriggered: lockGUI();
                         }
                         MenuItem {
                             text: "Sync now"
@@ -145,7 +141,9 @@ ApplicationWindow {
         }
     }
 
-    Lock { id: lock}
+    Lock {
+        id: lock
+    }
 
     Settings {
         id: settings
@@ -164,5 +162,18 @@ ApplicationWindow {
     Snackbar{
         id: snackbar
         fullWidth: true
+    }
+
+    function lockGUI(){
+        lock.visible = true;
+        toolbar.visible = false;
+        lock.setFocus();
+    }
+
+    function unlockGUI(){
+        lock.visible = false;
+        toolbar.visible = true;
+        searchInput.forceActiveFocus();
+        searchInput.selectAll();
     }
 }
