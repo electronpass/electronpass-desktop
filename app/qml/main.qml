@@ -115,9 +115,18 @@ ApplicationWindow {
 
     // basic devider
     RowLayout {
-        id: main_layout
+        id: mainLayout
         anchors.fill: parent
         spacing: 0
+
+        function onItemSelected(index) {
+            if (index < 0) {
+                detailsPane.destroyDetails();
+            }else {
+                detailsPane.showDetails(index);
+            }
+        }
+
         ItemsList {
             id: itemsList
             Layout.fillWidth: true
@@ -127,6 +136,7 @@ ApplicationWindow {
         }
 
         Pane {
+            id: detailsPane
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.minimumWidth: 220
@@ -135,10 +145,38 @@ ApplicationWindow {
             Layout.leftMargin: 16
             Layout.rightMargin: 16
             Layout.bottomMargin: 16
-            Details {
-                width: Math.min(420, parent.width)
-            }
             Keys.onPressed: handleKeys(event)
+
+            Details {
+                id: details
+                visible: false
+            }
+
+            function showDetails(index){
+                noItemSelectedLabel.visible = false;
+                details.destroyDetails();
+                details.visible = true;
+                details.setTitle("title");
+                details.addDetail({title: "Username", content: "zigapk", secure: false, url: false});
+                details.addDetail({title: "Url", content: "https://github.com/login", secure: false, url: true});
+                details.addDetail({title: "Password", content: "asdfasdf", secure: false, url: false});
+            }
+
+            function destroyDetails(){
+                noItemSelectedLabel.visible = true;
+                details.visible = false;
+                try {
+                    details.destroy();
+                }catch(e) {
+                    console.log("detailsPane: No details to hide.")
+                }
+            }
+
+            Label {
+                id: noItemSelectedLabel
+                anchors.centerIn: parent
+                text: "No item selected."
+            }
         }
     }
 

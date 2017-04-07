@@ -30,6 +30,7 @@ ListView {
     }
     highlightMoveDuration: 0
     currentIndex: -1
+    onCurrentItemChanged: mainLayout.onItemSelected(listView.currentIndex);
 
     ScrollIndicator.vertical: ScrollIndicator {
         id: scrollIndicator

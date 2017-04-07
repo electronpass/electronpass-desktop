@@ -22,13 +22,29 @@ import QtQuick.Controls.Material 2.1
 import "Components"
 
 Pane {
+    width: Math.min(420, parent.width)
     padding: 0
     leftPadding: 8
     Material.elevation: 1
     Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : "white"
 
-    id: details
     property color greyTextColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
+
+    function setTitle(title) {
+        detailsTitleLabel.text = title;
+    }
+
+    function addDetail(obj){
+        var component = Qt.createComponent("Components/ItemDetail.qml");
+        component.createObject(detailsContainer, {"title": obj.title, "content": obj.content, "secure": obj.secure, "url": obj.url});
+    }
+
+    function destroyDetails(){
+        detailsTitleLabel.text = "";
+        for(var i = detailsContainer.children.length; i > 0 ; i--) {
+            detailsContainer.children[i-1].destroy()
+        }
+    }
 
     ColumnLayout {
         anchors.left: parent.left
@@ -39,7 +55,7 @@ Pane {
             Layout.fillWidth: true
             Layout.bottomMargin: 16
             Label {
-                text: "Github"
+                id: detailsTitleLabel
                 font.pixelSize: 20
                 Layout.fillWidth: true
             }
@@ -55,22 +71,10 @@ Pane {
                 onClicked: deleteConfirmationDialog.open()
             }
         }
-
-        ItemDetail {
-            title: "Username"
-            content: "zigapk"
-        }
-
-        ItemDetail {
-            url: true
-            title: "Url"
-            content: "https://github.com/login"
-        }
-
-        ItemDetail {
-            secure: true
-            title: "Password"
-            content: "asdfasdf"
+        ColumnLayout {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            id: detailsContainer
         }
     }
 }
