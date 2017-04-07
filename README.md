@@ -4,13 +4,14 @@
 Desktop client written in qml.
 
 ## Dependencies
-Qt >= 5.8.0 with at least the following modules is required:
-- [qtbase](http://code.qt.io/cgit/qt/qtbase.git)
-- [qtdeclarative](http://code.qt.io/cgit/qt/qtdeclarative.git)
-- [qtquickcontrols2](http://code.qt.io/cgit/qt/qtquickcontrols2.git)
-- [qttools](http://code.qt.io/cgit/qt/qttools.git/)
 
-[Extra CMake modules (>=1.7.0)](https://github.com/KDE/extra-cmake-modules) is required for building the project.
+- [libelectronpass](https://github.com/electronpass/libelectronpass) - core library
+- Qt >= 5.8.0 with at least the following modules is required:
+    - [qtbase](http://code.qt.io/cgit/qt/qtbase.git)
+    - [qtdeclarative](http://code.qt.io/cgit/qt/qtdeclarative.git)
+    - [qtquickcontrols2](http://code.qt.io/cgit/qt/qtquickcontrols2.git)
+    - [qttools](http://code.qt.io/cgit/qt/qttools.git/)
+- [Extra CMake modules (>=1.7.0)](https://github.com/KDE/extra-cmake-modules) is required for building the project.
 
 To install all dependencies on Arch Linux:
 
@@ -26,7 +27,7 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet
     mkdir build; cd build
     cmake ..
     make electronpass -j8
-    
+
 Optionally install ElectronPass:
 
     sudo make install
@@ -38,4 +39,4 @@ Icons in this project are displayed as a [Material Icons Font](). To preview and
 Lock backgrounds are obtained from free wallpaper site  [WallpaperStop](http://www.wallpaperstop.com).
 
 ## License
-Code in this project is licensed under [GNU GPLv3 license](https://github.com/electronpass/electronpass-desktop/blob/master/LICENSE). Some third party files are subjective to their respective license. 
+Code in this project is licensed under [GNU GPLv3 license](https://github.com/electronpass/electronpass-desktop/blob/master/LICENSE). Some third party files are subjective to their respective license.
