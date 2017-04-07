@@ -46,7 +46,7 @@ Image {
             }
         }
 
-        function setFocus(a) {
+        function setFocus() {
             passInput.forceActiveFocus();
         }
 

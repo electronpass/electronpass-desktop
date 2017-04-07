@@ -44,6 +44,15 @@ ApplicationWindow {
             searchInput.selectAll();
         }
     }
+    function handleKeys(event) {
+        if (event.key == Qt.Key_Down) {
+            itemsList.nextItem();
+            event.accepted = true;
+        } else if (event.key == Qt.Key_Up) {
+            itemsList.previousItem();
+            event.accepted = true;
+        }
+    }
 
     header: ToolBar {
             id: toolbar
@@ -64,6 +73,11 @@ ApplicationWindow {
                     id: searchInput
                     font.pixelSize: 14
                     placeholderText: qsTr(" Search")
+                    Keys.onPressed: handleKeys(event)
+                    onTextChanged: {
+                        if (text != "") itemsList.setItemInxed(0);
+                        else itemsList.setItemInxed(-1);
+                    }
                 }
                 ToolButton {
                     id: newButton
@@ -127,6 +141,7 @@ ApplicationWindow {
             Details {
                 width: Math.min(420, parent.width)
             }
+            Keys.onPressed: handleKeys(event)
         }
     }
 
