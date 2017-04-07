@@ -45,6 +45,13 @@ ApplicationWindow {
             searchInput.selectAll();
         }
     }
+    Shortcut {
+        sequence: "Ctrl+W"
+        onActivated: {
+            //TODO: save work and lock before exiting
+            Qt.quit();
+        }
+    }
     function handleKeys(event) {
         if (event.key == Qt.Key_Down) {
             itemsList.nextItem();
