@@ -55,6 +55,7 @@ RowLayout {
     Item {
         width: 108
         Label {
+            id: titleLabel
             text: itemDetail.title + itemDetail.titlePostfix
             font.pixelSize: 14
             anchors.right: parent.right
@@ -73,6 +74,13 @@ RowLayout {
         color: greyTextColor
         onLinkActivated: {
             Qt.openUrlExternally(link)
+        }
+
+        background: PassStrengthIndicator {
+            visible: itemDetail.secure
+            height: 22
+            password: itemDetail.secure
+            anchors.centerIn: parent
         }
     }
     ToolButton {
