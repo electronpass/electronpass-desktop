@@ -17,8 +17,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "action_handler.hpp"
 
-#include <QProcess>
-
 bool ActionHandler::newWindow() {
     return QProcess::startDetached(m_action);
 }

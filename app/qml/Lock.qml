@@ -37,8 +37,14 @@ Image {
                 horizontalAlignment: TextInput.AlignHCenter
                 Keys.onReturnPressed: {
                     // TODO: validate password
+
+                    // passInput.clear();
+
+                    if(dataHolder.unlock(passInput.text)) {
+                        unlockGUI();
+                    }
                     passInput.clear();
-                    unlockGUI();
+
                 }
             }
         }

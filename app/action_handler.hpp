@@ -19,6 +19,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #define ACTION_HANDLER_HPP
 
 #include <QObject>
+#include <QProcess>
 
 class ActionHandler: public QObject {
 Q_OBJECT

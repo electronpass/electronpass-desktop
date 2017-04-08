@@ -23,7 +23,7 @@ std::string DataHolder::read_file(bool& success) {
     std::string path = globals::settings.get_data_location().toStdString();
     std::string data;
 
-    std::ifstream file("my_file");
+    std::ifstream file(path);
 
     if (!file.good()) {
         success = false;

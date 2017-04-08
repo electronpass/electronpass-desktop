@@ -27,6 +27,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "globals.hpp"
 
 class DataHolder: public QObject{
+    Q_OBJECT
+
     electronpass::Crypto* crypto = 0;
 
     // Reads first line of encrypted file.
