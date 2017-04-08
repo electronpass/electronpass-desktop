@@ -44,7 +44,6 @@ Pane {
         }
     }
 
-    property color greyTextColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
     property bool opened: false
 
     function setTitle(title) {

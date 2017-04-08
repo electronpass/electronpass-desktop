@@ -30,6 +30,7 @@ RowLayout {
     property string titlePostfix: ": "
     property string secureMask: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
     property bool secureTextVisible: false
+    property color greyTextColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade300) : Material.color(Material.Grey, Material.Shade800)
 
     function toggleVisibility() {
         if (itemDetail.secure && itemDetail.secureTextVisible) {
@@ -69,6 +70,7 @@ RowLayout {
         text: getDisplayableContent()
         textFormat: itemDetail.url ? Text.StyledText : Text.PlainText
         font.pixelSize: itemDetail.secure ? 18 : 14
+        color: greyTextColor
         onLinkActivated: {
             Qt.openUrlExternally(link)
         }
