@@ -41,8 +41,10 @@ ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+F"
         onActivated: {
-            searchInput.forceActiveFocus();
-            searchInput.selectAll();
+            if(!lock.visible){
+                searchInput.forceActiveFocus();
+                searchInput.selectAll();
+            }
         }
     }
     Shortcut {
@@ -55,7 +57,7 @@ ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+D"
         onActivated: {
-            if (itemsList.currentIndex >= 0){
+            if (!lock.visible && itemsList.currentIndex >= 0){
                 //TODO: tell cpp part to copy password
                 onClicked: snackbar.open("Password copied to clipboard.")
             }
@@ -63,11 +65,15 @@ ApplicationWindow {
     }
     Shortcut {
         sequence: "Ctrl+S"
-        onActivated: settingsDialog.open();
+        onActivated: {
+            if(!lock.visible) settingsDialog.open();
+        }
     }
     Shortcut {
         sequence: "Ctrl+L"
-        onActivated: lockGUI();
+        onActivated: {
+            if(!lock.visible) lockGUI();
+        }
     }
     function handleKeys(event) {
         if (event.key == Qt.Key_Down) {
