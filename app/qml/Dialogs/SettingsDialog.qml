@@ -35,10 +35,13 @@ Dialog {
         id: tabBar
         currentIndex: swipeView.currentIndex
         TabButton {
-            text: qsTr("First")
+            text: qsTr("Interface")
         }
         TabButton {
-            text: qsTr("Second")
+            text: qsTr("Sync")
+        }
+        TabButton {
+            text: qsTr("Shortcuts")
         }
     }
 
@@ -48,25 +51,23 @@ Dialog {
         currentIndex: tabBar.currentIndex
 
         Page {
-            ColumnLayout {
-                id: settingsList
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.topMargin: 20
-                anchors.top: parent.top
-
-                Switch {
-                    id: themeSwitch
-                    text: qsTr("Dark theme (restart application to apply)")
-                    checked: settings.theme
-                }
+            Switch {
+                id: themeSwitch
+                text: qsTr("Dark theme (restart application to apply)")
+                checked: settings.theme
             }
-
-//            width: parent.width
         }
 
         Page {
             Label {
                 text: qsTr("Second page")
+                anchors.centerIn: parent
+            }
+        }
+
+        Page {
+            Label {
+                text: qsTr("Third page")
                 anchors.centerIn: parent
             }
         }
