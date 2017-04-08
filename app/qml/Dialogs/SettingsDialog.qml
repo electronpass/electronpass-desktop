@@ -48,6 +48,7 @@ Dialog {
     SwipeView {
         id: swipeView
         anchors.fill: parent
+        clip: true
         currentIndex: tabBar.currentIndex
 
         Page {
@@ -72,6 +73,7 @@ Dialog {
             }
         }
     }
+
 
     Component.onDestruction: {
         settings.theme = themeSwitch.checked
