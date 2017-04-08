@@ -53,10 +53,9 @@ ApplicationWindow {
         }
     }
     Shortcut {
-        //TODO: pick a better shortcut
-        sequence: "Ctrl+Q"
+        sequence: "Ctrl+D"
         onActivated: {
-            //TODO: check whether any item is chosen and tell cpp part to copy password
+            //TODO: tell cpp part to copy password
             onClicked: snackbar.open("Password copied to clipboard.")
         }
     }
