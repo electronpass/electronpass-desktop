@@ -20,12 +20,12 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QSettings>
-#include <QStandardPaths>
 
 #include <iostream>
 
 #include "action_handler.hpp"
 #include "settings.hpp"
+#include "passwords.hpp"
 
 const char *ORGANIZATION_NAME = "ElectronPass";
 const char *APPLICATION_NAME = "ElectronPass";
@@ -63,10 +63,13 @@ int main(int argc, char *argv[]) {
 
     QSettings qsettings(ORGANIZATION_NAME, APPLICATION_NAME);
 
+    // init settings
     SettingsManager settings(qsettings);
     settings.init();
-
     std::cout << "Data location: " << settings.get_data_location().toStdString() << std::endl;
+
+    Passwords passwords;
+    engine.rootContext()->setContextProperty("passwordManager", &passwords);
 
     return app.exec();
 }

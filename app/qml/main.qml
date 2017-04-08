@@ -175,7 +175,7 @@ ApplicationWindow {
                 details.setTitle("Github " + index);
                 details.addDetail({title: "Username", content: "zigapk", secure: false, url: false});
                 details.addDetail({title: "Url", content: "https://github.com/login", secure: false, url: true});
-                details.addDetail({title: "Password", content: "asdfaj?sdf", secure: true, url: false});
+                details.addDetail({title: "Password", content: passwordManager.generateRandomPass(Math.floor((Math.random() * (25 - 5)) + 5)), secure: true, url: false});
             }
 
             function hideDetails(){

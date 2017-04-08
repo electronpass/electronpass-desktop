@@ -23,7 +23,7 @@ import QtQuick.Controls.Material 2.1
 RowLayout {
     id: strengthIndicator
     property string password
-    property int strength: 4 //strength in int from 1 to 5
+    property int strength: passwordManager.passStrengthToInt(password) //strength in int from 1 to 5
 
     function getColor() {
         if (strengthIndicator.strength == 1) return Material.color(Material.Red, Material.Shade500);

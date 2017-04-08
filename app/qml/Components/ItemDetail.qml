@@ -79,7 +79,7 @@ RowLayout {
         background: PassStrengthIndicator {
             visible: itemDetail.secure
             height: 22
-            password: itemDetail.secure
+            password: itemDetail.content
             anchors.centerIn: parent
         }
     }

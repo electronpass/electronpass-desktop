@@ -3,6 +3,7 @@ set(SOURCES
     main.cpp
     action_handler.cpp
     settings.cpp
+    passwords.cpp
     electronpass.qrc
     res/fonts/fonts.qrc
     res/img/img.qrc
