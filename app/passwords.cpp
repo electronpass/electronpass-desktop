@@ -20,12 +20,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <assert.h>
 #include <iostream>
 
-electronpass::passwords::strength_category getCategory(std::string pass){
-    return electronpass::passwords::password_strength_category(pass);
-}
-
 int Passwords::passStrengthToInt(const QString &pass) {
-    electronpass::passwords::strength_category category = getCategory(pass.toStdString());
+    electronpass::passwords::strength_category category = electronpass::passwords::password_strength_category(
+            pass.toStdString());
     switch (category) {
         case electronpass::passwords::strength_category::TERRIBLE:
             return 1;
@@ -39,6 +36,11 @@ int Passwords::passStrengthToInt(const QString &pass) {
             return 5;
     }
     assert(false && "No such enum state!");
+}
+
+QString Passwords::categoryTooltipText(const QString &pass) {
+    return QString::fromUtf8(
+            electronpass::passwords::human_readable_password_strength_category(pass.toStdString()).c_str());
 }
 
 QString Passwords::generateRandomPass(int len) {

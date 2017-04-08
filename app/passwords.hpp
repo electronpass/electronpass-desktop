@@ -31,6 +31,8 @@ public:
 
     Q_INVOKABLE int passStrengthToInt(const QString &pass);
 
+    Q_INVOKABLE QString categoryTooltipText(const QString &pass);
+
     Q_INVOKABLE QString generateRandomPass(int len);
 
     Q_INVOKABLE QString generateRandomPassWithRecipe(int len, int digits, int symbols, int uppercase);
