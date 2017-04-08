@@ -15,10 +15,11 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-import QtQuick 2.2
-import QtQuick.Layouts 1.3
+import QtQuick 2.7
 import QtQuick.Controls 2.1
-import Qt.labs.settings 1.0
+import QtQuick.Layouts 1.3
+import QtQuick.Controls.Material 2.1
+import "../Components"
 
 Dialog {
     title: qsTr("Settings")
@@ -67,9 +68,41 @@ Dialog {
         }
 
         Page {
-            Label {
-                text: qsTr("Third page")
-                anchors.centerIn: parent
+            ColumnLayout {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                spacing: 32
+                y: 8 // to avoid overlaping
+
+                ShortcutItem {
+                    shortcut: qsTr("\u2191 and \u2193")
+                    description: "Move through items"
+                }
+
+                ShortcutItem {
+                    shortcut: qsTr("Ctrl+L")
+                    description: "Lock wallet"
+                }
+
+                ShortcutItem {
+                    shortcut: qsTr("Ctrl+S")
+                    description: "Open settings"
+                }
+
+                ShortcutItem {
+                    shortcut: qsTr("Ctrl+F")
+                    description: "Search"
+                }
+
+                ShortcutItem {
+                    shortcut: qsTr("Ctrl+D")
+                    description: "Copy the first password from the selected item"
+                }
+
+                ShortcutItem {
+                    shortcut: qsTr("Ctrl+W")
+                    description: "Close application"
+                }
             }
         }
     }

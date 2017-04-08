@@ -1,4 +1,4 @@
-<!--
+/*
 This file is part of ElectronPass.
 
 ElectronPass is free software: you can redistribute it and/or modify
@@ -13,24 +13,29 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
--->
+*/
 
-<RCC>
-    <qresource prefix="/">
-        <file>qml/main.qml</file>
-        <file>qml/ItemsList.qml</file>
-        <file>qml/Details.qml</file>
-        <file>qml/Lock.qml</file>
+import QtQuick 2.7
+import QtQuick.Controls 2.1
+import QtQuick.Layouts 1.3
+import QtQuick.Controls.Material 2.1
 
-        <!--components-->
-        <file>qml/Components/ItemDetail.qml</file>
-        <file>qml/Components/PassStrengthIndicator.qml</file>
-        <file>qml/Components/ShortcutBlock.qml</file>
-        <file>qml/Components/ShortcutItem.qml</file>
-
-        <!--dialogs-->
-        <file>qml/Dialogs/SettingsDialog.qml</file>
-        <file>qml/Dialogs/DeleteConfirmationDialog.qml</file>
-        <file>qml/Dialogs/Snackbar.qml</file>
-    </qresource>
-</RCC>
+RowLayout {
+    id: shortcutItem
+    property string shortcut
+    property string description
+    Layout.fillWidth: true
+    spacing: 10
+    Item {
+        width: 108
+        ShortcutBlock {
+            text: shortcutItem.shortcut
+        }
+    }
+    Label {
+        text: shortcutItem.description
+        font.weight: Font.Light
+        lineHeight: parent.height
+        Layout.fillWidth: true
+    }
+}
