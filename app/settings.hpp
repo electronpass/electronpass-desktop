@@ -26,13 +26,11 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 class SettingsManager {
 
 private:
-    QSettings settings;
+    QSettings *settings;
 
 public:
-    SettingsManager(QSettings& settings_): settings(&settings_) {}
-
     // Checks if all settings are initialized and sets default values if not.
-    void init();
+    void init(QSettings& settings_);
 
     // Returns location where the file with passwords is stored.
     QString get_data_location();

@@ -23,6 +23,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <iostream>
 
+#include "globals.hpp"
+#include "data_holder.hpp"
 #include "action_handler.hpp"
 #include "settings.hpp"
 #include "passwords.hpp"
@@ -63,13 +65,16 @@ int main(int argc, char *argv[]) {
 
     QSettings qsettings(ORGANIZATION_NAME, APPLICATION_NAME);
 
-    // init settings
-    SettingsManager settings(qsettings);
-    settings.init();
-    std::cout << "Data location: " << settings.get_data_location().toStdString() << std::endl;
+    // init global settings
+    globals::settings.init(qsettings);
+    // Print location, for testing only.
+    // For more see: Testing.md
+    std::cout << "Data location: " << globals::settings.get_data_location().toStdString() << std::endl;
 
     Passwords passwords;
     engine.rootContext()->setContextProperty("passwordManager", &passwords);
+
+    engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
 
     return app.exec();
 }
