@@ -55,8 +55,10 @@ ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+D"
         onActivated: {
-            //TODO: tell cpp part to copy password
-            onClicked: snackbar.open("Password copied to clipboard.")
+            if (itemsList.currentIndex >= 0){
+                //TODO: tell cpp part to copy password
+                onClicked: snackbar.open("Password copied to clipboard.")
+            }
         }
     }
     function handleKeys(event) {
