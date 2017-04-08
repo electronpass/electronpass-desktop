@@ -49,12 +49,20 @@ bool DataHolder::unlock(const QString& password) {
     text = crypto->decrypt(text, success);
     if (!success) return false;
 
+    // debug only
     std::cout << text << std::endl;
+
+    wallet = electronpass::serialization::deserialize(text);
+
+    std::cout << "Items: ";
+    for (auto item : wallet.get_items()) std::cout << item.name << " ";
+    std::cout << std::endl;
 
     return true;
 }
 
-
 void DataHolder::lock() {
+    // Delete all decrypted data.
     delete[] crypto;
+    wallet = electronpass::Wallet();
 }

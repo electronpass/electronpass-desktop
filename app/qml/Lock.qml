@@ -36,10 +36,6 @@ Image {
                 echoMode: TextInput.Password
                 horizontalAlignment: TextInput.AlignHCenter
                 Keys.onReturnPressed: {
-                    // TODO: validate password
-
-                    // passInput.clear();
-
                     if(dataHolder.unlock(passInput.text)) {
                         unlockGUI();
                     }

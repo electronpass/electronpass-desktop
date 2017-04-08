@@ -20,16 +20,21 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QObject>
 #include <QString>
+#include <QList>
 #include <string>
 #include <fstream>
+#include <vector>
 
 #include <electronpass/crypto.hpp>
+#include <electronpass/serialization.hpp>
 #include "globals.hpp"
 
 class DataHolder: public QObject{
     Q_OBJECT
 
     electronpass::Crypto* crypto = 0;
+    electronpass::Wallet wallet;
+    QList<QString> item_names;
 
     // Reads first line of encrypted file.
     // Location of encrypted files is
@@ -45,9 +50,6 @@ public:
 
     // Deletes all decrypted data and electronpass::Crypto object used for decryption.
     Q_INVOKABLE void lock();
-
-    // Something that returns list of all password entries.
-    // Q_INVOKABLE ?? list_entries();
 
     // Function that changes attribute of one of the items.
     // electronpass::Wallet object should be then deserialized to json, encrypted and saved.
