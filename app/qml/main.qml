@@ -61,6 +61,10 @@ ApplicationWindow {
             }
         }
     }
+    Shortcut {
+        sequence: "Ctrl+S"
+        onActivated: settingsDialog.open();
+    }
     function handleKeys(event) {
         if (event.key == Qt.Key_Down) {
             itemsList.nextItem();

@@ -31,16 +31,45 @@ Dialog {
     width: Math.min(parent.width * 0.7, 600)
     height: Math.min(parent.height * 0.7, 400)
 
-    ColumnLayout {
-        id: settingsList
+    header: TabBar {
+        id: tabBar
+        currentIndex: swipeView.currentIndex
+        TabButton {
+            text: qsTr("First")
+        }
+        TabButton {
+            text: qsTr("Second")
+        }
+    }
 
-        Switch {
-            id: themeSwitch
-            text: qsTr("Dark theme (restart application to apply)")
-            checked: settings.theme
+    SwipeView {
+        id: swipeView
+        anchors.fill: parent
+        currentIndex: tabBar.currentIndex
+
+        Page {
+            ColumnLayout {
+                id: settingsList
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.topMargin: 20
+                anchors.top: parent.top
+
+                Switch {
+                    id: themeSwitch
+                    text: qsTr("Dark theme (restart application to apply)")
+                    checked: settings.theme
+                }
+            }
+
+//            width: parent.width
         }
 
-        width: parent.width
+        Page {
+            Label {
+                text: qsTr("Second page")
+                anchors.centerIn: parent
+            }
+        }
     }
 
     Component.onDestruction: {
