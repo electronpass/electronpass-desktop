@@ -65,6 +65,10 @@ ApplicationWindow {
         sequence: "Ctrl+S"
         onActivated: settingsDialog.open();
     }
+    Shortcut {
+        sequence: "Ctrl+L"
+        onActivated: lockGUI();
+    }
     function handleKeys(event) {
         if (event.key == Qt.Key_Down) {
             itemsList.nextItem();
