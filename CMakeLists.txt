@@ -39,5 +39,8 @@ set(REQUIRED_QT_VERSION "5.7.0")
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS
         Core Qml Quick Widgets QuickControls2)
 
+# find libelectronpass
+find_library(ELECTRONPASS_LIB electronpass)
+
 add_subdirectory(app)
 add_subdirectory(data)
