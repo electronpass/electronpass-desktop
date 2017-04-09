@@ -41,6 +41,8 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS
 
 # find libelectronpass
 find_library(ELECTRONPASS_LIB electronpass)
+find_path(ELECTRONPASS_INCLUDE electronpass)
+include_directories(${ELECTRONPASS_INCLUDE})
 
 add_subdirectory(app)
 add_subdirectory(data)
