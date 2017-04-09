@@ -55,7 +55,11 @@ Pane {
         horizontalCenter: fullWidth ? undefined : parent.horizontalCenter
 
         Behavior on bottomMargin {
-            NumberAnimation { duration: 300 }
+            NumberAnimation {
+                duration: 300
+                easing.type: Easing.InOutCubic
+            }
+
         }
     }
 
