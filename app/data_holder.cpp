@@ -36,18 +36,18 @@ std::string DataHolder::read_file(bool& success) {
     return data;
 }
 
-bool DataHolder::unlock(const QString& password) {
+int DataHolder::unlock(const QString& password) {
     std::string password_string = password.toStdString();
 
     crypto = new electronpass::Crypto(password_string);
-    if (!crypto->check()) return false;
+    if (!crypto->check()) return 1;
 
     bool success = false;
     std::string text = read_file(success);
-    if (!success) return false;
+    if (!success) return 2;
 
     text = crypto->decrypt(text, success);
-    if (!success) return false;
+    if (!success) return 3;
 
     // debug only
     std::cout << text << std::endl;
@@ -58,7 +58,7 @@ bool DataHolder::unlock(const QString& password) {
     for (auto item : wallet.get_items()) std::cout << item.name << " ";
     std::cout << std::endl;
 
-    return true;
+    return 0;
 }
 
 void DataHolder::lock() {

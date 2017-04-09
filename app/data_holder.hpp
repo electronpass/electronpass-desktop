@@ -44,9 +44,13 @@ public:
     DataHolder() {}
 
     // Opens file and tries do decrypt it with password.
-    // Returns true if decryption was successful and false otherwise.
     // Also converts decrypted file (json string) to electronpass::Wallet object.
-    Q_INVOKABLE bool unlock(const QString& password);
+    // Returns:
+    //     0 - success.
+    //     1 - electronpass::Crypto initialization was not successful
+    //     2 - can't open file at globals::settings.get_data_location()
+    //     3 - decryption was not succuessful (probably wrong password)
+    Q_INVOKABLE int unlock(const QString& password);
 
     // Deletes all decrypted data and electronpass::Crypto object used for decryption.
     Q_INVOKABLE void lock();

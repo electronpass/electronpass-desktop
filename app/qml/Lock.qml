@@ -31,19 +31,34 @@ Image {
 
             TextField {
                 id: passInput
+                property int unlocked: 4  // not unlocked
                 focus: true
                 Layout.topMargin: 48
                 placeholderText: qsTr("      Type password to unlock      ") // 6 spaces on each side to make textfield wider (if it's stupid but it works it ain't stupid)
                 echoMode: TextInput.Password
                 horizontalAlignment: TextInput.AlignHCenter
                 Keys.onReturnPressed: {
-                    if(dataHolder.unlock(passInput.text)) {
-                        unlockGUI();
-                        passInput.clear();
-                        toolTip.visible = false;
-                    }else {
-                        toolTip.show();
-                        passInput.selectAll();
+                    passInput.unlocked = dataHolder.unlock(passInput.text)
+                    switch (passInput.unlocked) {
+                        case 0:
+                            unlockGUI();
+                            passInput.clear();
+                            toolTip.visible = false;
+                            break;
+                        case 1:
+                            // Should not happen (only on random unsafe systems).
+                            toolTip.text = "Crypto initialization was not successful."
+                            break
+                        case 2:
+                            toolTip.text = "Couldn't open data file."
+                            break
+                        case 3:
+                            toolTip.text = "Wrong password."
+                            break
+                    }
+                    if (passInput.unlocked != 0) {
+                        toolTip.show()
+                        passInput.selectAll()
                     }
                 }
             }
@@ -51,7 +66,7 @@ Image {
             RowLayout {
                ToolTip {
                    id: toolTip
-                   text: "Unlocking failed."
+                   text: "Locked."
                    timeout: 2000
                    visible: false
 
