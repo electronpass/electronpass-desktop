@@ -24,6 +24,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <fstream>
 #include <vector>
+#include <iostream>
 
 #include <electronpass/crypto.hpp>
 #include <electronpass/serialization.hpp>

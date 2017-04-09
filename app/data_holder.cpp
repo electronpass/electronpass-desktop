@@ -15,9 +15,7 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <data_holder.hpp>
-
-#include <iostream>
+#include "data_holder.hpp"
 
 std::string DataHolder::read_file(bool& success) {
     std::string path = globals::settings.get_data_location().toStdString();
