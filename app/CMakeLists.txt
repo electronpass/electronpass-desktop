@@ -6,10 +6,10 @@ set(SOURCES
     passwords.cpp
     data_holder.cpp
     globals.cpp
+    sync/gdrive.cpp
     electronpass.qrc
     res/fonts/fonts.qrc
-    res/img/img.qrc
-)
+    res/img/img.qrc)
 
 add_executable(electronpass ${SOURCES})
 
@@ -19,7 +19,8 @@ target_link_libraries(electronpass
         Qt5::Quick
         Qt5::Widgets
         Qt5::QuickControls2
-        ${ELECTRONPASS_LIB})
+        ${ELECTRONPASS_LIB}
+        ${CURL_LIB})
 
 install(TARGETS electronpass
         DESTINATION ${BIN_INSTALL_DIR})

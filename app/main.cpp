@@ -29,6 +29,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "settings.hpp"
 #include "passwords.hpp"
 
+#include "sync/gdrive.hpp"
+
 const char *ORGANIZATION_NAME = "ElectronPass";
 const char *APPLICATION_NAME = "ElectronPass";
 const char *DOMAIN_NAME = "electronpass.github.io";
@@ -72,9 +74,10 @@ int main(int argc, char *argv[]) {
     std::cout << "Data location: " << globals::settings.get_data_location().toStdString() << std::endl;
 
     Passwords passwords;
+    Gdrive gdrive;
     engine.rootContext()->setContextProperty("passwordManager", &passwords);
-
     engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
+    engine.rootContext()->setContextProperty("gdrive", &gdrive);
 
     return app.exec();
 }

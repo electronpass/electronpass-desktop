@@ -140,6 +140,9 @@ ApplicationWindow {
                         }
                         MenuItem {
                             text: "Sync now"
+                            onTriggered: {
+                                gdrive.open_url();
+                            }
                         }
                         MenuItem {
                             text: "Settings"
