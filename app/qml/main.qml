@@ -51,7 +51,8 @@ ApplicationWindow {
         sequence: "Ctrl+W"
         onActivated: {
             //TODO: save work and lock before exiting
-            Qt.quit();
+            dataHolder.lock()
+            Qt.quit()
         }
     }
     Shortcut {
@@ -66,22 +67,25 @@ ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+S"
         onActivated: {
-            if(!lock.visible) settingsDialog.open();
+            if(!lock.visible) settingsDialog.open()
         }
     }
     Shortcut {
         sequence: "Ctrl+L"
         onActivated: {
-            if(!lock.visible) lockGUI();
+            if(!lock.visible) {
+                dataHolder.lock()
+                lockGUI()
+            }
         }
     }
     function handleKeys(event) {
         if (event.key == Qt.Key_Down) {
-            itemsList.nextItem();
-            event.accepted = true;
+            itemsList.nextItem()
+            event.accepted = true
         } else if (event.key == Qt.Key_Up) {
-            itemsList.previousItem();
-            event.accepted = true;
+            itemsList.previousItem()
+            event.accepted = true
         }
     }
 
@@ -129,7 +133,10 @@ ApplicationWindow {
                         y: parent.height
                         MenuItem {
                             text: "Lock"
-                            onTriggered: lockGUI();
+                            onTriggered: {
+                                dataHolder.lock()
+                                lockGUI()
+                            }
                         }
                         MenuItem {
                             text: "Sync now"

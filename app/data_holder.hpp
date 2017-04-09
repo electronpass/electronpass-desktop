@@ -55,6 +55,9 @@ public:
     // Deletes all decrypted data and electronpass::Crypto object used for decryption.
     Q_INVOKABLE void lock();
 
+    Q_INVOKABLE int get_number_of_items();
+    Q_INVOKABLE QList<QString> get_item_names();
+
     // Function that changes attribute of one of the items.
     // electronpass::Wallet object should be then deserialized to json, encrypted and saved.
     // Q_INVOKABLE void change(??);

@@ -16,9 +16,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "passwords.hpp"
-#include <electronpass/passwords.hpp>
-#include <assert.h>
-#include <iostream>
 
 int Passwords::passStrengthToInt(const QString &pass) {
     electronpass::passwords::strength_category category = electronpass::passwords::password_strength_category(
