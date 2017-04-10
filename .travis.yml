@@ -25,6 +25,8 @@ addons:
     packages:
       - clang-3.8
       - g++-5
+      - ruby
+      - rubygems
       - ruby-dev
       - build-essential
       - rpm
@@ -52,10 +54,11 @@ script:
   - cmake --version
 
   # install gem for fpm and configure fpm variables
-  - sudo gem install fpm
+  - sudo gem install --no-ri --no-rdoc fpm
   - LOWERAPP=appdir
   - VERSION=0.0.1
   - DIR=appdir
+  - fpm --version
 
   # clone and install libelectronpass
   - git clone https://github.com/electronpass/libelectronpass.git
