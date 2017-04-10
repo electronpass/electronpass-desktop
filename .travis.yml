@@ -26,7 +26,6 @@ addons:
       - clang-3.8
       - g++-5
       - ruby
-      - rubygems
       - ruby-dev
       - build-essential
       - rpm
