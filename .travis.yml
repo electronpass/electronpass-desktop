@@ -73,4 +73,4 @@ script:
   - chmod a+x ElectronPass-x86_64.AppImage
 
   # upload image to transfer.sh
-- curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+  - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
