@@ -22,6 +22,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QTcpServer>
 #include <QTcpSocket>
 #include <iostream>
+#include <string>
 
 class AuthServer: public QObject {
     Q_OBJECT
@@ -29,7 +30,10 @@ public:
     explicit AuthServer(QObject *parent = 0);
 
 public slots:
-    void newConnection();
+    void new_connection();
+signals:
+    void auth_success(std::string request);
+
 private:
     QTcpServer *server;
 };
