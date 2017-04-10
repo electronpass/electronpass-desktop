@@ -21,6 +21,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QObject>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDateTime>
 
 #include <string>
 #include <iostream>
@@ -28,6 +29,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <curl/curl.h>
 
 #include "auth_server.hpp"
+#include "globals.hpp"
+#include "settings.hpp"
 
 class Gdrive: public QObject {
     Q_OBJECT
