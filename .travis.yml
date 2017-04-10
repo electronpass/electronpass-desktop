@@ -1,4 +1,4 @@
-language: ruby
+language: cpp
 sudo: required
 dist: trusty
 
@@ -39,8 +39,6 @@ addons:
       - qt58declarative
       - libsodium-dev
       - curl
-      - fuse
-      - gvfs-fuse
 
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
@@ -49,11 +47,6 @@ before_install:
   - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.8" CC="clang-3.8"; fi
 
 script:
-  # configure fuse
-  - sudo modprobe fuse
-  - user="$(whoami)"
-  - sudo usermod -a -G fuse $user
-
   # install a recent CMake
   - CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
   - mkdir cmake
