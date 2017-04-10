@@ -31,6 +31,7 @@ ApplicationWindow {
 
     // load icon font
     FontLoader { id: materialIconsFont; source: "qrc:/res/fonts/MaterialIcons-Regular.ttf"}
+    FontLoader { id: robotoMonoFont; source: "qrc:/res/fonts/RobotoMono-Regular.ttf"}
 
     Material.theme: (settings.theme == 1) ? Material.Dark : Material.Light
     Material.accent: Material.Cyan

@@ -18,5 +18,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 <RCC>
     <qresource prefix="/res/fonts">
         <file>MaterialIcons-Regular.ttf</file>
+        <file>RobotoMono-Regular.ttf</file>
     </qresource>
 </RCC>
