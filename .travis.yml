@@ -5,10 +5,10 @@ dist: trusty
 matrix:
   include:
     - compiler: gcc
-      rvm: 1.9.1
+      rvm: 1.9.2
       env: COMPILER=g++-5 CXX=g++-5
     - compiler: clang
-      rvm: 1.9.1
+      rvm: 1.9.2
       env: COMPILER=clang++-3.8
 addons:
   apt:
