@@ -1,12 +1,14 @@
-language: cpp
+language: ruby
 sudo: required
 dist: trusty
 
 matrix:
   include:
     - compiler: gcc
+      rvm: 1.9.3
       env: COMPILER=g++-5 CXX=g++-5
     - compiler: clang
+      rvm: 1.9.3
       env: COMPILER=clang++-3.8
 addons:
   apt:
@@ -73,7 +75,6 @@ script:
   - chmod a+x ElectronPass-x86_64.AppImage
 
   # install gem for fpm and configure fpm variables
-  - rvm --default use 1.9.3
   - sudo gem install --no-ri --no-rdoc fpm
   - LOWERAPP=appdir
   - VERSION=0.0.1
