@@ -39,6 +39,7 @@ addons:
       - qt58declarative
       - libsodium-dev
       - curl
+      - gvfs-fuse
 
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
