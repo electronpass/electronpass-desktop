@@ -22,6 +22,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QDesktopServices>
 #include <QUrl>
 #include <QDateTime>
+#include <QNetworkAccessManager>
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 #include <string>
 #include <iostream>
@@ -34,11 +37,42 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 class Gdrive: public QObject {
     Q_OBJECT
+
+    enum class State {
+        SET, GET, NONE
+    };
+
+    Gdrive::State state = State::NONE;
+    std::string new_wallet;
+
+    QNetworkAccessManager *network_manager;
+
+    void authorize_client();
+    void refresh_token();
+
+    void clean_settings() {
+        globals::settings.gdrive_set_token_expiration(QDateTime::currentDateTimeUtc());
+        globals::settings.gdrive_set_refresh_token("");
+        globals::settings.gdrive_set_access_token("");
+    }
 public:
+    Gdrive(QObject *parent = 0);
+
     Q_INVOKABLE void open_url();
+    Q_INVOKABLE void get_wallet();
+    void set_wallet(const std::string&);
 
 public slots:
     void auth_server_request(std::string request);
+    void network_manager_reply(QNetworkReply*);
+
+signals:
+    void wallet_downloaded(const std::string& wallet, int success);
+    void wallet_did_set(int success);
+    // Success codes:
+    // 0: success
+    // 1: already syncing
+    // 2: no network
 };
 
 

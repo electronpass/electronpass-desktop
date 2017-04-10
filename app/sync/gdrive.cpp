@@ -17,6 +17,11 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "gdrive.hpp"
 
+Gdrive::Gdrive(QObject *parent): QObject(parent) {
+    network_manager = new QNetworkAccessManager(this);
+    connect(network_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(network_manager_reply(QNetworkReply*)));
+}
+
 void Gdrive::open_url() {
     QDesktopServices::openUrl(QUrl("http://github.com/electronpass"));
     AuthServer *server = new AuthServer();
@@ -25,4 +30,36 @@ void Gdrive::open_url() {
 
 void Gdrive::auth_server_request(std::string request) {
     std::cout << request << std::endl;
+}
+
+void Gdrive::network_manager_reply(QNetworkReply *reply) {
+    std::cout << std::string(reply->readAll().data()) << std::endl;
+}
+
+void Gdrive::refresh_token() {
+    if (globals::settings.gdrive_get_refresh_token() == "") {
+        authorize_client();
+        return;
+    }
+}
+
+void Gdrive::authorize_client() {
+}
+
+void Gdrive::get_wallet() {
+    if (state != State::NONE) {
+        emit wallet_downloaded("", 1);
+        return;
+    }
+
+    state = State::GET;
+
+    if (globals::settings.gdrive_get_token_expiration() <= QDateTime::currentDateTimeUtc()) {
+        refresh_token();
+        return;
+    }
+}
+
+void Gdrive::set_wallet(const std::string &) {
+
 }
