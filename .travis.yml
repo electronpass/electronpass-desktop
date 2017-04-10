@@ -47,12 +47,6 @@ before_install:
   - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.8" CC="clang-3.8"; fi
 
 script:
-  # install gem for fpm and configure fpm variables
-  - sudo gem install --no-ri --no-rdoc fpm
-  - LOWERAPP=appdir
-  - VERSION=0.0.1
-  - DIR=appdir
-
   # install a recent CMake
   - CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
   - mkdir cmake
@@ -83,6 +77,12 @@ script:
   - sudo ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=.
   - find ./appdir -executable -type f -exec ldd {} \; | grep " =!> /usr" | cut -d " " -f 2-3 | sort | uniq
   - chmod a+x ElectronPass-x86_64.AppImage
+
+  # install gem for fpm and configure fpm variables
+  - sudo gem install --no-ri --no-rdoc fpm
+  - LOWERAPP=appdir
+  - VERSION=0.0.1
+  - DIR=appdir
 
   # build deb and rmp with fpm
   - fpm -s dir -t deb -n $LOWERAPP -v $VERSION -C $DIR
