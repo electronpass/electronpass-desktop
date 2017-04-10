@@ -5,10 +5,8 @@ dist: trusty
 matrix:
   include:
     - compiler: gcc
-      rvm: 1.9.3
       env: COMPILER=g++-5 CXX=g++-5
     - compiler: clang
-      rvm: 1.9.3
       env: COMPILER=clang++-3.8
 addons:
   apt:
@@ -43,7 +41,7 @@ before_install:
   - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.8" CC="clang-3.8"; fi
 
 script:
-  # install a recent CMake
+  # Install a recent CMake
   - CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
   - mkdir cmake
   - wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
@@ -69,21 +67,10 @@ script:
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - sudo ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -qmldir=.
-  - sudo ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=.
-  - find ./appdir -executable -type f -exec ldd {} \; | grep " =!> /usr" | cut -d " " -f 2-3 | sort | uniq
+  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -qmldir=.
+  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=.
+  - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - chmod a+x ElectronPass-x86_64.AppImage
 
-  # install gem for fpm and configure fpm variables
-  - sudo gem install --no-ri --no-rdoc fpm
-  - LOWERAPP=appdir
-  - VERSION=0.0.1
-  - DIR=appdir
-
-  # build deb with fpm
-  - fpm -s dir -t deb -n $LOWERAPP -v $VERSION -C $DIR
-
-  # upload images to transfer.sh
-  - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
-  - curl --upload-file ./*.deb https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.deb
-  - curl --upload-file ./*.rpm https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.rpm
+  # upload image to transfer.sh
+- curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
