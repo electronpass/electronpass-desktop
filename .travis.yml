@@ -75,6 +75,7 @@ script:
   - chmod a+x ElectronPass-x86_64.AppImage
 
   # configure fpm
+  - sudo apt-get -y install ruby-dev build-essential rpm # fpm deps - do not install as packages because they mess with fuse config and linuxdeployqt won't run
   - sudo gem install fpm
   - LOWERAPP=appdir
   - VERSION=0.0.1
