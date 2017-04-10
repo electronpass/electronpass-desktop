@@ -25,6 +25,9 @@ addons:
     packages:
       - clang-3.8
       - g++-5
+      - ruby-dev
+      - build-essential
+      - rpm
       - extra-cmake-modules
       - qt58base
       - qt58graphicaleffects
@@ -41,12 +44,18 @@ before_install:
   - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.8" CC="clang-3.8"; fi
 
 script:
-  # Install a recent CMake
+  # install a recent CMake
   - CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
   - mkdir cmake
   - wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
   - export PATH=${TRAVIS_BUILD_DIR}/cmake/bin:${PATH}
   - cmake --version
+
+  # install gem for fpm and configure fpm variables
+  - sudo gem install fpm
+  - LOWERAPP=appdir
+  - VERSION=0.0.1
+  - DIR=appdir
 
   # clone and install libelectronpass
   - git clone https://github.com/electronpass/libelectronpass.git
@@ -72,5 +81,11 @@ script:
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - chmod a+x ElectronPass-x86_64.AppImage
 
-  # upload image to transfer.sh
+  # build deb and rmp with fpm
+  - fpm -s dir -t deb -n $LOWERAPP -v $VERSION -C $DIR
+  - fpm -s dir -t rpm -n $LOWERAPP -v $VERSION -C $DIR
+
+  # upload images to transfer.sh
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+  - curl --upload-file ./*.deb https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.deb
+  - curl --upload-file ./*.rpm https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.rpm
