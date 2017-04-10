@@ -22,6 +22,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QDesktopServices>
 #include <QUrl>
 
+#include <string>
+#include <iostream>
+
 #include <curl/curl.h>
 
 #include "auth_server.hpp"
@@ -30,6 +33,9 @@ class Gdrive: public QObject {
     Q_OBJECT
 public:
     Q_INVOKABLE void open_url();
+
+public slots:
+    void auth_server_request(std::string request);
 };
 
 
