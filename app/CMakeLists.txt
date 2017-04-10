@@ -7,6 +7,7 @@ set(SOURCES
     data_holder.cpp
     globals.cpp
     sync/gdrive.cpp
+    sync/auth_server.cpp
     electronpass.qrc
     res/fonts/fonts.qrc
     res/img/img.qrc)

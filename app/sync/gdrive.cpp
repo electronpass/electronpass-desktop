@@ -19,4 +19,5 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 void Gdrive::open_url() {
     QDesktopServices::openUrl(QUrl("http://github.com/electronpass"));
+    AuthServer *server = new AuthServer();
 }

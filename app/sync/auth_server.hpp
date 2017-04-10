@@ -15,22 +15,24 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELECTRONPASS_GDRIVE_HPP
-#define ELECTRONPASS_GDRIVE_HPP
+#ifndef ELECTRONPASS_AUTH_SERVER_HPP
+#define ELECTRONPASS_AUTH_SERVER_HPP
 
 #include <QObject>
-#include <QDesktopServices>
-#include <QUrl>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <iostream>
 
-#include <curl/curl.h>
-
-#include "auth_server.hpp"
-
-class Gdrive: public QObject {
+class AuthServer: public QObject {
     Q_OBJECT
 public:
-    Q_INVOKABLE void open_url();
+    explicit AuthServer(QObject *parent = 0);
+
+public slots:
+    void newConnection();
+private:
+    QTcpServer *server;
 };
 
 
-#endif //ELECTRONPASS_GDRIVE_HPP
+#endif //ELECTRONPASS_AUTH_SERVER_HPP
