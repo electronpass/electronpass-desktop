@@ -71,7 +71,7 @@ RowLayout {
         text: getDisplayableContent()
         textFormat: itemDetail.url ? Text.StyledText : Text.PlainText
         font.pixelSize: itemDetail.secure ? 18 : 14
-        font.family: itemDetail.secure ? robotoMonoFont.name : font.family
+        font.family: itemDetail.secure ? robotoMonoFont.name : TextSingleton.font.family
         color: greyTextColor
         onLinkActivated: {
             Qt.openUrlExternally(link)

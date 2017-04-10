@@ -48,6 +48,7 @@ script:
   # install gem for fpm and configure fpm variables
   - echo $PATH
   - echo $GEM_PATH
+  - sudo rvm gemset empty
   - sudo gem install --no-ri --no-rdoc fpm
   - LOWERAPP=appdir
   - VERSION=0.0.1
