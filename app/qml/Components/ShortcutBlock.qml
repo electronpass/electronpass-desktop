@@ -35,6 +35,6 @@ Rectangle {
     Label {
         id: label
         anchors.centerIn: parent
-        text: shortcutBlock.text
+        text: (Qt.platform.os === "osx") ? shortcutBlock.text.replace("Ctrl", "⌘") : shortcutBlock.text
     }
 }
