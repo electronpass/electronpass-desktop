@@ -51,7 +51,8 @@ Image {
                 property int unlocked: 4  // not unlocked
                 focus: true
                 Layout.topMargin: 48
-                placeholderText: qsTr("      Type password to unlock      ") // 6 spaces on each side to make textfield wider (if it's stupid but it works it ain't stupid)
+                font.family: robotoMonoFont.name
+                placeholderText: qsTr(" Type password to unlock ") // 6 spaces on each side to make textfield wider (if it's stupid but it works it ain't stupid)
                 echoMode: TextInput.Password
                 horizontalAlignment: TextInput.AlignHCenter
                 Keys.onReturnPressed: {
