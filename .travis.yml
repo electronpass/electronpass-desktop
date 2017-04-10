@@ -74,5 +74,12 @@ script:
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - chmod a+x ElectronPass-x86_64.AppImage
 
+  # configure fpm
+  - sudo gem install fpm
+  - LOWERAPP=appdir
+  - VERSION=0.0.1
+  - DIR=appdir
+  - fpm -s dir -t deb -n $LOWERAPP -v $VERSION -C $DIR
+
   # upload image to transfer.sh
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
