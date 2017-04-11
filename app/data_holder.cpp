@@ -61,10 +61,10 @@ void DataHolder::lock() {
     // Delete all decrypted data.
     delete[] crypto;
     wallet = electronpass::Wallet();
+    item_names = {};
 }
 
 int DataHolder::get_number_of_items() {
-    std::cout << item_names.size() << std::endl;
     return item_names.size();
 }
 

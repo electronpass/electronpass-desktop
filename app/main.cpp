@@ -59,25 +59,25 @@ int main(int argc, char *argv[]) {
 
     QQmlApplicationEngine engine;
 
+    QSettings qsettings(ORGANIZATION_NAME, APPLICATION_NAME);
+    // init global settings
+    globals::settings.init(qsettings);
+
+    Passwords passwords;
+    Gdrive gdrive;
+    engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
+    engine.rootContext()->setContextProperty("passwordManager", &passwords);
+    engine.rootContext()->setContextProperty("gdrive", &gdrive);
+
     ActionHandler action_handler(argv[0]);
 
     QQmlContext *ctx = engine.rootContext();
     ctx->setContextProperty("actionHandler", &action_handler);
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
-    QSettings qsettings(ORGANIZATION_NAME, APPLICATION_NAME);
-
-    // init global settings
-    globals::settings.init(qsettings);
     // Print location, for testing only.
     // For more see: Testing.md
     std::cout << "Data location: " << globals::settings.get_data_location().toStdString() << std::endl;
-
-    Passwords passwords;
-    Gdrive gdrive;
-    engine.rootContext()->setContextProperty("passwordManager", &passwords);
-    engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
-    engine.rootContext()->setContextProperty("gdrive", &gdrive);
 
     return app.exec();
 }

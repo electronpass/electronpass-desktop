@@ -248,17 +248,19 @@ ApplicationWindow {
     }
 
     function lockGUI(){
-        details.destroyDetails();
-        itemsList.setItemInxed(-1);
-        lock.visible = true;
-        toolbar.visible = false;
-        lock.setFocus();
+        details.destroyDetails()
+        itemsList.setItemIndex(-1)
+        itemsList.model = 0
+        lock.visible = true
+        toolbar.visible = false
+        lock.setFocus()
     }
 
     function unlockGUI(){
-        lock.visible = false;
-        toolbar.visible = true;
-        searchInput.forceActiveFocus();
-        searchInput.selectAll();
+        lock.visible = false
+        toolbar.visible = true
+        searchInput.forceActiveFocus()
+        searchInput.selectAll()
+        itemsList.model = dataHolder.get_number_of_items()
     }
 }

@@ -40,10 +40,10 @@ ListView {
         anchors.top: parent.top
     }
 
-    model: 20
+    model: 0
 
     delegate: ItemDelegate {
-        text: modelData
+        text: dataHolder.get_item_names()[modelData]
         width: listView.width - scrollIndicator.width
         onClicked: {
             listView.currentIndex = modelData;
@@ -58,7 +58,7 @@ ListView {
         listView.decrementCurrentIndex();
     }
 
-    function setItemInxed(index) {
+    function setItemIndex(index) {
         listView.currentIndex = index;
     }
 }
