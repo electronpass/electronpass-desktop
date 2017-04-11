@@ -1,7 +1,6 @@
 # file(GLOB_RECURSE SOURCES *.cpp *.hpp electronpass.qrc "qml/*.qml")
 set(SOURCES
     main.cpp
-    action_handler.cpp
     settings.cpp
     passwords.cpp
     data_holder.cpp

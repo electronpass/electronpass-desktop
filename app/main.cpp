@@ -25,7 +25,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "globals.hpp"
 #include "data_holder.hpp"
-#include "action_handler.hpp"
 #include "settings.hpp"
 #include "passwords.hpp"
 
@@ -69,10 +68,6 @@ int main(int argc, char *argv[]) {
     engine.rootContext()->setContextProperty("passwordManager", &passwords);
     engine.rootContext()->setContextProperty("gdrive", &gdrive);
 
-    ActionHandler action_handler(argv[0]);
-
-    QQmlContext *ctx = engine.rootContext();
-    ctx->setContextProperty("actionHandler", &action_handler);
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     // Print location, for testing only.
