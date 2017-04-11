@@ -43,7 +43,7 @@ ListView {
     model: 0
 
     delegate: ItemDelegate {
-        text: dataHolder.get_item_names()[modelData]
+        text: dataHolder.get_item_name(modelData)
         width: listView.width - scrollIndicator.width
         onClicked: {
             listView.currentIndex = modelData;

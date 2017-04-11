@@ -111,8 +111,8 @@ ApplicationWindow {
                     placeholderText: qsTr(" Search")
                     Keys.onPressed: handleKeys(event)
                     onTextChanged: {
-                        if (text != "") itemsList.setItemInxed(0);
-                        else itemsList.setItemInxed(-1);
+                        if (text != "") itemsList.setItemIndex(0);
+                        else itemsList.setItemIndex(-1);
                     }
                 }
                 ToolButton {

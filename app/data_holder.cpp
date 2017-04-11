@@ -47,9 +47,6 @@ int DataHolder::unlock(const QString& password) {
     text = crypto->decrypt(text, success);
     if (!success) return 3;
 
-    // debug only
-    std::cout << text << std::endl;
-
     wallet = electronpass::serialization::deserialize(text);
 
     for (auto item : wallet.get_items()) item_names.push_back(QString::fromStdString(item.name));
@@ -68,6 +65,6 @@ int DataHolder::get_number_of_items() {
     return item_names.size();
 }
 
-QList<QString> DataHolder::get_item_names() {
-    return item_names;
+QString DataHolder::get_item_name(int id) {
+    return item_names[id];
 }

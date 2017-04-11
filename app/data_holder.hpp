@@ -20,7 +20,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QObject>
 #include <QString>
-#include <QList>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -57,7 +56,7 @@ public:
     Q_INVOKABLE void lock();
 
     Q_INVOKABLE int get_number_of_items();
-    Q_INVOKABLE QList<QString> get_item_names();
+    Q_INVOKABLE QString get_item_name(int id);
 
     // Function that changes attribute of one of the items.
     // electronpass::Wallet object should be then deserialized to json, encrypted and saved.
