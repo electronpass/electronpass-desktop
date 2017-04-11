@@ -44,10 +44,5 @@ find_library(ELECTRONPASS_LIB electronpass)
 find_path(ELECTRONPASS_INCLUDE electronpass)
 include_directories(${ELECTRONPASS_INCLUDE})
 
-# find curl
-find_library(CURL_LIB curl)
-find_path(CURL_INCLUDE curl)
-include_directories(${CURL_INCLUDE})
-
 add_subdirectory(app)
 add_subdirectory(data)

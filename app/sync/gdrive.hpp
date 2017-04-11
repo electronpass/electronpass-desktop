@@ -29,8 +29,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <iostream>
 
-#include <curl/curl.h>
-
 #include "auth_server.hpp"
 #include "globals.hpp"
 #include "settings.hpp"
