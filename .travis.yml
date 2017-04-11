@@ -34,7 +34,6 @@ addons:
       - qt58svg
       - qt58declarative
       - libsodium-dev
-      - curl
 
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
@@ -75,14 +74,15 @@ script:
   - chmod a+x ElectronPass-x86_64.AppImage
 
   # configure fpm
-  - rvm --default use 1.9.3
   - sudo apt-get -y install ruby1.9.3 build-essential rpm # fpm deps - do not install as packages because they mess with fuse config and linuxdeployqt won't run
-  - rvm --default use 1.9.3
   - sudo gem install --no-ri --no-rdoc fpm
-  - LOWERAPP=appdir
+  - LOWERAPP=electronpass
   - VERSION=0.0.1
   - DIR=appdir
   - fpm -s dir -t deb -n $LOWERAPP -v $VERSION -C $DIR
+  - fpm -s dir -t rpm -n $LOWERAPP -v $VERSION -C $DIR
 
   # upload image to transfer.sh
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
+  - curl --upload-file ./*.deb https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.deb
+  - curl --upload-file ./*.rpm https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.rpm
