@@ -1,14 +1,12 @@
-language: ruby
+language: cpp
 sudo: required
 dist: trusty
 
 matrix:
   include:
     - compiler: gcc
-      rvm: 2.0
       env: COMPILER=g++-5 CXX=g++-5
     - compiler: clang
-      rvm: 2.0
       env: COMPILER=clang++-3.8
 addons:
   apt:
@@ -34,7 +32,6 @@ addons:
       - qt58svg
       - qt58declarative
       - libsodium-dev
-      - curl
 
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
@@ -75,8 +72,8 @@ script:
   - chmod a+x ElectronPass-x86_64.AppImage
 
   # configure fpm
-  - sudo apt-get -y install ruby2.0-dev build-essential rpm # fpm deps - do not install as packages because they mess with fuse config and linuxdeployqt won't run
-  - sudo gem install fpm
+  - sudo apt-get -y install ruby1.9.3 rubygems build-essential rpm # fpm deps - do not install as packages because they mess with fuse config and linuxdeployqt won't run
+  - sudo gem install --no-ri --no-rdoc fpm
   - LOWERAPP=appdir
   - VERSION=0.0.1
   - DIR=appdir
