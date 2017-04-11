@@ -5,6 +5,7 @@ bin/*
 cmake-build-debug/*
 docs/html/*
 docs/latex/*
+app/sync/keys.hpp
 
 # Compiled Object files
 *.slo

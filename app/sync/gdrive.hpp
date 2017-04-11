@@ -25,13 +25,18 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QUrlQuery>
+
+#include <electronpass/json/json.h>
 
 #include <string>
 #include <iostream>
+#include <regex>
 
 #include "auth_server.hpp"
 #include "globals.hpp"
 #include "settings.hpp"
+#include "keys.hpp"
 
 class Gdrive: public QObject {
     Q_OBJECT
@@ -44,9 +49,12 @@ class Gdrive: public QObject {
     std::string new_wallet;
 
     QNetworkAccessManager *network_manager;
+    QNetworkReply *current_reply;
 
     void authorize_client();
     void refresh_token();
+
+    void resume_state();
 
     void clean_settings() {
         globals::settings.gdrive_set_token_expiration(QDateTime::currentDateTimeUtc());
@@ -62,7 +70,8 @@ public:
 
 public slots:
     void auth_server_request(std::string request);
-    void network_manager_reply(QNetworkReply*);
+    void client_authentication_ready();
+    void refresh_authentication_ready();
 
 signals:
     void wallet_downloaded(const std::string& wallet, int success);
@@ -71,6 +80,7 @@ signals:
     // 0: success
     // 1: already syncing
     // 2: no network
+    // 3: could not authorize
 };
 
 
