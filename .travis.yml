@@ -1,12 +1,14 @@
-language: cpp
+language: ruby
 sudo: required
 dist: trusty
 
 matrix:
   include:
     - compiler: gcc
+      rvm: 1.9.3
       env: COMPILER=g++-5 CXX=g++-5
     - compiler: clang
+      rvm: 1.9.3
       env: COMPILER=clang++-3.8
 addons:
   apt:
@@ -32,6 +34,7 @@ addons:
       - qt58svg
       - qt58declarative
       - libsodium-dev
+      - curl
 
 before_install:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
