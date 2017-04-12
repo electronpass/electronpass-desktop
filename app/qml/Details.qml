@@ -25,6 +25,7 @@ Pane {
     width: Math.min(420, parent.width)
     padding: 0
     leftPadding: 8
+    bottomPadding: 8
     Material.elevation: 1
     Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : "white"
     opacity: opened ? 1 : 0

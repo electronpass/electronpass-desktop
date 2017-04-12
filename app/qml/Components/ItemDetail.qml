@@ -51,7 +51,7 @@ RowLayout {
         return itemDetail.content;
     }
 
-    Layout.topMargin: -24
+    Layout.topMargin: -22
     Item {
         width: 108
         Label {
@@ -71,6 +71,7 @@ RowLayout {
         text: getDisplayableContent()
         textFormat: itemDetail.url ? Text.StyledText : Text.PlainText
         font.pixelSize: itemDetail.secure ? 18 : 14
+        wrapMode: Text.WrapAnywhere
         color: greyTextColor
         onLinkActivated: {
             Qt.openUrlExternally(link)
@@ -82,7 +83,7 @@ RowLayout {
 
         background: PassStrengthIndicator {
             visible: itemDetail.secure
-            height: 22
+            height: itemDetailContent.height+4
             password: itemDetail.content
             anchors.centerIn: parent
         }
