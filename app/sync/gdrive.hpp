@@ -47,14 +47,18 @@ class Gdrive: public QObject {
 
     Gdrive::State state = State::NONE;
     std::string new_wallet;
+    std::string wallet_id;
 
     QNetworkAccessManager *network_manager;
     QNetworkReply *current_reply;
 
     void authorize_client();
     void refresh_token();
+    void get_wallet_id();
+    void create_wallet();
 
     void resume_state();
+    bool check_authentication_error(const Json::Value&);
 
     void clean_settings() {
         globals::settings.gdrive_set_token_expiration(QDateTime::currentDateTimeUtc());
@@ -72,6 +76,8 @@ public slots:
     void auth_server_request(std::string request);
     void client_authentication_ready();
     void refresh_authentication_ready();
+    void wallet_id_ready();
+    void create_wallet_redy();
 
 signals:
     void wallet_downloaded(const std::string& wallet, int success);

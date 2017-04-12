@@ -17,6 +17,29 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "gdrive.hpp"
 
+std::string upload_body(const std::string& boundary, const std::string& content) {
+    std::string body = "--" + boundary + "\n";
+    body += "Content-Type: application/json; charset=UTF-8\n\n";
+    body += "{\"name\": \"ElectronPass.wallet\"}\n\n";
+    body += "--" + boundary + "\n";
+    body += "Content-Type: text/plain\n\n";
+    body += content + "\n\n";
+    body += "--" + boundary + "--";
+
+    return body;
+}
+
+bool Gdrive::check_authentication_error(const Json::Value& json) {
+    if (json["error"].isObject()) {
+        if (state == State::GET) emit wallet_downloaded("", 3);
+        else if (state == State::SET) emit wallet_did_set(3);
+        state = State::NONE;
+        return true;
+    }
+
+    return false;
+}
+
 Gdrive::Gdrive(QObject *parent): QObject(parent) {
     network_manager = new QNetworkAccessManager(this);
 }
@@ -147,9 +170,69 @@ void Gdrive::authorize_client() {
     QDesktopServices::openUrl(url);
 }
 
-void Gdrive::get_wallet() {
-    std::cout << kGdriveClientSecret << std::endl << kGdriveClientID << std::endl;
+void Gdrive::get_wallet_id() {
+    std::cout << "getting wallet id" << std::endl;
 
+    QUrl url("https://www.googleapis.com/drive/v3/files");
+
+    QUrlQuery url_query;
+    url_query.addQueryItem("q", QUrl::toPercentEncoding("name='ElectronPass.wallet'"));
+    url.setQuery(url_query);
+
+    std::string access_token = globals::settings.gdrive_get_access_token();
+    QNetworkRequest network_request(url);
+    network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
+
+    current_reply = network_manager->get(network_request);
+    connect(current_reply, SIGNAL(readyRead()), this, SLOT(wallet_id_ready()));
+}
+
+void Gdrive::wallet_id_ready() {
+    Json::Value json;
+    Json::Reader reader;
+    reader.parse(current_reply->readAll().data(), json);
+    current_reply->deleteLater();
+
+    if (check_authentication_error(json)) return;
+
+    if (json["files"].size() == 0) {
+        create_wallet();
+        return;
+    }
+
+    wallet_id = json["files"][0]["id"].asString();
+    resume_state();
+}
+
+void Gdrive::create_wallet() {
+    std::cout << "creating wallet" << std::endl;
+
+    const std::string boundary = "electronpass_request_boundary";
+
+    QUrl url("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart");
+
+    QNetworkRequest network_request(url);
+    network_request.setRawHeader("Content-Type", ("multipart/related; boundary=" + boundary).c_str());
+    std::string access_token = globals::settings.gdrive_get_access_token();
+    network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
+
+    current_reply = network_manager->post(network_request, upload_body(boundary, "").c_str());
+    connect(current_reply, SIGNAL(readyRead()), this, SLOT(create_wallet_redy()));
+}
+
+void Gdrive::create_wallet_redy() {
+    Json::Value json;
+    Json::Reader reader;
+    reader.parse(current_reply->readAll().data(), json);
+    current_reply->deleteLater();
+
+    if (check_authentication_error(json)) return;
+
+    wallet_id = json["id"].asString();
+    resume_state();
+}
+
+void Gdrive::get_wallet() {
     if (state != State::NONE) {
         emit wallet_downloaded("", 1);
         return;
@@ -162,7 +245,13 @@ void Gdrive::get_wallet() {
         return;
     }
 
+    if (wallet_id == "") {
+        get_wallet_id();
+        return;
+    }
+
     std::cout << "getting wallet" << std::endl;
+    state = State::NONE;
 }
 
 void Gdrive::set_wallet(const std::string &) {
