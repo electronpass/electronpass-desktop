@@ -19,6 +19,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
+import "Components"
 
 ListView {
     id: listView
@@ -42,12 +43,11 @@ ListView {
 
     model: 0
 
-    delegate: ItemDelegate {
-        text: dataHolder.get_item_name(modelData)
-        width: listView.width - scrollIndicator.width
-        onClicked: {
-            listView.currentIndex = modelData;
-        }
+    delegate: listDelegate
+
+    Component {
+        id: listDelegate
+        ListItem{}
     }
 
     function nextItem() {
