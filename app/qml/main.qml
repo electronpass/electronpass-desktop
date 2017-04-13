@@ -262,5 +262,6 @@ ApplicationWindow {
         searchInput.forceActiveFocus()
         searchInput.selectAll()
         itemsList.model = dataHolder.get_number_of_items()
+        itemsList.setItemIndex(-1)
     }
 }
