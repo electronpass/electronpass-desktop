@@ -60,7 +60,7 @@ ItemDelegate {
             elide: Text.ElideRight
             horizontalAlignment: Text.AlignLeft
 
-            text: "sample.mail@protonmail.com"
+            text: dataHolder.get_item_subname(modelData)
         }
 
     }

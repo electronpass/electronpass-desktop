@@ -49,8 +49,18 @@ int DataHolder::unlock(const QString& password) {
 
     wallet = electronpass::serialization::deserialize(text);
 
-    for (auto item : wallet.get_items()) item_names.push_back(QString::fromStdString(item.name));
+    for (auto item : wallet.get_items()) {
+        item_names.push_back(QString::fromStdString(item.name));
 
+        std::string subname = "";
+        for (auto field : item.get_fields()) {
+            if (!field.sensitive) {
+                subname = field.value;
+                break;
+            }
+        }
+        item_subnames.push_back(QString::fromStdString(subname));
+    }
     return 0;
 }
 
@@ -67,4 +77,13 @@ int DataHolder::get_number_of_items() {
 
 QString DataHolder::get_item_name(int id) {
     return item_names[id];
+}
+
+QString DataHolder::get_item_subname(int id) {
+    return item_subnames[id];
+}
+
+QList<QMap<QString, QString>> DataHolder::get_item(int id) {
+    QList<QMap<QString, QString>> fields;
+    return fields;
 }

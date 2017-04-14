@@ -20,6 +20,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QObject>
 #include <QString>
+#include <QMap>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -34,11 +35,13 @@ class DataHolder: public QObject{
 
     electronpass::Crypto* crypto = 0;
     electronpass::Wallet wallet;
-    QList<QString> item_names;
+    std::vector<QString> item_names;
+    std::vector<QString> item_subnames;
 
     // Reads first line of encrypted file.
     // Location of encrypted files is
     std::string read_file(bool& success);
+    // also: write_file
 
 public:
     DataHolder() {}
@@ -57,6 +60,9 @@ public:
 
     Q_INVOKABLE int get_number_of_items();
     Q_INVOKABLE QString get_item_name(int id);
+    Q_INVOKABLE QString get_item_subname(int id);
+
+    Q_INVOKABLE QList<QMap<QString, QString>> get_item(int id);
 
     // Function that changes attribute of one of the items.
     // electronpass::Wallet object should be then deserialized to json, encrypted and saved.
