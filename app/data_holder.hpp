@@ -20,7 +20,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QObject>
 #include <QString>
-#include <QMap>
+#include <QList>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -30,18 +30,26 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <electronpass/serialization.hpp>
 #include "globals.hpp"
 
-class DataHolder: public QObject{
+
+class DataHolder: public QObject {
     Q_OBJECT
 
     electronpass::Crypto* crypto = 0;
     electronpass::Wallet wallet;
+
     std::vector<QString> item_names;
     std::vector<QString> item_subnames;
+    std::vector<int> item_numbers;
+
+    std::vector<electronpass::Wallet::Field> current_item;
+    int current_item_index = -1;
 
     // Reads first line of encrypted file.
     // Location of encrypted files is
     std::string read_file(bool& success);
     // also: write_file
+
+    QList<QString> convert_field(const electronpass::Wallet::Field& field);
 
 public:
     DataHolder() {}
@@ -62,7 +70,8 @@ public:
     Q_INVOKABLE QString get_item_name(int id);
     Q_INVOKABLE QString get_item_subname(int id);
 
-    Q_INVOKABLE QList<QMap<QString, QString>> get_item(int id);
+    Q_INVOKABLE int get_number_of_item_fields(int id);
+    Q_INVOKABLE QList<QString> get_item_field(int item_id, int field_id);
 
     // Function that changes attribute of one of the items.
     // electronpass::Wallet object should be then deserialized to json, encrypted and saved.

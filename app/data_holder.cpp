@@ -34,6 +34,36 @@ std::string DataHolder::read_file(bool& success) {
     return data;
 }
 
+QList<QString> DataHolder::convert_field(const electronpass::Wallet::Field& field) {
+    QString name = QString::fromStdString(field.name);
+    QString value = QString::fromStdString(field.value);
+    QString sensitive = field.sensitive ? "true" : "false";
+
+    QString type;
+    switch (field.field_type) {
+        case electronpass::Wallet::FieldType::USERNAME:
+            type = "username";
+            break;
+        case electronpass::Wallet::FieldType::PASSWORD:
+            type = "password";
+            break;
+        case electronpass::Wallet::FieldType::EMAIL:
+            type = "email";
+            break;
+        case electronpass::Wallet::FieldType::URL:
+            type = "url";
+            break;
+        case electronpass::Wallet::FieldType::PIN:
+            type = "pin";
+            break;
+        case electronpass::Wallet::FieldType::UNDEFINED:
+        default:
+            type = "undefinded";
+            break;
+    }
+    return {name, value, sensitive};
+}
+
 int DataHolder::unlock(const QString& password) {
     std::string password_string = password.toStdString();
 
@@ -53,12 +83,15 @@ int DataHolder::unlock(const QString& password) {
         item_names.push_back(QString::fromStdString(item.name));
 
         std::string subname = "";
-        for (auto field : item.get_fields()) {
+        std::vector<electronpass::Wallet::Field> fields = item.get_fields();
+        for (auto field : fields) {
             if (!field.sensitive) {
                 subname = field.value;
                 break;
             }
         }
+
+        item_numbers.push_back(fields.size());
         item_subnames.push_back(QString::fromStdString(subname));
     }
     return 0;
@@ -68,7 +101,13 @@ void DataHolder::lock() {
     // Delete all decrypted data.
     delete[] crypto;
     wallet = electronpass::Wallet();
+
     item_names = {};
+    item_subnames = {};
+    item_numbers = {};
+
+    current_item = {};
+    current_item_index = -1;
 }
 
 int DataHolder::get_number_of_items() {
@@ -83,7 +122,22 @@ QString DataHolder::get_item_subname(int id) {
     return item_subnames[id];
 }
 
-QList<QMap<QString, QString>> DataHolder::get_item(int id) {
-    QList<QMap<QString, QString>> fields;
-    return fields;
+int DataHolder::get_number_of_item_fields(int id) {
+    return item_numbers[id];
+}
+
+QList<QString> DataHolder::get_item_field(int item_id, int field_id) {
+    if (item_id == current_item_index) {
+        return convert_field(current_item[field_id]);
+    }
+
+    int error = -1;
+    electronpass::Wallet::Item item = wallet.get_item(item_id, error);
+
+    if (error != 0) {
+        return {"", "", "", ""};
+    }
+    current_item_index = item_id;
+    current_item = item.get_fields();
+    return convert_field(current_item[field_id]);
 }

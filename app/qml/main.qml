@@ -198,10 +198,13 @@ ApplicationWindow {
                 noItemSelectedLabel.opened = false;
                 details.destroyDetails();
                 details.opened = true;
-                details.setTitle("Github " + index);
-                details.addDetail({title: "Username", content: "zigapk", secure: false, url: false});
-                details.addDetail({title: "Url", content: "https://github.com/login", secure: false, url: true});
-                details.addDetail({title: "Password", content: passwordManager.generateRandomPass(Math.floor((Math.random() * (25 - 5)) + 5)), secure: true, url: false});
+                details.setTitle(dataHolder.get_item_name(index));
+                for (var i = 0; i < dataHolder.get_number_of_item_fields(index); ++i) {
+                    var field = dataHolder.get_item_field(index, i);
+                    var sensitive = field[2] != "false";
+                    var url = field[3] == "url";
+                    details.addDetail({title: field[0], content: field[1], secure: sensitive, url: url});
+                }
             }
 
             function hideDetails(){
