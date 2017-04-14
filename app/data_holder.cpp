@@ -99,7 +99,8 @@ int DataHolder::unlock(const QString& password) {
 
 void DataHolder::lock() {
     // Delete all decrypted data.
-    delete[] crypto;
+    delete crypto;
+    crypto = 0;
     wallet = electronpass::Wallet();
 
     item_names = {};
