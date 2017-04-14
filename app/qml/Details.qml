@@ -26,6 +26,7 @@ Pane {
     padding: 0
     leftPadding: 8
     bottomPadding: 8
+    anchors.horizontalCenter: parent.horizontalCenter
     Material.elevation: 1
     Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : "white"
     opacity: opened ? 1 : 0
