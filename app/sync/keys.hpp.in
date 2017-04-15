@@ -1,0 +1,7 @@
+#ifndef ELECTRONPASS_KEYS_HPP
+#define ELECTRONPASS_KEYS_HPP
+
+#define kGdriveClientID "@GDRIVE_CLIENT_ID@"
+#define kGdriveClientSecret "@GDRIVE_CLIENT_SECRET@"
+
+#endif //ELECTRONPASS_KEYS_HPP

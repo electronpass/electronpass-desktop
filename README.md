@@ -53,7 +53,7 @@ The password is:
 
 ### Syncing
 
-For obvious reasons api keys are not included in the source repository. For now ```app id``` and ```app secret``` are stored in ```app/sync/keys.hpp``` as macros. If you want to test syncing you should set your own ```app id``` and ```app secret```. To do that go to [Google API Console](https://console.developer.google.com) and create new project. Under ```Credentials``` create new ```OAuth client ID```. You should also enable ```Google Drive API``` under ```Dashboard```.
+For obvious reasons api keys are not included in the source repository. Sample keys are stored in `app/sync/keys.txt` Refer to [electronpass/credentials](https://github.com/electronpass/credentials) for more information.
 
 ## Graphical assets
 Icons in this project are displayed as a [Material Icons Font](). To preview and find their unicode representations use [CharacterMap](http://bluejamesbond.github.io/CharacterMap/) tool and load ttf file from app/res/fonts/.

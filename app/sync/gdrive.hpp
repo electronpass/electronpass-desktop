@@ -36,7 +36,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "auth_server.hpp"
 #include "globals.hpp"
 #include "settings.hpp"
-#include "keys.hpp"
+#include "keys.hpp.in"
 
 class Gdrive: public QObject {
     Q_OBJECT

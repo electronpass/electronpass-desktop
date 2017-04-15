@@ -6,6 +6,9 @@ cmake-build-debug/*
 docs/html/*
 docs/latex/*
 
+# Gets created by cmake
+app/sync/keys.hpp
+
 # Compiled Object files
 *.slo
 *.lo
