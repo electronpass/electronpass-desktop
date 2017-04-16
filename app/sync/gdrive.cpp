@@ -42,6 +42,7 @@ bool Gdrive::check_authentication_error(const Json::Value& json) {
 
 Gdrive::Gdrive(QObject *parent): QObject(parent) {
     network_manager = new QNetworkAccessManager(this);
+//    clean_settings();
 }
 
 void Gdrive::open_url() {
