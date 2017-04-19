@@ -70,14 +70,16 @@ public:
 
     Q_INVOKABLE void open_url();
     Q_INVOKABLE void get_wallet();
-    void set_wallet(const std::string&);
+    Q_INVOKABLE void set_wallet(const std::string&);
 
 public slots:
     void auth_server_request(std::string request);
     void client_authentication_ready();
     void refresh_authentication_ready();
     void wallet_id_ready();
-    void create_wallet_redy();
+    void create_wallet_ready();
+    void wallet_download_ready();
+    void upload_wallet_ready();
 
 signals:
     void wallet_downloaded(const std::string& wallet, int success);

@@ -218,10 +218,10 @@ void Gdrive::create_wallet() {
     network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
 
     current_reply = network_manager->post(network_request, upload_body(boundary, "").c_str());
-    connect(current_reply, SIGNAL(readyRead()), this, SLOT(create_wallet_redy()));
+    connect(current_reply, SIGNAL(readyRead()), this, SLOT(create_wallet_ready()));
 }
 
-void Gdrive::create_wallet_redy() {
+void Gdrive::create_wallet_ready() {
     Json::Value json;
     Json::Reader reader;
     reader.parse(current_reply->readAll().data(), json);
@@ -231,6 +231,17 @@ void Gdrive::create_wallet_redy() {
 
     wallet_id = json["id"].asString();
     resume_state();
+}
+
+void Gdrive::wallet_download_ready() {
+    std::string wallet(current_reply->readAll().data());
+    current_reply->deleteLater();
+
+    std::cout << "wallet downloaded" << std::endl;
+    std::cout << wallet << std::endl;
+
+    state = State::NONE;
+    emit wallet_downloaded(wallet, 0);
 }
 
 void Gdrive::get_wallet() {
@@ -252,9 +263,60 @@ void Gdrive::get_wallet() {
     }
 
     std::cout << "getting wallet" << std::endl;
-    state = State::NONE;
+
+    std::string url_string = "https://www.googleapis.com/drive/v3/files/" + wallet_id + "?alt=media";
+    QUrl url = QUrl::fromEncoded(QByteArray(url_string.c_str()));
+
+    std::string access_token = globals::settings.gdrive_get_access_token();
+    QNetworkRequest network_request(url);
+    network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
+
+    current_reply = network_manager->get(network_request);
+    connect(current_reply, SIGNAL(readyRead()), this, SLOT(wallet_download_ready()));
 }
 
-void Gdrive::set_wallet(const std::string &) {
+void Gdrive::upload_wallet_ready() {
+    std::string reply(current_reply->readAll().data());
+    current_reply->deleteLater();
 
+    std::cout << "wallet uploaded" << std::endl;
+    std::cout << reply << std::endl;
+
+    state = State::NONE;
+    emit wallet_did_set(0);
+}
+
+void Gdrive::set_wallet(const std::string& wallet) {
+    if (state != State::NONE) {
+        emit wallet_did_set(1);
+        return;
+    }
+
+    state = State::SET;
+    new_wallet = wallet;
+
+    if (globals::settings.gdrive_get_token_expiration() <= QDateTime::currentDateTimeUtc()) {
+        refresh_token();
+        return;
+    }
+
+    if (wallet_id == "") {
+        get_wallet_id();
+        return;
+    }
+
+    std::cout << "setting wallet" << std::endl;
+
+    std::string url_string = "https://www.googleapis.com/upload/drive/v3/files/" + wallet_id + "?uploadType=multipart";
+    QUrl url = QUrl::fromEncoded(QByteArray(url_string.c_str()));
+
+    const std::string boundary = "electronpass_request_boundary";
+
+    std::string access_token = globals::settings.gdrive_get_access_token();
+    QNetworkRequest network_request(url);
+    network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
+    network_request.setRawHeader("Content-Type", ("multipart/related; boundary=" + boundary).c_str());
+
+    current_reply = network_manager->sendCustomRequest(network_request, "PATCH", upload_body(boundary, wallet).c_str());
+    connect(current_reply, SIGNAL(readyRead()), this, SLOT(upload_wallet_ready()));
 }
