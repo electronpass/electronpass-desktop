@@ -112,15 +112,17 @@ ApplicationWindow {
                     Keys.onPressed: handleKeys(event)
                     onTextChanged: {
                         if (text != "") {
-                            var search_results = dataHolder.search(text);
                             // returns -1 if nothing found
+                            var search_results = dataHolder.search(text);
+
+                            // first change model, then update index
+                            itemsList.model = dataHolder.get_number_of_items();
                             itemsList.setItemIndex(search_results);
                         } else {
                             dataHolder.stop_search();
+                            itemsList.model = dataHolder.get_number_of_items();
                             itemsList.setItemIndex(-1);
                         }
-                        // update side bar
-                        itemsList.model = dataHolder.get_number_of_items();
                     }
                 }
                 ToolButton {
@@ -169,11 +171,12 @@ ApplicationWindow {
         spacing: 0
 
         function onItemSelected(index) {
-            if (index < 0) {
-                detailsPane.hideDetails();
-            }else {
-                detailsPane.showDetails(index);
-            }
+            handleDetails(index);
+        }
+
+        function handleDetails(index) {
+            if (index < 0) detailsPane.hideDetails();
+            else detailsPane.showDetails(index);
         }
 
         ItemsList {

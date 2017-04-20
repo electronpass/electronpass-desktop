@@ -60,5 +60,6 @@ ListView {
 
     function setItemIndex(index) {
         listView.currentIndex = index;
+        mainLayout.handleDetails(index);
     }
 }

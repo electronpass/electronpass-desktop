@@ -119,6 +119,7 @@ void DataHolder::lock() {
     item_numbers = {};
 
     search_strings = {};
+    search_in_progress = false;
 
     current_item = {};
     current_item_index = -1;
