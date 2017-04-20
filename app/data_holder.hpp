@@ -41,6 +41,10 @@ class DataHolder: public QObject {
     std::vector<QString> item_subnames;
     std::vector<int> item_numbers;
 
+    std::vector<QString> search_strings;
+    std::vector<int> found_indices;
+    bool search_in_progress = false;
+
     std::vector<electronpass::Wallet::Field> current_item;
     int current_item_index = -1;
 
@@ -72,6 +76,10 @@ public:
 
     Q_INVOKABLE int get_number_of_item_fields(int id);
     Q_INVOKABLE QList<QString> get_item_field(int item_id, int field_id);
+
+    // Returns index of first found item which contains string.
+    Q_INVOKABLE int search(const QString& s);
+    Q_INVOKABLE void stop_search();
 
     // Function that changes attribute of one of the items.
     // electronpass::Wallet object should be then deserialized to json, encrypted and saved.

@@ -111,8 +111,16 @@ ApplicationWindow {
                     placeholderText: qsTr(" Search")
                     Keys.onPressed: handleKeys(event)
                     onTextChanged: {
-                        if (text != "") itemsList.setItemIndex(0);
-                        else itemsList.setItemIndex(-1);
+                        if (text != "") {
+                            var search_results = dataHolder.search(text);
+                            // returns -1 if nothing found
+                            itemsList.setItemIndex(search_results);
+                        } else {
+                            dataHolder.stop_search();
+                            itemsList.setItemIndex(-1);
+                        }
+                        // update side bar
+                        itemsList.model = dataHolder.get_number_of_items();
                     }
                 }
                 ToolButton {

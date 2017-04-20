@@ -5,11 +5,13 @@ set(SOURCES
     passwords.cpp
     data_holder.cpp
     globals.cpp
+    search.cpp
     sync/gdrive.cpp
     sync/auth_server.cpp
     electronpass.qrc
     res/fonts/fonts.qrc
-    res/img/img.qrc)
+    res/img/img.qrc
+    )
 
 add_executable(electronpass ${SOURCES})
 

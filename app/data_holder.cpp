@@ -79,21 +79,32 @@ int DataHolder::unlock(const QString& password) {
 
     wallet = electronpass::serialization::deserialize(text);
 
+
     for (auto item : wallet.get_items()) {
         item_names.push_back(QString::fromStdString(item.name));
 
         std::string subname = "";
+        std::string search_string = item.name + " ";
+        bool got_subname = false;
+
         std::vector<electronpass::Wallet::Field> fields = item.get_fields();
         for (auto field : fields) {
             if (!field.sensitive) {
-                subname = field.value;
-                break;
+                if (!got_subname) {
+                    subname = field.value;
+                    got_subname = true;
+                }
+                search_string += field.value + " ";
             }
         }
 
         item_numbers.push_back(fields.size());
         item_subnames.push_back(QString::fromStdString(subname));
+
+        QString search_qstring = QString::fromStdString(search_string);
+        search_strings.push_back(search_qstring);
     }
+
     return 0;
 }
 
@@ -107,27 +118,45 @@ void DataHolder::lock() {
     item_subnames = {};
     item_numbers = {};
 
+    search_strings = {};
+
     current_item = {};
     current_item_index = -1;
 }
 
 int DataHolder::get_number_of_items() {
+    if (search_in_progress) {
+        return found_indices.size();
+    }
     return item_names.size();
 }
 
 QString DataHolder::get_item_name(int id) {
+    if (search_in_progress) {
+        id = found_indices[id];
+    }
     return item_names[id];
 }
 
 QString DataHolder::get_item_subname(int id) {
+    if (search_in_progress) {
+        id = found_indices[id];
+    }
     return item_subnames[id];
 }
 
 int DataHolder::get_number_of_item_fields(int id) {
+    if (search_in_progress) {
+        id = found_indices[id];
+    }
     return item_numbers[id];
 }
 
 QList<QString> DataHolder::get_item_field(int item_id, int field_id) {
+    if (search_in_progress) {
+        item_id = found_indices[item_id];
+    }
+
     if (item_id == current_item_index) {
         return convert_field(current_item[field_id]);
     }
