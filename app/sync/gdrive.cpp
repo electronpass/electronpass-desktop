@@ -18,6 +18,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "gdrive.hpp"
 
 std::string upload_body(const std::string& boundary, const std::string& content) {
+
     std::string body = "--" + boundary + "\n";
     body += "Content-Type: application/json; charset=UTF-8\n\n";
     body += "{\"name\": \"ElectronPass.wallet\"}\n\n";
@@ -27,6 +28,10 @@ std::string upload_body(const std::string& boundary, const std::string& content)
     body += "--" + boundary + "--";
 
     return body;
+}
+
+Gdrive::Gdrive(QObject *parent): QObject(parent) {
+    network_manager = new QNetworkAccessManager(this);
 }
 
 bool Gdrive::check_authentication_error(const Json::Value& json) {
@@ -40,61 +45,19 @@ bool Gdrive::check_authentication_error(const Json::Value& json) {
     return false;
 }
 
-Gdrive::Gdrive(QObject *parent): QObject(parent) {
-    network_manager = new QNetworkAccessManager(this);
-//    clean_settings();
-}
-
-void Gdrive::open_url() {
-    QDesktopServices::openUrl(QUrl("http://github.com/electronpass"));
-    AuthServer *server = new AuthServer(this);
-    connect(server, SIGNAL(auth_success(std::string)), this, SLOT(auth_server_request(std::string)));
-}
-
 void Gdrive::resume_state() {
     switch (state) {
         case State::GET:
             state = State::NONE;
-            get_wallet();
+            download_wallet();
             break;
         case State::SET:
             state = State::NONE;
-            set_wallet(new_wallet);
+            upload_wallet(new_wallet);
             break;
         default:
             break;
     }
-}
-
-void Gdrive::client_authentication_ready() {
-    Json::Value json;
-    Json::Reader reader;
-    reader.parse(current_reply->readAll().data(), json);
-    current_reply->deleteLater();
-
-    globals::settings.gdrive_set_access_token(json["access_token"].asString());
-    globals::settings.gdrive_set_refresh_token(json["refresh_token"].asString());
-
-    int expires_in = json["expires_in"].asInt() - 300;
-    QDateTime expiration_time = QDateTime::currentDateTimeUtc().addSecs(expires_in);
-    globals::settings.gdrive_set_token_expiration(expiration_time);
-
-    resume_state();
-}
-
-void Gdrive::refresh_authentication_ready() {
-    Json::Value json;
-    Json::Reader reader;
-    reader.parse(current_reply->readAll().data(), json);
-    current_reply->deleteLater();
-
-    globals::settings.gdrive_set_access_token(json["access_token"].asString());
-
-    int expires_in = json["expires_in"].asInt() - 300;
-    QDateTime expiration_time = QDateTime::currentDateTimeUtc().addSecs(expires_in);
-    globals::settings.gdrive_set_token_expiration(expiration_time);
-
-    resume_state();
 }
 
 void Gdrive::auth_server_request(std::string request) {
@@ -132,6 +95,37 @@ void Gdrive::auth_server_request(std::string request) {
     connect(current_reply, SIGNAL(readyRead()), this, SLOT(client_authentication_ready()));
 }
 
+void Gdrive::client_authentication_ready() {
+    Json::Value json;
+    Json::Reader reader;
+    reader.parse(current_reply->readAll().data(), json);
+    current_reply->deleteLater();
+
+    globals::settings.gdrive_set_access_token(json["access_token"].asString());
+    globals::settings.gdrive_set_refresh_token(json["refresh_token"].asString());
+
+    int expires_in = json["expires_in"].asInt() - 300;
+    QDateTime expiration_time = QDateTime::currentDateTimeUtc().addSecs(expires_in);
+    globals::settings.gdrive_set_token_expiration(expiration_time);
+
+    resume_state();
+}
+
+void Gdrive::refresh_authentication_ready() {
+    Json::Value json;
+    Json::Reader reader;
+    reader.parse(current_reply->readAll().data(), json);
+    current_reply->deleteLater();
+
+    globals::settings.gdrive_set_access_token(json["access_token"].asString());
+
+    int expires_in = json["expires_in"].asInt() - 300;
+    QDateTime expiration_time = QDateTime::currentDateTimeUtc().addSecs(expires_in);
+    globals::settings.gdrive_set_token_expiration(expiration_time);
+
+    resume_state();
+}
+
 void Gdrive::refresh_token() {
     std::string refresh_token = globals::settings.gdrive_get_refresh_token();
 
@@ -140,7 +134,7 @@ void Gdrive::refresh_token() {
         return;
     }
 
-    std::cout << "refreshing token" << std::endl;
+    std::cout << "<gdrive.cpp> [Log] Refreshing access token." << std::endl;
 
     QUrlQuery post_data;
     post_data.addQueryItem("refresh_token", QString(refresh_token.c_str()));
@@ -155,7 +149,7 @@ void Gdrive::refresh_token() {
 }
 
 void Gdrive::authorize_client() {
-    std::cout << "authorizing client" << std::endl;
+    std::cout << "<gdrive.cpp> [Log] Authorizing client." << std::endl;
 
     QUrl url("https://accounts.google.com/o/oauth2/v2/auth");
     QUrlQuery url_query;
@@ -172,7 +166,7 @@ void Gdrive::authorize_client() {
 }
 
 void Gdrive::get_wallet_id() {
-    std::cout << "getting wallet id" << std::endl;
+    std::cout << "<gdrive.cpp> [Log] Getting wallet id." << std::endl;
 
     QUrl url("https://www.googleapis.com/drive/v3/files");
 
@@ -206,11 +200,11 @@ void Gdrive::wallet_id_ready() {
 }
 
 void Gdrive::create_wallet() {
-    std::cout << "creating wallet" << std::endl;
-
-    const std::string boundary = "electronpass_request_boundary";
+    std::cout << "<gdrive.cpp> [Log] Creating wallet." << std::endl;
 
     QUrl url("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart");
+
+    const std::string boundary = "electronpass_request_boundary";
 
     QNetworkRequest network_request(url);
     network_request.setRawHeader("Content-Type", ("multipart/related; boundary=" + boundary).c_str());
@@ -233,18 +227,17 @@ void Gdrive::create_wallet_ready() {
     resume_state();
 }
 
-void Gdrive::wallet_download_ready() {
+void Gdrive::download_wallet_ready() {
     std::string wallet(current_reply->readAll().data());
     current_reply->deleteLater();
 
-    std::cout << "wallet downloaded" << std::endl;
-    std::cout << wallet << std::endl;
+    std::cout << "<gdrive.cpp> [Log] Wallet downloaded." << std::endl;
 
     state = State::NONE;
     emit wallet_downloaded(wallet, 0);
 }
 
-void Gdrive::get_wallet() {
+void Gdrive::download_wallet() {
     if (state != State::NONE) {
         emit wallet_downloaded("", 1);
         return;
@@ -262,7 +255,7 @@ void Gdrive::get_wallet() {
         return;
     }
 
-    std::cout << "getting wallet" << std::endl;
+    std::cout << "<gdrive.cpp> [Log] Getting wallet." << std::endl;
 
     std::string url_string = "https://www.googleapis.com/drive/v3/files/" + wallet_id + "?alt=media";
     QUrl url = QUrl::fromEncoded(QByteArray(url_string.c_str()));
@@ -272,21 +265,20 @@ void Gdrive::get_wallet() {
     network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
 
     current_reply = network_manager->get(network_request);
-    connect(current_reply, SIGNAL(readyRead()), this, SLOT(wallet_download_ready()));
+    connect(current_reply, SIGNAL(readyRead()), this, SLOT(download_wallet_ready()));
 }
 
 void Gdrive::upload_wallet_ready() {
     std::string reply(current_reply->readAll().data());
     current_reply->deleteLater();
 
-    std::cout << "wallet uploaded" << std::endl;
-    std::cout << reply << std::endl;
+    std::cout << "<gdrive.cpp> [Log] Wallet uploaded." << std::endl;
 
     state = State::NONE;
     emit wallet_uploaded(0);
 }
 
-void Gdrive::set_wallet(const std::string& wallet) {
+void Gdrive::upload_wallet(const std::string &wallet) {
     if (state != State::NONE) {
         emit wallet_uploaded(1);
         return;
@@ -305,7 +297,7 @@ void Gdrive::set_wallet(const std::string& wallet) {
         return;
     }
 
-    std::cout << "setting wallet" << std::endl;
+    std::cout << "<gdrive.cpp> [Log] Uploading wallet." << std::endl;
 
     std::string url_string = "https://www.googleapis.com/upload/drive/v3/files/" + wallet_id + "?uploadType=multipart";
     QUrl url = QUrl::fromEncoded(QByteArray(url_string.c_str()));

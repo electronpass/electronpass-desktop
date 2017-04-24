@@ -49,17 +49,19 @@ bool SyncManager::init() {
 }
 
 void SyncManager::download_wallet() {
-    sync_object->get_wallet();
+    sync_object->download_wallet();
 }
 
 void SyncManager::upload_wallet(const std::string &wallet) {
-    sync_object->set_wallet(wallet);
+    sync_object->upload_wallet(wallet);
 }
 
 void SyncManager::service_did_download_wallet(const std::string &wallet, int success) {
+    std::cout << "<sync_manager.cpp> [Log] Downloaded wallet." << std::endl << wallet << std::endl;
     emit wallet_downloaded(wallet, success);
 }
 
 void SyncManager::service_did_upload_wallet(int success) {
+    std::cout << "<sync_manager.cpp> [Log] Uploaded wallet." << std::endl;
     emit wallet_uploaded(success);
 }

@@ -23,15 +23,12 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 class SyncBase {
 public:
     virtual ~SyncBase() {}
-    virtual void get_wallet() = 0;
-    virtual void set_wallet(const std::string&) = 0;
+    virtual void download_wallet() = 0;
+    virtual void upload_wallet(const std::string&) = 0;
 
 signals:
     virtual void wallet_downloaded(const std::string& wallet, int success) = 0;
     virtual void wallet_uploaded(int success) = 0;
 };
-
-
-Q_DECLARE_INTERFACE(SyncBase, "SyncBase")
 
 #endif //ELECTRONPASS_SYNC_BASE_HPP

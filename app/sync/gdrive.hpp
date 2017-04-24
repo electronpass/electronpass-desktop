@@ -41,7 +41,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 class Gdrive: public QObject, public SyncBase {
     Q_OBJECT
-    Q_INTERFACES(SyncBase)
 
     enum class State {
         SET, GET, NONE
@@ -64,9 +63,8 @@ class Gdrive: public QObject, public SyncBase {
 public:
     Gdrive(QObject *parent = 0);
 
-    Q_INVOKABLE void open_url();
-    Q_INVOKABLE void get_wallet();
-    Q_INVOKABLE void set_wallet(const std::string&);
+    void download_wallet();
+    void upload_wallet(const std::string&);
 
 public slots:
     void auth_server_request(std::string request);
@@ -74,7 +72,7 @@ public slots:
     void refresh_authentication_ready();
     void wallet_id_ready();
     void create_wallet_ready();
-    void wallet_download_ready();
+    void download_wallet_ready();
     void upload_wallet_ready();
 
 signals:
