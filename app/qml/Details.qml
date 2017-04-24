@@ -26,10 +26,12 @@ Pane {
     padding: 0
     leftPadding: 8
     bottomPadding: 8
+    height: detailsList.contentHeight + detailsTitleLabel.height + 32
     anchors.horizontalCenter: parent.horizontalCenter
     Material.elevation: 1
     Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : "white"
     opacity: opened ? 1 : 0
+    property string title
     Behavior on opacity {
         NumberAnimation { duration: detailsPane.opacityAnimationDuration }
     }
@@ -53,15 +55,12 @@ Pane {
     }
 
     function addDetail(obj){
-        var component = Qt.createComponent("Components/ItemDetail.qml");
-        component.createObject(detailsContainer, {"title": obj.title, "content": obj.content, "secure": obj.secure, "url": obj.url});
+        detailsModel.append({titlevar: obj.title, contentvar: obj.content, securevar: obj.secure, urlvar: obj.url});
     }
 
     function destroyDetails(){
         detailsTitleLabel.text = "";
-        for(var i = detailsContainer.children.length; i > 0 ; i--) {
-            detailsContainer.children[i-1].destroy()
-        }
+        detailsModel.clear();
     }
 
     function destroyDetailsWithDelay(delay){
@@ -73,6 +72,8 @@ Pane {
         anchors.left: parent.left
         anchors.right: parent.right
         id: rootColumnLayout
+        height: parent.height - 32
+        width: parent.width
 
         RowLayout {
             Layout.fillWidth: true
@@ -81,11 +82,19 @@ Pane {
                 id: detailsTitleLabel
                 font.pixelSize: 20
                 Layout.fillWidth: true
+                wrapMode: Text.WordWrap
             }
             ToolButton {
                 font.family: materialIconsFont.name
                 font.pixelSize: 18
                 text: qsTr("\uE150")
+                onClicked: {
+                  editItemDialog.open();
+                  editItemDialog.setTitle(detailsTitleLabel.text);
+                  for (var i = 0; i < detailsModel.count; i++){
+                    editItemDialog.addEditDetail(detailsModel.get(i));
+                  }
+                }
             }
             ToolButton {
                 font.family: materialIconsFont.name
@@ -94,10 +103,36 @@ Pane {
                 onClicked: deleteConfirmationDialog.open()
             }
         }
-        ColumnLayout {
+
+        //model to hold details
+        ListModel {
+          id: detailsModel
+        }
+
+        ListView {
             anchors.left: parent.left
             anchors.right: parent.right
-            id: detailsContainer
+            Layout.fillHeight: true
+            Layout.topMargin: -22
+            interactive: false
+            spacing: -12
+            id: detailsList
+            model: detailsModel
+
+            add: Transition {
+                NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.InOutCubic }
+            }
+
+            displaced: Transition {
+                NumberAnimation { properties: "y"; duration: 200; easing.type: Easing.InOutCubic }
+            }
+
+            delegate: ItemDetail {
+              title: titlevar
+              content: contentvar
+              secure: securevar
+              url: urlvar
+            }
         }
     }
 }

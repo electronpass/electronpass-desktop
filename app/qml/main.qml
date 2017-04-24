@@ -256,6 +256,10 @@ ApplicationWindow {
         id: deleteConfirmationDialog
     }
 
+    EditItemDialog{
+        id: editItemDialog
+    }
+
     Snackbar{
         id: snackbar
         fullWidth: true

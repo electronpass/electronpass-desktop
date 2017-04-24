@@ -31,6 +31,7 @@ RowLayout {
     property string secureMask: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022"
     property bool secureTextVisible: false
     property color greyTextColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade300) : Material.color(Material.Grey, Material.Shade800)
+    width: parent.width
 
     function toggleVisibility() {
         if (itemDetail.secure && itemDetail.secureTextVisible) {
@@ -51,7 +52,6 @@ RowLayout {
         return itemDetail.content;
     }
 
-    Layout.topMargin: -22
     Item {
         width: 108
         Label {
