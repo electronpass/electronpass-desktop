@@ -60,5 +60,7 @@ Icons in this project are displayed as a [Material Icons Font](). To preview and
 
 Lock backgrounds are obtained from free wallpaper site  [WallpaperStop](http://www.wallpaperstop.com).
 
+Electronpass icons and other project specific assets are stored in [electronpass/graphics](https://github.com/electronpass/graphics).
+
 ## License
 Code in this project is licensed under [GNU GPLv3 license](https://github.com/electronpass/electronpass-desktop/blob/master/LICENSE). Some third party files are subjective to their respective license.
