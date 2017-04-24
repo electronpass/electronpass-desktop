@@ -23,7 +23,7 @@ int DataHolder::search(const QString& s) {
     found_indices = {};
 
     for (unsigned int i = 0; i < search_strings.size(); ++i) {
-        int found = search_strings[i].indexOf(s, Qt::CaseInsensitive);
+        int found = search_strings[i].indexOf(s, 0, Qt::CaseInsensitive);
         if (found != -1) {
             found_indices.push_back(i);
             if (best_match_index > found) {
