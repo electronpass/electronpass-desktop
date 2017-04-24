@@ -18,6 +18,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #ifndef ELECTRONPASS_GDRIVE_HPP
 #define ELECTRONPASS_GDRIVE_HPP
 
+#define kRequestBoundary "electronpass_request_boundary"
+
 #include <QObject>
 #include <QDesktopServices>
 #include <QUrl>

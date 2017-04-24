@@ -17,15 +17,15 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "gdrive.hpp"
 
-std::string upload_body(const std::string& boundary, const std::string& content) {
+std::string upload_body(const std::string& content) {
 
-    std::string body = "--" + boundary + "\n";
+    std::string body = "--" kRequestBoundary "\n";
     body += "Content-Type: application/json; charset=UTF-8\n\n";
     body += "{\"name\": \"ElectronPass.wallet\"}\n\n";
-    body += "--" + boundary + "\n";
+    body += "--" kRequestBoundary "\n";
     body += "Content-Type: text/plain\n\n";
     body += content + "\n\n";
-    body += "--" + boundary + "--";
+    body += "--" kRequestBoundary "--";
 
     return body;
 }
@@ -204,14 +204,12 @@ void Gdrive::create_wallet() {
 
     QUrl url("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart");
 
-    const std::string boundary = "electronpass_request_boundary";
-
     QNetworkRequest network_request(url);
-    network_request.setRawHeader("Content-Type", ("multipart/related; boundary=" + boundary).c_str());
+    network_request.setRawHeader("Content-Type", "multipart/related; boundary=" kRequestBoundary);
     std::string access_token = globals::settings.gdrive_get_access_token();
     network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
 
-    current_reply = network_manager->post(network_request, upload_body(boundary, "").c_str());
+    current_reply = network_manager->post(network_request, upload_body("").c_str());
     connect(current_reply, SIGNAL(readyRead()), this, SLOT(create_wallet_ready()));
 }
 
@@ -302,13 +300,11 @@ void Gdrive::upload_wallet(const std::string &wallet) {
     std::string url_string = "https://www.googleapis.com/upload/drive/v3/files/" + wallet_id + "?uploadType=multipart";
     QUrl url = QUrl::fromEncoded(QByteArray(url_string.c_str()));
 
-    const std::string boundary = "electronpass_request_boundary";
-
     std::string access_token = globals::settings.gdrive_get_access_token();
     QNetworkRequest network_request(url);
     network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
-    network_request.setRawHeader("Content-Type", ("multipart/related; boundary=" + boundary).c_str());
+    network_request.setRawHeader("Content-Type", "multipart/related; boundary=" kRequestBoundary);
 
-    current_reply = network_manager->sendCustomRequest(network_request, "PATCH", upload_body(boundary, wallet).c_str());
+    current_reply = network_manager->sendCustomRequest(network_request, "PATCH", upload_body(wallet).c_str());
     connect(current_reply, SIGNAL(readyRead()), this, SLOT(upload_wallet_ready()));
 }
