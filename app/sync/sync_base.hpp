@@ -31,4 +31,7 @@ signals:
     virtual void wallet_did_set(int success) = 0;
 };
 
+
+Q_DECLARE_INTERFACE(SyncBase, "SyncBase")
+
 #endif //ELECTRONPASS_SYNC_BASE_HPP

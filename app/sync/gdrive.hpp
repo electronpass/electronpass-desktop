@@ -41,6 +41,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 class Gdrive: public QObject, public SyncBase {
     Q_OBJECT
+    Q_INTERFACES(SyncBase)
 
     enum class State {
         SET, GET, NONE

@@ -44,7 +44,18 @@ public:
     static std::string service_to_string(const Service &);
 
 public slots:
+    void service_did_download_wallet(const std::string& wallet, int success);
+    void service_did_upload_wallet(int success);
 
+signals:
+    void wallet_downloaded(const std::string& wallet, int success);
+    void wallet_uploaded(int success);
+
+    // Success codes:
+    // 0: success
+    // 1: already syncing
+    // 2: no network
+    // 3: could not authorize
 };
 
 

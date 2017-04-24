@@ -34,5 +34,14 @@ void SyncManager::init() {
 
     if (service == Service::GDRIVE) {
         sync_object = new Gdrive(this);
+        connect(dynamic_cast<QObject*>(sync_object), SIGNAL(wallet_downloaded(const std::string& wallet, int success)), this, SLOT(service_did_download_wallet(const std::string& wallet, int success)));
     }
+}
+
+void SyncManager::service_did_download_wallet(const std::string &wallet, int success) {
+    emit wallet_downloaded(wallet, success);
+}
+
+void SyncManager::service_did_upload_wallet(int success) {
+    emit wallet_uploaded(success);
 }
