@@ -32,7 +32,7 @@ std::string upload_body(const std::string& boundary, const std::string& content)
 bool Gdrive::check_authentication_error(const Json::Value& json) {
     if (json["error"].isObject()) {
         if (state == State::GET) emit wallet_downloaded("", 3);
-        else if (state == State::SET) emit wallet_did_set(3);
+        else if (state == State::SET) emit wallet_uploaded(3);
         state = State::NONE;
         return true;
     }
@@ -108,7 +108,7 @@ void Gdrive::auth_server_request(std::string request) {
                 emit wallet_downloaded("", 3);
                 break;
             case State::SET:
-                emit wallet_did_set(3);
+                emit wallet_uploaded(3);
                 break;
             case State::NONE:
                 break;
@@ -283,12 +283,12 @@ void Gdrive::upload_wallet_ready() {
     std::cout << reply << std::endl;
 
     state = State::NONE;
-    emit wallet_did_set(0);
+    emit wallet_uploaded(0);
 }
 
 void Gdrive::set_wallet(const std::string& wallet) {
     if (state != State::NONE) {
-        emit wallet_did_set(1);
+        emit wallet_uploaded(1);
         return;
     }
 

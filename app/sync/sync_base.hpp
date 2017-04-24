@@ -28,7 +28,7 @@ public:
 
 signals:
     virtual void wallet_downloaded(const std::string& wallet, int success) = 0;
-    virtual void wallet_did_set(int success) = 0;
+    virtual void wallet_uploaded(int success) = 0;
 };
 
 

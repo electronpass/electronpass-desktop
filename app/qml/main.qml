@@ -152,7 +152,7 @@ ApplicationWindow {
                         MenuItem {
                             text: "Sync now"
                             onTriggered: {
-                                gdrive.get_wallet();
+                                syncManager.download_wallet();
                             }
                         }
                         MenuItem {

@@ -34,7 +34,8 @@ class SyncManager: public QObject {
 public:
     SyncManager(QObject *parent = 0);
 
-    void init();
+    // Return true if successful init, otherwise false
+    bool init();
 
     enum class Service {
         NONE, GDRIVE
@@ -42,6 +43,9 @@ public:
 
     static Service string_to_service(const std::string &);
     static std::string service_to_string(const Service &);
+
+    Q_INVOKABLE void download_wallet();
+    Q_INVOKABLE void upload_wallet(const std::string& wallet);
 
 public slots:
     void service_did_download_wallet(const std::string& wallet, int success);

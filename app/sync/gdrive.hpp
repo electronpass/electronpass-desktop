@@ -79,7 +79,7 @@ public slots:
 
 signals:
     void wallet_downloaded(const std::string& wallet, int success);
-    void wallet_did_set(int success);
+    void wallet_uploaded(int success);
     // Success codes:
     // 0: success
     // 1: already syncing

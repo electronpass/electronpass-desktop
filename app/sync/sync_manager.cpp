@@ -29,13 +29,31 @@ std::string SyncManager::service_to_string(const Service& service) {
 
 SyncManager::SyncManager(QObject *parent): QObject(parent) {}
 
-void SyncManager::init() {
+bool SyncManager::init() {
     Service service = string_to_service(globals::settings.sync_manager_get_service());
 
-    if (service == Service::GDRIVE) {
-        sync_object = new Gdrive(this);
-        connect(dynamic_cast<QObject*>(sync_object), SIGNAL(wallet_downloaded(const std::string& wallet, int success)), this, SLOT(service_did_download_wallet(const std::string& wallet, int success)));
-    }
+    if (service == Service::NONE) return false;
+
+    if (service == Service::GDRIVE) sync_object = new Gdrive(this);
+
+    connect(dynamic_cast<QObject*>(sync_object),
+            SIGNAL(wallet_downloaded(const std::string&, int)),
+            this,
+            SLOT(service_did_download_wallet(const std::string&, int)));
+    connect(dynamic_cast<QObject*>(sync_object),
+            SIGNAL(wallet_uploaded(int)),
+            this,
+            SLOT(service_did_upload_wallet(int)));
+
+    return true;
+}
+
+void SyncManager::download_wallet() {
+    sync_object->get_wallet();
+}
+
+void SyncManager::upload_wallet(const std::string &wallet) {
+    sync_object->set_wallet(wallet);
 }
 
 void SyncManager::service_did_download_wallet(const std::string &wallet, int success) {
