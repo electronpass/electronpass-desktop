@@ -15,23 +15,29 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GLOBALS_HPP
-#define GLOBALS_HPP
+#ifndef ELECTRONPASS_SYNC_MANAGER_HPP
+#define ELECTRONPASS_SYNC_MANAGER_HPP
 
-#include "data_holder.hpp"
-#include "settings.hpp"
-#include "sync/sync_manager.hpp"
 
-class DataHolder;
-class SyncManager;
+#include <string>
 
-// Namespace in which are few global objects like settings and so on.
-namespace globals {
+#include "globals.hpp"
+#include "sync_base.hpp"
 
-    // Will be initialized later.
-    extern DataHolder data_holder;
-    extern SettingsManager settings;
-    extern SyncManager sync_manager;
-}
 
-#endif // GLOBALS_HPP
+class SyncManager {
+public:
+    SyncManager();
+
+    enum class Service {
+        NONE, GDRIVE
+    };
+
+    static Service string_to_service(const std::string &);
+    static std::string service_to_string(const Service &);
+
+};
+
+
+
+#endif //ELECTRONPASS_SYNC_MANAGER_HPP

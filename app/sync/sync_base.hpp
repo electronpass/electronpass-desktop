@@ -15,23 +15,17 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GLOBALS_HPP
-#define GLOBALS_HPP
+#ifndef ELECTRONPASS_SYNC_BASE_HPP
+#define ELECTRONPASS_SYNC_BASE_HPP
 
-#include "data_holder.hpp"
-#include "settings.hpp"
-#include "sync/sync_manager.hpp"
+#include <QObject>
 
-class DataHolder;
-class SyncManager;
+class SyncBase: public QObject {
+public:
+    virtual void get_wallet() = 0;
+    virtual void set_wallet(const std::string&) = 0;
+};
 
-// Namespace in which are few global objects like settings and so on.
-namespace globals {
 
-    // Will be initialized later.
-    extern DataHolder data_holder;
-    extern SettingsManager settings;
-    extern SyncManager sync_manager;
-}
 
-#endif // GLOBALS_HPP
+#endif //ELECTRONPASS_SYNC_BASE_HPP

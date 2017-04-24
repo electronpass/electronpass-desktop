@@ -20,6 +20,7 @@ void SettingsManager::init(QSettings& settings_) {
     if (!settings->contains(kGdriveRefreshToken)) settings->setValue(kGdriveRefreshToken, "");
     if (!settings->contains(kGdriveTokenExpiration)) settings->setValue(kGdriveTokenExpiration, QDateTime::currentDateTimeUtc());
 
+    if (!settings->contains(kSyncManagerService)) settings->setValue(kSyncManagerService, "none");
 
     settings->sync();
 }
@@ -59,4 +60,12 @@ void SettingsManager::gdrive_set_refresh_token(const std::string &token) {
 
 void SettingsManager::gdrive_set_token_expiration(const QDateTime& expire_date) {
     settings->setValue(kGdriveTokenExpiration, expire_date);
+}
+
+std::string SettingsManager::sync_manager_get_service() {
+    return settings->value(kSyncManagerService).toString().toStdString();
+}
+
+void SettingsManager::sync_manager_set_service(const std::string &service) {
+    settings->setValue(kSyncManagerService, service.c_str());
 }

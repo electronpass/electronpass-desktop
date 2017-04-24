@@ -1,2 +1,2 @@
-GDRIVE_CLIENT_ID=sample_id
-GDRIVE_CLIENT_SECRET=sample_secret
+GDRIVE_CLIENT_ID=59703594718-c8liq4ngnv51t9f7tmtdhv8isejsdhr0.apps.googleusercontent.com
+GDRIVE_CLIENT_SECRET=4qQ5haeW0SlnmuyJE36d24Yq

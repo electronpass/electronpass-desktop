@@ -21,6 +21,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #define kGdriveAccessToken "gdrive_access_token"
 #define kGdriveRefreshToken "gdrive_refresh_token"
 #define kGdriveTokenExpiration "gdrive_token_expiration"
+#define kSyncManagerService "sync_manager"
 
 #include <QSettings>
 #include <QStandardPaths>
@@ -52,6 +53,10 @@ public:
     void gdrive_set_access_token(const std::string& token);
     void gdrive_set_refresh_token(const std::string& token);
     void gdrive_set_token_expiration(const QDateTime& expire_date);
+
+    std::string sync_manager_get_service();
+    void sync_manager_set_service(const std::string& service);
+
 
     //access token
     // refresh token

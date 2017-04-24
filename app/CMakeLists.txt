@@ -8,6 +8,7 @@ set(SOURCES
     search.cpp
     sync/gdrive.cpp
     sync/auth_server.cpp
+    sync/sync_manager.cpp
     electronpass.qrc
     res/fonts/fonts.qrc
     res/img/img.qrc
