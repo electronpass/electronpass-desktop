@@ -27,7 +27,12 @@ std::string SyncManager::service_to_string(const Service& service) {
     else return "none";
 }
 
-SyncManager::SyncManager() {
+SyncManager::SyncManager(QObject *parent): QObject(parent) {}
+
+void SyncManager::init() {
     Service service = string_to_service(globals::settings.sync_manager_get_service());
 
+    if (service == Service::GDRIVE) {
+        sync_object = new Gdrive(this);
+    }
 }

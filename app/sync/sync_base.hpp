@@ -20,12 +20,15 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QObject>
 
-class SyncBase: public QObject {
+class SyncBase {
 public:
+    virtual ~SyncBase() {}
     virtual void get_wallet() = 0;
     virtual void set_wallet(const std::string&) = 0;
+
+signals:
+    virtual void wallet_downloaded(const std::string& wallet, int success) = 0;
+    virtual void wallet_did_set(int success) = 0;
 };
-
-
 
 #endif //ELECTRONPASS_SYNC_BASE_HPP

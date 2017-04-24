@@ -36,9 +36,10 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "auth_server.hpp"
 #include "globals.hpp"
 #include "settings.hpp"
+#include "sync_base.hpp"
 #include <sync/keys.hpp>
 
-class Gdrive: public QObject {
+class Gdrive: public QObject, public SyncBase {
     Q_OBJECT
 
     enum class State {
@@ -59,12 +60,6 @@ class Gdrive: public QObject {
 
     void resume_state();
     bool check_authentication_error(const Json::Value&);
-
-    void clean_settings() {
-        globals::settings.gdrive_set_token_expiration(QDateTime::currentDateTimeUtc());
-        globals::settings.gdrive_set_refresh_token("");
-        globals::settings.gdrive_set_access_token("");
-    }
 public:
     Gdrive(QObject *parent = 0);
 

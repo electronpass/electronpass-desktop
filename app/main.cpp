@@ -59,8 +59,9 @@ int main(int argc, char *argv[]) {
     QQmlApplicationEngine engine;
 
     QSettings qsettings(ORGANIZATION_NAME, APPLICATION_NAME);
-    // init global settings
+    // init global objects
     globals::settings.init(qsettings);
+    globals::sync_manager.init();
 
     Passwords passwords;
     Gdrive gdrive;

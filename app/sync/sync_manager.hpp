@@ -20,14 +20,21 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 
 #include <string>
+#include <QObject>
 
 #include "globals.hpp"
 #include "sync_base.hpp"
+#include "gdrive.hpp"
 
 
-class SyncManager {
+class SyncManager: public QObject {
+    Q_OBJECT
+
+    SyncBase *sync_object;
 public:
-    SyncManager();
+    SyncManager(QObject *parent = 0);
+
+    void init();
 
     enum class Service {
         NONE, GDRIVE
@@ -35,6 +42,8 @@ public:
 
     static Service string_to_service(const std::string &);
     static std::string service_to_string(const Service &);
+
+public slots:
 
 };
 
