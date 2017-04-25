@@ -20,13 +20,19 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 
 Dialog {
-    title: "Are you sure you want to delet this item?"
+    title: "Are you sure you want to delete this item?"
     standardButtons: Dialog.Ok | Dialog.Cancel
     modal: true
 
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
-    onAccepted: console.log("Ok clicked")
-    onRejected: console.log("Cancel clicked")
+    onAccepted: {
+        dataHolder.delete_item(itemsList.currentIndex)
+        itemsList.model = dataHolder.get_number_of_items();
+        itemsList.setItemIndex(-1);
+    }
+    onRejected: {
+        // Nothing ?
+    }
 }

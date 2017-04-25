@@ -34,6 +34,51 @@ std::string DataHolder::read_file(bool& success) {
     return data;
 }
 
+bool DataHolder::write_file(const std::string& data) {
+    std::string path = globals::settings.get_data_location().toStdString();
+
+    std::ofstream file(path);
+    if (!file.good()) return false;
+
+    file << data << std::endl;
+    file.close();
+    return true;
+}
+
+void DataHolder::update() {
+    item_names = {};
+    item_subnames = {};
+    item_numbers = {};
+
+    search_strings = {};
+    current_item = {};
+
+    for (auto item : wallet.get_items()) {
+        item_names.push_back(QString::fromStdString(item.name));
+
+        std::string subname = "";
+        std::string search_string = item.name + " ";
+        bool got_subname = false;
+
+        std::vector<electronpass::Wallet::Field> fields = item.get_fields();
+        for (auto field : fields) {
+            if (!field.sensitive) {
+                if (!got_subname) {
+                    subname = field.value;
+                    got_subname = true;
+                }
+                search_string += field.value + " ";
+            }
+        }
+
+        item_numbers.push_back(fields.size());
+        item_subnames.push_back(QString::fromStdString(subname));
+
+        QString search_qstring = QString::fromStdString(search_string);
+        search_strings.push_back(search_qstring);
+    }
+}
+
 QList<QString> DataHolder::convert_field(const electronpass::Wallet::Field& field) {
     QString name = QString::fromStdString(field.name);
     QString value = QString::fromStdString(field.value);
@@ -61,7 +106,26 @@ QList<QString> DataHolder::convert_field(const electronpass::Wallet::Field& fiel
             type = "undefinded";
             break;
     }
-    return {name, value, sensitive};
+    return {name, value, sensitive, type};
+}
+
+electronpass::Wallet::Field convert_field(const QList<QString>& field_list) {
+    electronpass::Wallet::Field field;
+
+    field.name = field_list[0].toStdString();
+    field.value = field_list[1].toStdString();
+    field.sensitive = field_list[2].toStdString() != "false" ? true : false;
+
+    std::string type = field_list[3].toStdString();
+
+    if (type == "username") field.field_type = electronpass::Wallet::FieldType::USERNAME;
+    else if (type == "password") field.field_type = electronpass::Wallet::FieldType::PASSWORD;
+    else if (type == "email") field.field_type = electronpass::Wallet::FieldType::EMAIL;
+    else if (type == "url") field.field_type = electronpass::Wallet::FieldType::URL;
+    else if (type == "pin") field.field_type = electronpass::Wallet::FieldType::PIN;
+    else field.field_type = electronpass::Wallet::FieldType::UNDEFINED;
+
+    return field;
 }
 
 int DataHolder::unlock(const QString& password) {
@@ -79,36 +143,14 @@ int DataHolder::unlock(const QString& password) {
 
     wallet = electronpass::serialization::deserialize(text);
 
+    update();
 
-    for (auto item : wallet.get_items()) {
-        item_names.push_back(QString::fromStdString(item.name));
-
-        std::string subname = "";
-        std::string search_string = item.name + " ";
-        bool got_subname = false;
-
-        std::vector<electronpass::Wallet::Field> fields = item.get_fields();
-        for (auto field : fields) {
-            if (!field.sensitive) {
-                if (!got_subname) {
-                    subname = field.value;
-                    got_subname = true;
-                }
-                search_string += field.value + " ";
-            }
-        }
-
-        item_numbers.push_back(fields.size());
-        item_subnames.push_back(QString::fromStdString(subname));
-
-        QString search_qstring = QString::fromStdString(search_string);
-        search_strings.push_back(search_qstring);
-    }
-
+    unlocked = true;
     return 0;
 }
 
 void DataHolder::lock() {
+    unlocked = false;
     // Delete all decrypted data.
     delete crypto;
     crypto = 0;
@@ -123,6 +165,39 @@ void DataHolder::lock() {
 
     current_item = {};
     current_item_index = -1;
+}
+
+int DataHolder::save() {
+    // If locked, there is nothing to save.
+    if (!unlocked) return -1;
+
+    std::string text = electronpass::serialization::serialize(wallet);
+
+    if (!crypto->check()) return 1;
+
+    bool success = false;
+    text = crypto->encrypt(text, success);
+    if (!success) return 1;
+
+    success = write_file(text);
+    if (!success) return 2;
+
+    update();
+
+    return 0;
+}
+
+int DataHolder::delete_item(int id) {
+    if (search_in_progress) {
+        id = found_indices[id];
+    }
+    int error = -1;
+    wallet.delete_item(id, error);
+
+    current_item_index = -1;
+    save();
+
+    return error != 0;
 }
 
 int DataHolder::get_number_of_items() {

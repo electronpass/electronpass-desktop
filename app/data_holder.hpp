@@ -36,6 +36,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 class DataHolder: public QObject {
     Q_OBJECT
 
+    bool unlocked = false;
+
     electronpass::Crypto* crypto = 0;
     electronpass::Wallet wallet;
 
@@ -51,11 +53,26 @@ class DataHolder: public QObject {
     int current_item_index = -1;
 
     // Reads first line of encrypted file.
-    // Location of encrypted files is
+    // Location of encrypted file is stored in settings.
     std::string read_file(bool& success);
-    // also: write_file
+
+    // Writes single-line string to file.
+    bool write_file(const std::string& data);
 
     QList<QString> convert_field(const electronpass::Wallet::Field& field);
+    electronpass::Wallet::Field convert_field(const QList<QString>& field);
+
+    // Encrypts wallet and saves it. Should be already called by other functions.
+    // Also updates names in side bar and search strings.
+    // Returns:
+    //      0 - OK
+    //     -1 - Nothing to save, app is locked.
+    //      1 - Encryption failed.
+    //      2 - File write failed.
+    Q_INVOKABLE int save();
+
+    // Updates item_names, search_strings...
+    void update();
 
 public:
     DataHolder() {}
@@ -82,6 +99,11 @@ public:
     // Returns index of first found item which contains string.
     Q_INVOKABLE int search(const QString& s);
     Q_INVOKABLE void stop_search();
+
+    // Deletes item at index. Function save must be called afterwards to apply changes.
+    // Returns 0 if everything was OK and 1 if not.
+    Q_INVOKABLE int delete_item(int id);
+
 
     // Function that changes attribute of one of the items.
     // electronpass::Wallet object should be then deserialized to json, encrypted and saved.
