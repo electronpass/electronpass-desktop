@@ -104,6 +104,9 @@ public:
     // Returns 0 if everything was OK and 1 if not.
     Q_INVOKABLE int delete_item(int id);
 
+    // Replaces past item with new item and saves it.
+    // Returns 0 if OK and 1 othervise.
+    Q_INVOKABLE int change_item(int id, const QString& name, const QVariantList& fields);
 
     // Function that changes attribute of one of the items.
     // electronpass::Wallet object should be then deserialized to json, encrypted and saved.

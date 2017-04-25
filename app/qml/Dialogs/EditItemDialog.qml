@@ -69,7 +69,17 @@ Dialog {
     }
 
     function saveEditDetails(){
-      //TODO: implement
+        var field = new Array(editDetailsModel.count);
+        for (var i = 0; i < editDetailsModel.count; ++i) {
+            var line = {
+                name: editDetailsModel.get(i)["titlevar"],
+                value: editDetailsModel.get(i)["contentvar"],
+                sensitive: editDetailsModel.get(i)["securevar"],
+                type: editDetailsModel.get(i)["typevar"]
+            };
+            field[i] = line;
+        }
+        dataHolder.change_item(itemsList.currentIndex, detailsTitleLabel.text, field);
     }
 
     Pane {
@@ -106,7 +116,7 @@ Dialog {
                     font.pixelSize: 24
                     text: qsTr("\uE145")
                     onClicked: {
-                      editDetailsModel.append({ titlevar: "Email", contentvar: "some.mail@protonmail.com", securevar: false })
+                      editDetailsModel.append({ titlevar: "Email", contentvar: "some.mail@protonmail.com", securevar: false, typevar: "email" })
                     }
                 }
             }

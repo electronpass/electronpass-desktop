@@ -109,7 +109,7 @@ QList<QString> DataHolder::convert_field(const electronpass::Wallet::Field& fiel
     return {name, value, sensitive, type};
 }
 
-electronpass::Wallet::Field convert_field(const QList<QString>& field_list) {
+electronpass::Wallet::Field DataHolder::convert_field(const QList<QString>& field_list) {
     electronpass::Wallet::Field field;
 
     field.name = field_list[0].toStdString();
@@ -193,9 +193,42 @@ int DataHolder::delete_item(int id) {
     }
     int error = -1;
     wallet.delete_item(id, error);
+    if (error != 0) return 1;
 
     current_item_index = -1;
-    save();
+    error = save();
+
+    return error != 0;
+}
+
+int DataHolder::change_item(int id, const QString& name, const QVariantList& fields) {
+    if (search_in_progress) {
+        id = found_indices[id];
+    }
+
+    electronpass::Wallet::Item item;
+    std::vector<electronpass::Wallet::Field> wallet_fields;
+
+    item.name = name.toStdString();
+
+    for (const QVariant& v : fields) {
+        QMap<QString, QVariant> m = v.toMap();
+        QList<QString> field = {m["name"].toString(), m["value"].toString(),
+                                m["sensitive"].toString(), m["type"].toString()
+                            };
+
+        for (auto i : field) std::cout << i.toStdString() << " ";
+        std::cout << std::endl;
+
+        wallet_fields.push_back(convert_field(field));
+    }
+    item.set_fields(wallet_fields);
+
+    int error = -1;
+    wallet.set_item(id, item, error);
+
+    if (error != 0) return 1;
+    error = save();
 
     return error != 0;
 }
