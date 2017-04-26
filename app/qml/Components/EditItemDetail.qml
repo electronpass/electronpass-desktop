@@ -64,6 +64,7 @@ RowLayout {
 
             onTextChanged: {
                 editItemDetail.title = text;
+                editDetailsModel.setProperty(model.index, "titlevar", text);
             }
         }
     }
@@ -94,6 +95,7 @@ RowLayout {
 
         onTextChanged: {
             editItemDetail.content = text;
+            editDetailsModel.setProperty(model.index, "contentvar", text);
         }
 
         Component.onCompleted: {
