@@ -59,8 +59,8 @@ class DataHolder: public QObject {
     // Writes single-line string to file.
     bool write_file(const std::string& data);
 
-    QList<QString> convert_field(const electronpass::Wallet::Field& field);
-    electronpass::Wallet::Field convert_field(const QList<QString>& field);
+    QMap<QString, QVariant> convert_field(const electronpass::Wallet::Field& field);
+    electronpass::Wallet::Field convert_field(const QMap<QString, QVariant>& field);
 
     // Encrypts wallet and saves it. Should be already called by other functions.
     // Also updates names in side bar and search strings.
@@ -69,7 +69,7 @@ class DataHolder: public QObject {
     //     -1 - Nothing to save, app is locked.
     //      1 - Encryption failed.
     //      2 - File write failed.
-    Q_INVOKABLE int save();
+    int save();
 
     // Updates item_names, search_strings...
     void update();
@@ -94,7 +94,7 @@ public:
     Q_INVOKABLE QString get_item_subname(int id);
 
     Q_INVOKABLE int get_number_of_item_fields(int id);
-    Q_INVOKABLE QList<QString> get_item_field(int item_id, int field_id);
+    Q_INVOKABLE QMap<QString, QVariant> get_item_field(int item_id, int field_id);
 
     // Returns index of first found item which contains string.
     Q_INVOKABLE int search(const QString& s);

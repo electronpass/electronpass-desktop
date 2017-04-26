@@ -6,6 +6,7 @@ set(SOURCES
     data_holder.cpp
     globals.cpp
     search.cpp
+    convert_field.cpp
     sync/gdrive.cpp
     sync/auth_server.cpp
     sync/sync_manager.cpp

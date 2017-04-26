@@ -85,55 +85,6 @@ void DataHolder::update() {
     }
 }
 
-QList<QString> DataHolder::convert_field(const electronpass::Wallet::Field& field) {
-    QString name = QString::fromStdString(field.name);
-    QString value = QString::fromStdString(field.value);
-    QString sensitive = field.sensitive ? "true" : "false";
-
-    QString type;
-    switch (field.field_type) {
-        case electronpass::Wallet::FieldType::USERNAME:
-            type = "username";
-            break;
-        case electronpass::Wallet::FieldType::PASSWORD:
-            type = "password";
-            break;
-        case electronpass::Wallet::FieldType::EMAIL:
-            type = "email";
-            break;
-        case electronpass::Wallet::FieldType::URL:
-            type = "url";
-            break;
-        case electronpass::Wallet::FieldType::PIN:
-            type = "pin";
-            break;
-        case electronpass::Wallet::FieldType::UNDEFINED:
-        default:
-            type = "undefinded";
-            break;
-    }
-    return {name, value, sensitive, type};
-}
-
-electronpass::Wallet::Field DataHolder::convert_field(const QList<QString>& field_list) {
-    electronpass::Wallet::Field field;
-
-    field.name = field_list[0].toStdString();
-    field.value = field_list[1].toStdString();
-    field.sensitive = field_list[2].toStdString() != "false" ? true : false;
-
-    std::string type = field_list[3].toStdString();
-
-    if (type == "username") field.field_type = electronpass::Wallet::FieldType::USERNAME;
-    else if (type == "password") field.field_type = electronpass::Wallet::FieldType::PASSWORD;
-    else if (type == "email") field.field_type = electronpass::Wallet::FieldType::EMAIL;
-    else if (type == "url") field.field_type = electronpass::Wallet::FieldType::URL;
-    else if (type == "pin") field.field_type = electronpass::Wallet::FieldType::PIN;
-    else field.field_type = electronpass::Wallet::FieldType::UNDEFINED;
-
-    return field;
-}
-
 int DataHolder::unlock(const QString& password) {
     std::string password_string = password.toStdString();
 
@@ -218,13 +169,18 @@ int DataHolder::change_item(int id, const QString& name, const QVariantList& fie
     item.name = name.toStdString();
 
     for (const QVariant& v : fields) {
+        // Probably exists a better conversion.
         QMap<QString, QVariant> m = v.toMap();
-        QList<QString> field = {m["name"].toString(), m["value"].toString(),
-                                m["sensitive"].toString(), m["type"].toString()
-                            };
+        QMap<QString, QVariant> field;
+
+        field["name"] = m["name"].toString();
+        field["value"] = m["value"].toString();
+        field["sensitive"] = m["sensitive"].toString();
+        field["type"] = m["type"].toString();
 
         wallet_fields.push_back(convert_field(field));
     }
+
     item.set_fields(wallet_fields);
 
     int error = -1;
@@ -264,7 +220,7 @@ int DataHolder::get_number_of_item_fields(int id) {
     return item_numbers[id];
 }
 
-QList<QString> DataHolder::get_item_field(int item_id, int field_id) {
+QMap<QString, QVariant> DataHolder::get_item_field(int item_id, int field_id) {
     if (search_in_progress) {
         item_id = found_indices[item_id];
     }
@@ -277,7 +233,7 @@ QList<QString> DataHolder::get_item_field(int item_id, int field_id) {
     electronpass::Wallet::Item item = wallet.get_item(item_id, error);
 
     if (error != 0) {
-        return {"", "", "", ""};
+        return QMap<QString, QVariant>();
     }
     current_item_index = item_id;
     current_item = item.get_fields();

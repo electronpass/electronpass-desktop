@@ -236,9 +236,12 @@ ApplicationWindow {
                 details.setTitle(dataHolder.get_item_name(index));
                 for (var i = 0; i < dataHolder.get_number_of_item_fields(index); ++i) {
                     var field = dataHolder.get_item_field(index, i);
-                    var sensitive = field[2] != "false";
-                    var url = field[3] == "url";
-                    details.addDetail({title: field[0], content: field[1], secure: sensitive, type: field[3]});
+
+                    details.addDetail({ title: field["name"],
+                                        content: field["value"],
+                                        secure: field["sensitive"] != "false",
+                                        type: field["type"]
+                                    });
                 }
             }
 

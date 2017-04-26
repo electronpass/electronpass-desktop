@@ -79,8 +79,13 @@ Dialog {
             };
             field[i] = line;
         }
-        dataHolder.change_item(itemsList.currentIndex, detailsTitleLabel.text, field);
+        var success = dataHolder.change_item(itemsList.currentIndex, detailsTitleLabel.text, field);
         detailsPane.showDetails(itemsList.currentIndex);
+
+        if (success != 0) {
+            // TODO: report error
+            console.log("[Error] Could not save wallet.");
+        }
     }
 
     Pane {
