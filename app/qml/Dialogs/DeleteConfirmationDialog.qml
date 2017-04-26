@@ -28,7 +28,12 @@ Dialog {
     y: (parent.height - height) / 2
 
     onAccepted: {
-        dataHolder.delete_item(itemsList.currentIndex)
+        var success = dataHolder.delete_item(itemsList.currentIndex);
+        if (success != 0) {
+            // TODO: report error
+            console.log("[Error] Could not save wallet.");
+        }
+
         itemsList.model = dataHolder.get_number_of_items();
         itemsList.setItemIndex(-1);
     }
