@@ -23,12 +23,17 @@ import QtQuick.Controls.Material 2.1
 RowLayout {
     id: editItemDetail
     property bool secure: false
-    property bool url: false
     property color contentColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
     property string title
+    property string type
     property string content
     property string titlePostfix: ": "
     property color greyTextColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade300) : Material.color(Material.Grey, Material.Shade800)
+
+    RegExpValidator {
+      id: digitsOnlyRegex
+      regExp: /[0-9]+\.[0-9]+/
+    }
 
     Layout.topMargin: -18
     anchors.right: parent.right
@@ -73,8 +78,10 @@ RowLayout {
         font.pixelSize: 14
         color: greyTextColor
         property string content: editItemDetail.content
+        property string type: editItemDetail.type
         background.opacity: bcgOpacity
         placeholderText: "Content"
+        validator: (editItemDetail.type == "pin") ? digitsOnlyRegex : titleLabel.validator
 
         property real bcgOpacity: (activeFocus || editItemDetail.secure) ? 1 : 0
 

@@ -234,7 +234,7 @@ ApplicationWindow {
                     var field = dataHolder.get_item_field(index, i);
                     var sensitive = field[2] != "false";
                     var url = field[3] == "url";
-                    details.addDetail({title: field[0], content: field[1], secure: sensitive, url: url});
+                    details.addDetail({title: field[0], content: field[1], secure: sensitive, type: field[3]});
                 }
             }
 

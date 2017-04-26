@@ -23,18 +23,23 @@ import QtQuick.Controls.Material 2.1
 RowLayout {
     id: strengthIndicator
     property string password: parent.content
+    property string type: parent.type
     property int strength: passwordManager.passStrengthToInt(password) //strength in int from 1 to 5
 
     function getColor() {
-        if (strengthIndicator.strength == 1) return Material.color(Material.Red, Material.Shade500);
-        if (strengthIndicator.strength == 2) return Material.color(Material.DeepOrange, Material.Shade500);
-        if (strengthIndicator.strength == 3) {
-            if (Material.theme == Material.Dark) return Material.color(Material.Yellow, Material.Shade500);
-            return Material.color(Material.Amber, Material.Shade500);
-        }
-        if (strengthIndicator.strength == 4) return Material.color(Material.LightGreen, Material.Shade500);
-        if (strengthIndicator.strength == 5) return Material.color(Material.Green, Material.Shade500);
-        return Material.color(Material.Grey, Material.Shade500);
+      var num = strengthIndicator.strength
+      if (strengthIndicator.type == "pin") num = strengthIndicator.password.length + 1
+
+      if (num == 1) return Material.color(Material.Red, Material.Shade500);
+      if (num == 2) return Material.color(Material.DeepOrange, Material.Shade500);
+      if (num == 3) {
+          if (Material.theme == Material.Dark) return Material.color(Material.Yellow, Material.Shade500);
+          return Material.color(Material.Amber, Material.Shade500);
+      }
+      if (num == 4) return Material.color(Material.LightGreen, Material.Shade500);
+      if (num == 5) return Material.color(Material.Green, Material.Shade500);
+
+      return Material.color(Material.Grey, Material.Shade500);
     }
 
     Item {
@@ -54,7 +59,7 @@ RowLayout {
         Rectangle {
             height: 2
             radius: 1
-            width: parent.width / 5 * strengthIndicator.strength
+            width: (strengthIndicator.type == "pin") ? parent.width / 5 * Math.min(5, strengthIndicator.password.length + 1) : parent.width / 5 * strengthIndicator.strength
             color: strengthIndicator.getColor()
 
             Behavior on width {

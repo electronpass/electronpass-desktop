@@ -23,7 +23,7 @@ import QtQuick.Controls.Material 2.1
 RowLayout {
     id: itemDetail
     property bool secure: false
-    property bool url: false
+    property string type
     property color contentColor: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade700)
     property string title
     property string content
@@ -48,7 +48,7 @@ RowLayout {
     // called when ItemDetail is created, won't work after toggleVisibility is called
     function getDisplayableContent(){
         if(itemDetail.secure) return itemDetail.secureMask;
-        if(itemDetail.url) return "<a href='" + itemDetail.content + "'>" + itemDetail.content + "</a>";
+        if(itemDetail.type == "url") return "<a href='" + itemDetail.content + "'>" + itemDetail.content + "</a>";
         return itemDetail.content;
     }
 
@@ -69,7 +69,7 @@ RowLayout {
         id: itemDetailContent
         Layout.fillWidth: true
         text: getDisplayableContent()
-        textFormat: itemDetail.url ? Text.StyledText : Text.PlainText
+        textFormat: (itemDetail.type == "url" ) ? Text.StyledText : Text.PlainText
         font.pixelSize: itemDetail.secure ? 18 : 14
         wrapMode: Text.WrapAnywhere
         color: greyTextColor
@@ -85,6 +85,7 @@ RowLayout {
             visible: itemDetail.secure
             height: itemDetailContent.height+4
             password: itemDetail.content
+            type: itemDetail.type
             anchors.centerIn: parent
         }
     }

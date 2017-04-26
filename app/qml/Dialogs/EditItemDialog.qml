@@ -55,7 +55,7 @@ Dialog {
     }
 
     function addEditDetail(obj){
-        editDetailsModel.append({titlevar: obj.titlevar, contentvar: obj.contentvar, securevar: obj.securevar, urlvar: obj.urlvar});
+        editDetailsModel.append({titlevar: obj.titlevar, contentvar: obj.contentvar, securevar: obj.securevar, typevar: obj.typevar});
     }
 
     function destroyEditDetails(){
@@ -115,8 +115,35 @@ Dialog {
                     font.family: materialIconsFont.name
                     font.pixelSize: 24
                     text: qsTr("\uE145")
-                    onClicked: {
-                      editDetailsModel.append({ titlevar: "Email", contentvar: "some.mail@protonmail.com", securevar: false, typevar: "email" })
+                    onClicked: newDetailMenu.open()
+                    Menu {
+                        id: newDetailMenu
+                        y: parent.height
+                        x: - width + parent.width
+                        MenuItem {
+                            text: "Username"
+                            onTriggered: editDetailsModel.append({ titlevar: "Username", contentvar: "", typevar: "username" })
+                        }
+                        MenuItem {
+                            text: "Email"
+                            onTriggered: editDetailsModel.append({ titlevar: "Email", contentvar: "", typevar: "email" })
+                        }
+                        MenuItem {
+                            text: "Url"
+                            onTriggered: editDetailsModel.append({ titlevar: "Url", contentvar: "", typevar: "url" })
+                        }
+                        MenuItem {
+                            text: "Password"
+                            onTriggered: editDetailsModel.append({ titlevar: "Password", contentvar: "", securevar: true, typevar: "password" })
+                        }
+                        MenuItem {
+                            text: "PIN"
+                            onTriggered: editDetailsModel.append({ titlevar: "PIN", contentvar: "", securevar: true, typevar: "pin" })
+                        }
+                        MenuItem {
+                            text: "Other text"
+                            onTriggered: editDetailsModel.append({ titlevar: "", contentvar: "", typevar: "undefined" })
+                        }
                     }
                 }
             }
@@ -144,6 +171,7 @@ Dialog {
                   title: titlevar
                   content: contentvar
                   secure: securevar
+                  type: typevar
                 }
             }
         }

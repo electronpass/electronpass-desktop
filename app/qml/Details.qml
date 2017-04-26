@@ -55,7 +55,7 @@ Pane {
     }
 
     function addDetail(obj){
-        detailsModel.append({titlevar: obj.title, contentvar: obj.content, securevar: obj.secure, urlvar: obj.url});
+        detailsModel.append({titlevar: obj.title, contentvar: obj.content, securevar: obj.secure, typevar: obj.type})
     }
 
     function destroyDetails(){
@@ -131,7 +131,7 @@ Pane {
               title: titlevar
               content: contentvar
               secure: securevar
-              url: urlvar
+              type: typevar
             }
         }
     }
