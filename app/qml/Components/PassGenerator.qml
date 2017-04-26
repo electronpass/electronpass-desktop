@@ -24,16 +24,21 @@ Popup {
   id: passwordGenerator
   property string generatedPassword: ""
   property int passLength: settings.defaultPassLength
+  property int numberOfDigitsInPassword: settings.numberOfDigitsInPassword
+  property int numberOfSymbolsInPassword: settings.numberOfSymbolsInPassword
+  property int numberOfUppercaseLettersInPassword: settings.numberOfUppercaseLettersInPassword
+  property var toFill: undefined
+  Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : Material.color(Material.Grey, Material.Shade100)
 
   function generateRandomPass(){
-    generatedPassword = passwordManager.generateRandomPassWithRecipe(passLength, 4, 4, 4)
+    generatedPassword = passwordManager.generateRandomPassWithRecipe(passLength, numberOfDigitsInPassword, numberOfSymbolsInPassword, numberOfUppercaseLettersInPassword)
   }
 
   onOpened: generateRandomPass()
 
   ColumnLayout {
     Label {
-      text: "Password generator"
+      text: "    Password generator    "
       Material.foreground: Material.accent
       font.pointSize: 12
       Layout.fillWidth: true
@@ -54,7 +59,11 @@ Popup {
         font.pointSize: 10
         Layout.fillWidth: true
         onClicked: {
-          editItemDetailContent.text = generatedPassword;
+          try{
+            passwordGenerator.toFill.text = generatedPassword;
+          }catch (e){
+            console.log("[Warning] No item to fill by passwordGenerator!")
+          }
           passwordGenerator.close();
         }
       }
@@ -76,11 +85,13 @@ Popup {
         }
     }
     RowLayout {
-      Label {
-        text: "Length:"
-        font.pointSize: 10
-        width: 48
-        id: lengthLabel
+      Item {
+        Layout.topMargin: -16
+        Layout.fillWidth: true
+        Label {
+          text: "Lenght:"
+          font.pointSize: 10
+        }
       }
       SpinBox {
         id: passwordLengthInput
@@ -95,6 +106,96 @@ Popup {
         onValueChanged: {
           settings.defaultPassLength = value;
           passwordGenerator.passLength = value;
+          passwordGenerator.generateRandomPass();
+          numberOfDigitsInput.increase();
+          numberOfDigitsInput.decrease();
+        }
+      }
+    }
+    RowLayout {
+      Layout.topMargin: -24
+      Item {
+        Layout.fillWidth: true
+        Layout.topMargin: -16
+        Label {
+          text: "Digits:"
+          font.pointSize: 10
+          font.weight: Font.Light
+        }
+      }
+      SpinBox {
+        id: numberOfDigitsInput
+        from: 0
+        to: passwordGenerator.passLength
+        value: passwordGenerator.numberOfDigitsInPassword
+        scale: 0.75 //bad solution
+        editable: true
+        Layout.maximumWidth: 132
+        Layout.leftMargin: -22
+        Layout.rightMargin: -26
+        onValueChanged: {
+          settings.numberOfDigitsInPassword = value;
+          passwordGenerator.numberOfDigitsInPassword = value;
+          passwordGenerator.generateRandomPass();
+          numberOfSymbolsInput.increase();
+          numberOfSymbolsInput.decrease();
+        }
+      }
+    }
+    RowLayout {
+      Layout.topMargin: -24
+      Item {
+        Layout.fillWidth: true
+        Layout.topMargin: -16
+        Label {
+          text: "Symbols:"
+          font.pointSize: 10
+          font.weight: Font.Light
+        }
+      }
+      SpinBox {
+        id: numberOfSymbolsInput
+        from: 0
+        to: passwordGenerator.passLength
+        value: passwordGenerator.numberOfSymbolsInPassword
+        scale: 0.75 //bad solution
+        editable: true
+        Layout.maximumWidth: 132
+        Layout.leftMargin: -22
+        Layout.rightMargin: -26
+        onValueChanged: {
+          settings.numberOfSymbolsInPassword = value;
+          passwordGenerator.numberOfSymbolsInPassword = value;
+          passwordGenerator.generateRandomPass();
+          numberofUppercaseInput.increase();
+          numberofUppercaseInput.decrease();
+        }
+      }
+    }
+    RowLayout {
+      Layout.topMargin: -24
+      Item {
+        Layout.fillWidth: true
+        Layout.topMargin: -16
+        Label {
+          text: "Uppercase:"
+          font.pointSize: 10
+          font.weight: Font.Light
+        }
+      }
+      SpinBox {
+        id: numberofUppercaseInput
+        from: 0
+        to: passwordGenerator.passLength
+        value: passwordGenerator.numberOfUppercaseLettersInPassword
+        scale: 0.75 //bad solution
+        editable: true
+        Layout.maximumWidth: 132
+        Layout.leftMargin: -22
+        Layout.rightMargin: -26
+        onValueChanged: {
+          settings.numberOfUppercaseLettersInPassword = value;
+          passwordGenerator.numberOfUppercaseLettersInPassword = value;
           passwordGenerator.generateRandomPass();
         }
       }

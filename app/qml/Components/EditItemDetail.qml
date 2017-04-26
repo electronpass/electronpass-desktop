@@ -113,10 +113,9 @@ RowLayout {
         text: qsTr("\uE899")
         font.family: materialIconsFont.name
         Material.foreground: editItemDetail.contentColor
-        onClicked: passGenerator.open()
-
-        PassGenerator {
-          id: passGenerator
+        onClicked: {
+          passGenerator.toFill = editItemDetailContent;
+          passGenerator.open();
         }
     }
     ToolButton {
