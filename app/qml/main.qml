@@ -264,8 +264,8 @@ ApplicationWindow {
 
     Settings {
         id: settings
-        // 1 for dark theme, anything else for light
-        property int theme: 0
+        property int theme: 0 // 1 for dark theme, anything else for light
+        property int defaultPassLength: 16 // passwordGenerator needs to remember password length
     }
 
     SettingsDialog {
