@@ -26,7 +26,7 @@ Pane {
     padding: 0
     leftPadding: 8
     bottomPadding: 8
-    height: detailsList.contentHeight + detailsTitleLabel.height + 32
+    height: Math.min(detailsList.contentHeight, window.height - 154) + detailsTitleLabel.height + 32
     anchors.horizontalCenter: parent.horizontalCenter
     Material.elevation: 1
     Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : "white"
@@ -114,7 +114,8 @@ Pane {
             anchors.right: parent.right
             Layout.fillHeight: true
             Layout.topMargin: -22
-            interactive: false
+            Layout.maximumHeight: window.height-32
+            interactive: (contentHeight - 32 > height)
             spacing: -12
             id: detailsList
             model: detailsModel
