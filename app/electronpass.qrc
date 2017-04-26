@@ -29,6 +29,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/Components/PassStrengthIndicator.qml</file>
         <file>qml/Components/ShortcutBlock.qml</file>
         <file>qml/Components/ShortcutItem.qml</file>
+        <file>qml/Components/PassGenerator.qml</file>
 
         <!--dialogs-->
         <file>qml/Dialogs/SettingsDialog.qml</file>

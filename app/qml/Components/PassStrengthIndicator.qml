@@ -28,7 +28,7 @@ RowLayout {
 
     function getColor() {
       var num = strengthIndicator.strength
-      if (strengthIndicator.type == "pin") num = strengthIndicator.password.length + 1
+      if (strengthIndicator.type == "pin") num = Math.min(5, strengthIndicator.password.length + 1)
 
       if (num == 1) return Material.color(Material.Red, Material.Shade500);
       if (num == 2) return Material.color(Material.DeepOrange, Material.Shade500);
