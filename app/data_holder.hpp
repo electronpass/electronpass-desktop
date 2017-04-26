@@ -46,8 +46,6 @@ class DataHolder: public QObject {
     std::vector<QString> item_names;
     std::vector<QString> item_subnames;
 
-    int current_item_index = -1;
-
     // Reads first line of encrypted file.
     // Location of encrypted file is stored in settings.
     static std::string read_file(bool& success);
@@ -55,6 +53,7 @@ class DataHolder: public QObject {
     // Writes single-line string to file.
     static bool write_file(const std::string& data);
 
+    // Functions to convert from QMap to Field object and reverse.
     static QMap<QString, QVariant> convert_field(const electronpass::Wallet::Field& field);
     static electronpass::Wallet::Field convert_field(const QMap<QString, QVariant>& field);
 
@@ -88,24 +87,24 @@ public:
     // Deletes all decrypted data and electronpass::Crypto object used for decryption.
     Q_INVOKABLE void lock();
 
-    Q_INVOKABLE int get_number_of_items();
-    Q_INVOKABLE QString get_item_name(int id);
-    Q_INVOKABLE QString get_item_subname(int id);
+    Q_INVOKABLE int get_number_of_items() const;
+    Q_INVOKABLE QString get_item_name(unsigned int index) const;
+    Q_INVOKABLE QString get_item_subname(unsigned int index) const;
 
-    Q_INVOKABLE int get_number_of_item_fields(int id);
-    Q_INVOKABLE QMap<QString, QVariant> get_item_field(int item_id, int field_id);
+    Q_INVOKABLE int get_number_of_item_fields(unsigned int index);
+    Q_INVOKABLE QMap<QString, QVariant> get_item_field(unsigned int item_index, unsigned int field_index);
 
     // Returns index of first found item which contains string.
-    Q_INVOKABLE int search(const QString& s);
-    Q_INVOKABLE void stop_search();
+    Q_INVOKABLE int search(const QString& s) const;
+    Q_INVOKABLE void stop_search() const;
 
     // Deletes item at index. Function save must be called afterwards to apply changes.
     // Returns 0 if everything was OK and 1 if not.
-    Q_INVOKABLE int delete_item(int id);
+    Q_INVOKABLE int delete_item(int index);
 
     // Replaces past item with new item and saves it.
     // Returns 0 if OK and 1 othervise.
-    Q_INVOKABLE int change_item(int id, const QString& name, const QVariantList& fields);
+    Q_INVOKABLE int change_item(int index, const QString& name, const QVariantList& fields);
 
     // Function that changes attribute of one of the items.
     // electronpass::Wallet object should be then deserialized to json, encrypted and saved.

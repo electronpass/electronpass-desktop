@@ -61,9 +61,7 @@ int DataHolder::unlock(const QString& password) {
     text = crypto->decrypt(text, success);
     if (!success) return 3;
 
-    std::cout << "/* before serialization */" << std::endl;
     wallet = electronpass::serialization::deserialize(text);
-    std::cout << "/* after serialization */" << std::endl;
 
     update();
 
@@ -80,8 +78,6 @@ void DataHolder::lock() {
 
     item_names = {};
     item_subnames = {};
-
-    current_item_index = -1;
 
     item_ids = {};
 }
@@ -111,9 +107,7 @@ int DataHolder::delete_item(int index) {
 
     wallet.items.erase(id);
 
-    current_item_index = -1;
     int error = save();
-
     return error != 0;
 }
 
@@ -133,26 +127,27 @@ int DataHolder::change_item(int index, const QString& name_, const QVariantList&
     return error != 0;
 }
 
-int DataHolder::get_number_of_items() {
-    return item_names.size();
+int DataHolder::get_number_of_items() const {
+    return wallet.items.size();
 }
 
-QString DataHolder::get_item_name(int index) {
+QString DataHolder::get_item_name(unsigned int index) const {
+    if (index >= item_names.size()) return "";
     return item_names[index];
 }
 
-QString DataHolder::get_item_subname(int index) {
+QString DataHolder::get_item_subname(unsigned int index) const {
+    if (index >= item_subnames.size()) return "";
     return item_subnames[index];
 }
 
-int DataHolder::get_number_of_item_fields(int index) {
+int DataHolder::get_number_of_item_fields(unsigned int index) {
     std::string id = index_to_id(index);
     return wallet.items[id].size();
 }
 
-QMap<QString, QVariant> DataHolder::get_item_field(int item_index, int field_index) {
+QMap<QString, QVariant> DataHolder::get_item_field(unsigned int item_index, unsigned int field_index) {
     std::string item_id = index_to_id(item_index);
-
-    current_item_index = item_index;
+    if (wallet.items[item_id].size() <= field_index) return QMap<QString, QVariant>();
     return convert_field(wallet.items[item_id][field_index]);
 }

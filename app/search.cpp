@@ -17,9 +17,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "data_holder.hpp"
 
-int DataHolder::search(const QString& s) {
+int DataHolder::search(const QString& s) const {
     return 0;
 }
 
-void DataHolder::stop_search() {
+void DataHolder::stop_search() const {
 }
