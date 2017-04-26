@@ -17,71 +17,34 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "data_holder.hpp"
 
-std::string DataHolder::read_file(bool& success) {
-    std::string path = globals::settings.get_data_location().toStdString();
-    std::string data;
-
-    std::ifstream file(path);
-
-    if (!file.is_open()) {
-        success = false;
-        return "";
-    }
-    // Because data is encoded in Base64, it is only in one line.
-    std::getline(file, data);
-
-    success = true;
-    return data;
-}
-
-bool DataHolder::write_file(const std::string& data) {
-    std::string path = globals::settings.get_data_location().toStdString();
-
-    std::ofstream file(path);
-
-    if (!file.is_open()) {
-        std::cout << "<data_holder.cpp> [Error] Could not open file." << std::endl;
-        std::cout << "File path: " << path << '\n';
-        return false;
-    }
-
-    file << data << '\n';
-
-    file.close();
-    return true;
+std::string DataHolder::index_to_id(unsigned int index) const {
+    if (index >= item_ids.size()) return "";
+    return item_ids[index];
 }
 
 void DataHolder::update() {
     item_names = {};
     item_subnames = {};
-    item_numbers = {};
+    item_ids = {};
 
-    search_strings = {};
-    current_item = {};
+    for (const auto& pair : wallet.items) {
+        electronpass::Wallet::Item item;
+        std::string item_id;
 
-    for (auto item : wallet.get_items()) {
+        std::tie(item_id, item) = pair;
+
+        item_ids.push_back(item_id);
+
         item_names.push_back(QString::fromStdString(item.name));
-
         std::string subname = "";
-        std::string search_string = item.name + " ";
-        bool got_subname = false;
 
-        std::vector<electronpass::Wallet::Field> fields = item.get_fields();
-        for (auto field : fields) {
-            if (!field.sensitive) {
-                if (!got_subname) {
-                    subname = field.value;
-                    got_subname = true;
-                }
-                search_string += field.value + " ";
+        for (unsigned int i = 0; i < item.size(); ++i) {
+            if (!item[i].sensitive) {
+                subname = item[i].value;
+                break;
             }
         }
-
-        item_numbers.push_back(fields.size());
         item_subnames.push_back(QString::fromStdString(subname));
-
-        QString search_qstring = QString::fromStdString(search_string);
-        search_strings.push_back(search_qstring);
     }
 }
 
@@ -98,7 +61,9 @@ int DataHolder::unlock(const QString& password) {
     text = crypto->decrypt(text, success);
     if (!success) return 3;
 
+    std::cout << "/* before serialization */" << std::endl;
     wallet = electronpass::serialization::deserialize(text);
+    std::cout << "/* after serialization */" << std::endl;
 
     update();
 
@@ -115,13 +80,10 @@ void DataHolder::lock() {
 
     item_names = {};
     item_subnames = {};
-    item_numbers = {};
 
-    search_strings = {};
-    search_in_progress = false;
-
-    current_item = {};
     current_item_index = -1;
+
+    item_ids = {};
 }
 
 int DataHolder::save() {
@@ -144,98 +106,53 @@ int DataHolder::save() {
     return 0;
 }
 
-int DataHolder::delete_item(int id) {
-    if (search_in_progress) {
-        id = found_indices[id];
-    }
-    int error = -1;
-    wallet.delete_item(id, error);
-    if (error != 0) return 1;
+int DataHolder::delete_item(int index) {
+    std::string id = index_to_id(index);
+
+    wallet.items.erase(id);
 
     current_item_index = -1;
-    error = save();
+    int error = save();
 
     return error != 0;
 }
 
-int DataHolder::change_item(int id, const QString& name, const QVariantList& fields) {
-    if (search_in_progress) {
-        id = found_indices[id];
-    }
+int DataHolder::change_item(int index, const QString& name_, const QVariantList& fields) {
+    std::string name = name_.toStdString();
+    std::string id = index_to_id(index);
 
-    electronpass::Wallet::Item item;
     std::vector<electronpass::Wallet::Field> wallet_fields;
-
-    item.name = name.toStdString();
-
     for (const QVariant& v : fields) {
-        // Probably exists a better conversion.
-        QMap<QString, QVariant> m = v.toMap();
-        QMap<QString, QVariant> field;
-
-        field["name"] = m["name"].toString();
-        field["value"] = m["value"].toString();
-        field["sensitive"] = m["sensitive"].toString();
-        field["type"] = m["type"].toString();
-
+        QMap<QString, QVariant> field = v.toMap();
         wallet_fields.push_back(convert_field(field));
     }
 
-    item.set_fields(wallet_fields);
+    wallet.items[id] = electronpass::Wallet::Item(name, wallet_fields, id);
 
-    int error = -1;
-    wallet.set_item(id, item, error);
-
-    if (error != 0) return 1;
-    error = save();
-
+    int error = save();
     return error != 0;
 }
 
 int DataHolder::get_number_of_items() {
-    if (search_in_progress) {
-        return found_indices.size();
-    }
     return item_names.size();
 }
 
-QString DataHolder::get_item_name(int id) {
-    if (search_in_progress) {
-        id = found_indices[id];
-    }
-    return item_names[id];
+QString DataHolder::get_item_name(int index) {
+    return item_names[index];
 }
 
-QString DataHolder::get_item_subname(int id) {
-    if (search_in_progress) {
-        id = found_indices[id];
-    }
-    return item_subnames[id];
+QString DataHolder::get_item_subname(int index) {
+    return item_subnames[index];
 }
 
-int DataHolder::get_number_of_item_fields(int id) {
-    if (search_in_progress) {
-        id = found_indices[id];
-    }
-    return item_numbers[id];
+int DataHolder::get_number_of_item_fields(int index) {
+    std::string id = index_to_id(index);
+    return wallet.items[id].size();
 }
 
-QMap<QString, QVariant> DataHolder::get_item_field(int item_id, int field_id) {
-    if (search_in_progress) {
-        item_id = found_indices[item_id];
-    }
+QMap<QString, QVariant> DataHolder::get_item_field(int item_index, int field_index) {
+    std::string item_id = index_to_id(item_index);
 
-    if (item_id == current_item_index) {
-        return convert_field(current_item[field_id]);
-    }
-
-    int error = -1;
-    electronpass::Wallet::Item item = wallet.get_item(item_id, error);
-
-    if (error != 0) {
-        return QMap<QString, QVariant>();
-    }
-    current_item_index = item_id;
-    current_item = item.get_fields();
-    return convert_field(current_item[field_id]);
+    current_item_index = item_index;
+    return convert_field(wallet.items[item_id][field_index]);
 }

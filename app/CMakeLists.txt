@@ -3,10 +3,13 @@ set(SOURCES
     main.cpp
     settings.cpp
     passwords.cpp
-    data_holder.cpp
     globals.cpp
+
+    data_holder.cpp
     search.cpp
     convert_field.cpp
+    file_stream.cpp
+
     sync/gdrive.cpp
     sync/auth_server.cpp
     sync/sync_manager.cpp

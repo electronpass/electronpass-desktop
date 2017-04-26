@@ -41,26 +41,25 @@ class DataHolder: public QObject {
     electronpass::Crypto* crypto = 0;
     electronpass::Wallet wallet;
 
+    std::vector<std::string> item_ids;
+
     std::vector<QString> item_names;
     std::vector<QString> item_subnames;
-    std::vector<int> item_numbers;
 
-    std::vector<QString> search_strings;
-    std::vector<int> found_indices;
-    bool search_in_progress = false;
-
-    std::vector<electronpass::Wallet::Field> current_item;
     int current_item_index = -1;
 
     // Reads first line of encrypted file.
     // Location of encrypted file is stored in settings.
-    std::string read_file(bool& success);
+    static std::string read_file(bool& success);
 
     // Writes single-line string to file.
-    bool write_file(const std::string& data);
+    static bool write_file(const std::string& data);
 
-    QMap<QString, QVariant> convert_field(const electronpass::Wallet::Field& field);
-    electronpass::Wallet::Field convert_field(const QMap<QString, QVariant>& field);
+    static QMap<QString, QVariant> convert_field(const electronpass::Wallet::Field& field);
+    static electronpass::Wallet::Field convert_field(const QMap<QString, QVariant>& field);
+
+    // Returns uuid of item at index. Empty string if index is too large or if locked.
+    std::string index_to_id(unsigned int index) const;
 
     // Encrypts wallet and saves it. Should be already called by other functions.
     // Also updates names in side bar and search strings.

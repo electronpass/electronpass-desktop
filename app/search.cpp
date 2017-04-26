@@ -18,24 +18,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "data_holder.hpp"
 
 int DataHolder::search(const QString& s) {
-    search_in_progress = true;
-    int best_match = -1, best_match_index = std::numeric_limits<int>::max();
-    found_indices = {};
-
-    for (unsigned int i = 0; i < search_strings.size(); ++i) {
-        int found = search_strings[i].indexOf(s, 0, Qt::CaseInsensitive);
-        if (found != -1) {
-            found_indices.push_back(i);
-            if (best_match_index > found) {
-                best_match = i;
-                best_match_index = found;
-            }
-        }
-    }
-    return best_match;
+    return 0;
 }
 
 void DataHolder::stop_search() {
-    found_indices = {};
-    search_in_progress = false;
 }
