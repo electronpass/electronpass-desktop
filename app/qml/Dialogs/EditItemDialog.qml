@@ -80,6 +80,7 @@ Dialog {
             field[i] = line;
         }
         dataHolder.change_item(itemsList.currentIndex, detailsTitleLabel.text, field);
+        detailsPane.showDetails(itemsList.currentIndex);
     }
 
     Pane {
