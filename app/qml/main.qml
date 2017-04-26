@@ -130,6 +130,26 @@ ApplicationWindow {
                     font.family: materialIconsFont.name
                     font.pixelSize: 22
                     text: qsTr("\uE145")
+                    onClicked: newItemMenu.open()
+
+                    //TODO: implement actual item addition
+                    Menu {
+                        id: newItemMenu
+                        y: parent.height
+                        x: - width + parent.width
+                        MenuItem {
+                            text: "Login"
+                        }
+                        MenuItem {
+                            text: "Credit card"
+                        }
+                        MenuItem {
+                            text: "Computer"
+                        }
+                        MenuItem {
+                            text: "Secure note"
+                        }
+                    }
                 }
                 ToolButton {
                     id: menuButton
