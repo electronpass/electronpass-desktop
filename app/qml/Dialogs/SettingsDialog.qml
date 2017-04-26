@@ -85,6 +85,11 @@ Dialog {
                 }
 
                 ShortcutItem {
+                    shortcut: qsTr("Ctrl+E")
+                    description: "Edit currently selected item"
+                }
+
+                ShortcutItem {
                     shortcut: qsTr("Ctrl+S")
                     description: "Sync"
                 }
