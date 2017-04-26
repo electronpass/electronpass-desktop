@@ -23,7 +23,7 @@ std::string DataHolder::read_file(bool& success) {
 
     std::ifstream file(path);
 
-    if (!file.good()) {
+    if (!file.is_open()) {
         success = false;
         return "";
     }
@@ -38,9 +38,15 @@ bool DataHolder::write_file(const std::string& data) {
     std::string path = globals::settings.get_data_location().toStdString();
 
     std::ofstream file(path);
-    if (!file.good()) return false;
 
-    file << data << std::endl;
+    if (!file.is_open()) {
+        std::cout << "<data_holder.cpp> [Error] Could not open file." << std::endl;
+        std::cout << "File path: " << path << '\n';
+        return false;
+    }
+
+    file << data << '\n';
+
     file.close();
     return true;
 }
@@ -216,9 +222,6 @@ int DataHolder::change_item(int id, const QString& name, const QVariantList& fie
         QList<QString> field = {m["name"].toString(), m["value"].toString(),
                                 m["sensitive"].toString(), m["type"].toString()
                             };
-
-        for (auto i : field) std::cout << i.toStdString() << " ";
-        std::cout << std::endl;
 
         wallet_fields.push_back(convert_field(field));
     }
