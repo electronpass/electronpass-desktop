@@ -29,6 +29,8 @@ Popup {
     generatedPassword = passwordManager.generateRandomPassWithRecipe(passLength, 4, 4, 4)
   }
 
+  onOpened: generateRandomPass()
+
   ColumnLayout {
     Label {
       text: "Password generator"
@@ -53,7 +55,6 @@ Popup {
         Layout.fillWidth: true
         onClicked: {
           editItemDetailContent.text = generatedPassword;
-          generatedPassword = "";
           passwordGenerator.close();
         }
       }
