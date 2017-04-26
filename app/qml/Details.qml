@@ -68,6 +68,14 @@ Pane {
         timer.restart();
     }
 
+    function openEditDialog(){
+      editItemDialog.open();
+      editItemDialog.setTitle(detailsTitleLabel.text);
+      for (var i = 0; i < detailsModel.count; i++){
+        editItemDialog.addEditDetail(detailsModel.get(i));
+      }
+    }
+
     ColumnLayout {
         anchors.left: parent.left
         anchors.right: parent.right
@@ -88,13 +96,7 @@ Pane {
                 font.family: materialIconsFont.name
                 font.pixelSize: 18
                 text: qsTr("\uE150")
-                onClicked: {
-                  editItemDialog.open();
-                  editItemDialog.setTitle(detailsTitleLabel.text);
-                  for (var i = 0; i < detailsModel.count; i++){
-                    editItemDialog.addEditDetail(detailsModel.get(i));
-                  }
-                }
+                onClicked: details.openEditDialog()
             }
             ToolButton {
                 font.family: materialIconsFont.name

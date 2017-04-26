@@ -86,7 +86,7 @@ Dialog {
 
                 ShortcutItem {
                     shortcut: qsTr("Ctrl+S")
-                    description: "Open settings"
+                    description: "Sync"
                 }
 
                 ShortcutItem {

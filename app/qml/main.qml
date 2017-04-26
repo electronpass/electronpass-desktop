@@ -67,9 +67,7 @@ ApplicationWindow {
     }
     Shortcut {
         sequence: "Ctrl+S"
-        onActivated: {
-            if(!lock.visible) settingsDialog.open()
-        }
+        onActivated: if(!lock.visible) syncManager.download_wallet()
     }
     Shortcut {
         sequence: "Ctrl+L"
@@ -78,6 +76,12 @@ ApplicationWindow {
                 dataHolder.lock()
                 lockGUI()
             }
+        }
+    }
+    Shortcut {
+        sequence: "Ctrl+E"
+        onActivated: {
+            if(!lock.visible && details.opened) details.openEditDialog();
         }
     }
     function handleKeys(event) {
