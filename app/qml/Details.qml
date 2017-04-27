@@ -70,6 +70,7 @@ Pane {
 
     function openEditDialog(){
       editItemDialog.open();
+      editItemDialog.index = itemsList.currentIndex;
       editItemDialog.setTitle(detailsTitleLabel.text);
       for (var i = 0; i < detailsModel.count; i++){
         editItemDialog.addEditDetail(detailsModel.get(i));

@@ -21,18 +21,24 @@ using namespace electronpass;
 
 void DataHolder::fill_item_template(electronpass::Wallet::Item& item, const std::string& item_template) {
     if (item_template == "login") {
-        item.name = "Login";
+        item.name = "Website login";
 
-        Wallet::Field username("Username", "electron", Wallet::FieldType::USERNAME, false);
-        Wallet::Field password("Password", passwords::generate_random_pass(16), Wallet::FieldType::PASSWORD, true);
-        Wallet::Field website("Website", "github.com/electronpass", Wallet::FieldType::URL, false);
+        Wallet::Field username("Username", "", Wallet::FieldType::USERNAME, false);
+        Wallet::Field email("Email", "", Wallet::FieldType::EMAIL, false);
+        Wallet::Field password("Password", "", Wallet::FieldType::PASSWORD, true);
+        Wallet::Field website("URL", "", Wallet::FieldType::URL, false);
 
-        item.fields = {username, password, website};
+        item.fields = {username, email, password, website};
 
     } else if (item_template == "credit_card") {
+        item.name = "Credit card";
+
+        Wallet::Field number("Number", "", Wallet::FieldType::PIN, false);
+        Wallet::Field pin("PIN", "", Wallet::FieldType::PIN, true);
+
+        item.fields = {number, pin};
 
     } else {
         item.name = "New Item";
-        item.fields.push_back(electronpass::Wallet::Field());
     }
 }

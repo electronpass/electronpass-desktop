@@ -115,6 +115,7 @@ ApplicationWindow {
                     placeholderText: qsTr(" Search")
                     Keys.onPressed: handleKeys(event)
                     onTextChanged: {
+                        itemsList.model = 0;
                         if (text != "") {
                             // returns -1 if nothing found
                             var search_results = dataHolder.search(text);
@@ -157,12 +158,8 @@ ApplicationWindow {
                             onClicked: newItemMenu.addItem("credit_card")
                         }
                         MenuItem {
-                            text: "Computer"
-                            onClicked: newItemMenu.addItem("computer")
-                        }
-                        MenuItem {
-                            text: "Secure note"
-                            onClicked: newItemMenu.addItem("note")
+                            text: "Custom"
+                            onClicked: newItemMenu.addItem("")
                         }
                     }
                 }

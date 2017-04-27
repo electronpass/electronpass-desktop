@@ -28,6 +28,7 @@ Dialog {
 
     modal: true
     standardButtons: Dialog.Save | Dialog.Cancel
+    property int index: -1
 
     onAccepted: {
       saveEditDetails();
@@ -83,12 +84,17 @@ Dialog {
             field[i] = line;
         }
         var success = dataHolder.change_item(itemsList.currentIndex, detailsTitleLabel.text, field);
-        detailsPane.showDetails(itemsList.currentIndex);
+
+        // Ugly solution. Propably there exist a better way to reload a model.
+        itemsList.model = -1;
+        itemsList.model = dataHolder.get_number_of_items();
+        itemsList.setItemIndex(index);
 
         if (success != 0) {
             // TODO: report error
             console.log("[Error] Could not save wallet.");
         }
+
     }
 
     Pane {
