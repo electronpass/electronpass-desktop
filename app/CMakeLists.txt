@@ -9,6 +9,7 @@ set(SOURCES
     search.cpp
     convert_field.cpp
     file_stream.cpp
+    item_template.cpp
 
     sync/gdrive.cpp
     sync/auth_server.cpp

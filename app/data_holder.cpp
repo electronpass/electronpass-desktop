@@ -22,18 +22,19 @@ std::string DataHolder::index_to_id(unsigned int index) const {
     return item_ids[index];
 }
 
+unsigned int DataHolder::id_to_index(const std::string& id) const {
+    unsigned int index = std::find(item_ids.begin(), item_ids.end(), id) - item_ids.begin();
+    if (index >= item_ids.size()) return -1;
+    return index;
+}
+
 void DataHolder::update() {
+    item_ids = wallet.get_ids();
     item_names = {};
     item_subnames = {};
-    item_ids = {};
 
-    for (const auto& pair : wallet.items) {
-        electronpass::Wallet::Item item;
-        std::string item_id;
-
-        std::tie(item_id, item) = pair;
-
-        item_ids.push_back(item_id);
+    for (const std::string& id : item_ids) {
+        const electronpass::Wallet::Item item = wallet.items[id];
 
         item_names.push_back(QString::fromStdString(item.name));
         std::string subname = "";
@@ -80,6 +81,7 @@ void DataHolder::lock() {
     item_subnames = {};
 
     item_ids = {};
+    new_item_id = "";
 }
 
 int DataHolder::save() {
@@ -121,10 +123,30 @@ int DataHolder::change_item(int index, const QString& name_, const QVariantList&
         wallet_fields.push_back(convert_field(field));
     }
 
-    wallet.items[id] = electronpass::Wallet::Item(name, wallet_fields, id);
+    wallet.edit_item(id, name, wallet_fields);
 
     int error = save();
     return error != 0;
+}
+
+int DataHolder::add_item(const QString& item_template_) {
+    electronpass::Wallet::Item item;
+    std::string item_template = item_template_.toStdString();
+
+    fill_item_template(item, item_template);
+
+    wallet.add_item(item);
+
+    update();
+
+    new_item_id = item.get_id();
+
+    return id_to_index(new_item_id);
+}
+
+void DataHolder::cancel_edit() {
+    wallet.items.erase(new_item_id);
+    update();
 }
 
 int DataHolder::get_number_of_items() const {

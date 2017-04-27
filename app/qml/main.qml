@@ -136,22 +136,33 @@ ApplicationWindow {
                     text: qsTr("\uE145")
                     onClicked: newItemMenu.open()
 
-                    //TODO: implement actual item addition
                     Menu {
                         id: newItemMenu
                         y: parent.height
                         x: - width + parent.width
+
+                        function addItem(template) {
+                            var newItemIndex = dataHolder.add_item(template);
+                            itemsList.model = dataHolder.get_number_of_items();
+                            itemsList.setItemIndex(newItemIndex);
+                            details.openEditDialog();
+                        }
+
                         MenuItem {
                             text: "Login"
+                            onClicked: newItemMenu.addItem("login")
                         }
                         MenuItem {
                             text: "Credit card"
+                            onClicked: newItemMenu.addItem("credit_card")
                         }
                         MenuItem {
                             text: "Computer"
+                            onClicked: newItemMenu.addItem("computer")
                         }
                         MenuItem {
                             text: "Secure note"
+                            onClicked: newItemMenu.addItem("note")
                         }
                     }
                 }

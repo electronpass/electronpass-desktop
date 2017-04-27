@@ -30,6 +30,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <electronpass/crypto.hpp>
 #include <electronpass/serialization.hpp>
+#include <electronpass/passwords.hpp>
 #include "globals.hpp"
 
 
@@ -46,6 +47,8 @@ class DataHolder: public QObject {
     std::vector<QString> item_names;
     std::vector<QString> item_subnames;
 
+    std::string new_item_id = "";
+
     // Reads first line of encrypted file.
     // Location of encrypted file is stored in settings.
     static std::string read_file(bool& success);
@@ -57,8 +60,13 @@ class DataHolder: public QObject {
     static QMap<QString, QVariant> convert_field(const electronpass::Wallet::Field& field);
     static electronpass::Wallet::Field convert_field(const QMap<QString, QVariant>& field);
 
+    // Fills new item with template value.
+    static void fill_item_template(electronpass::Wallet::Item& item, const std::string& item_template);
+
     // Returns uuid of item at index. Empty string if index is too large or if locked.
     std::string index_to_id(unsigned int index) const;
+    // Returns index where item with given id should be located.
+    unsigned int id_to_index(const std::string& id) const;
 
     // Encrypts wallet and saves it. Should be already called by other functions.
     // Also updates names in side bar and search strings.
@@ -106,9 +114,14 @@ public:
     // Returns 0 if OK and 1 othervise.
     Q_INVOKABLE int change_item(int index, const QString& name, const QVariantList& fields);
 
-    // Function that changes attribute of one of the items.
-    // electronpass::Wallet object should be then deserialized to json, encrypted and saved.
-    // Q_INVOKABLE void change(??);
+    // Creates new item with given template.
+    // Returns index of new item. Does not save the wallet.
+    Q_INVOKABLE int add_item(const QString& item_template);
+
+    // Deletes not saved items. Should be called after `add_item` if item is not saved.
+    Q_INVOKABLE void cancel_edit();
+
+
 };
 
 #endif // DATA_HOLDER_HPP
