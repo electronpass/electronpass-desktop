@@ -17,6 +17,21 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "data_holder.hpp"
 
+void DataHolder::sort_items() {
+    permutation_vector = std::vector<int>(item_ids.size());
+    for (unsigned int i = 0; i < item_ids.size(); ++i) permutation_vector[i] = i;
+
+    // Sort indices based on values in item_names.
+    sort(permutation_vector.begin(), permutation_vector.end(),
+        [&] (int a, int b) { return item_names[a] < item_names[b]; }
+    );
+
+    reverse_permutaton_vector = std::vector<int>(item_ids.size());
+    for (unsigned int i = 0; i < item_ids.size(); ++i) {
+        reverse_permutaton_vector[permutation_vector[i]] = i;
+    }
+}
+
 int DataHolder::search(const QString& s) const {
     return 0;
 }

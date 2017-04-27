@@ -47,6 +47,10 @@ class DataHolder: public QObject {
     std::vector<QString> item_names;
     std::vector<QString> item_subnames;
 
+    // Items order is changed, because displayed items should be sorted in alphabetical order.
+    std::vector<int> permutation_vector;
+    std::vector<int> reverse_permutaton_vector;
+
     std::string new_item_id = "";
 
     // Reads first line of encrypted file.
@@ -64,9 +68,17 @@ class DataHolder: public QObject {
     static void fill_item_template(electronpass::Wallet::Item& item, const std::string& item_template);
 
     // Returns uuid of item at index. Empty string if index is too large or if locked.
-    std::string index_to_id(unsigned int index) const;
+    std::string index_to_id(int index) const;
     // Returns index where item with given id should be located.
-    unsigned int id_to_index(const std::string& id) const;
+    int id_to_index(const std::string& id) const;
+
+    // Items need to be sorted in alphabetical order. Instead of actually sorting them,
+    // only a permutation vector is created.
+    void sort_items();
+
+    // Returns position of item in item_names, item_subnames, item_id...
+    int permute(int index) const;
+    int permute_back(int index) const;
 
     // Encrypts wallet and saves it. Should be already called by other functions.
     // Also updates names in side bar and search strings.
@@ -96,11 +108,11 @@ public:
     Q_INVOKABLE void lock();
 
     Q_INVOKABLE int get_number_of_items() const;
-    Q_INVOKABLE QString get_item_name(unsigned int index) const;
-    Q_INVOKABLE QString get_item_subname(unsigned int index) const;
+    Q_INVOKABLE QString get_item_name(int index) const;
+    Q_INVOKABLE QString get_item_subname(int index) const;
 
-    Q_INVOKABLE int get_number_of_item_fields(unsigned int index) const;
-    Q_INVOKABLE QMap<QString, QVariant> get_item_field(unsigned int item_index, unsigned int field_index) const;
+    Q_INVOKABLE int get_number_of_item_fields(int index) const;
+    Q_INVOKABLE QMap<QString, QVariant> get_item_field(int item_index, int field_index) const;
 
     // Returns index of first found item which contains string.
     Q_INVOKABLE int search(const QString& s) const;

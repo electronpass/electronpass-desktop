@@ -17,15 +17,26 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "data_holder.hpp"
 
-std::string DataHolder::index_to_id(unsigned int index) const {
-    if (index >= item_ids.size()) return "";
+int DataHolder::permute(int index) const {
+    if (index >= static_cast<int>(permutation_vector.size())) return -1;
+    return permutation_vector[index];
+}
+
+int DataHolder::permute_back(int index) const {
+    if (index >= static_cast<int>(reverse_permutaton_vector.size())) return -1;
+    return reverse_permutaton_vector[index];
+}
+
+std::string DataHolder::index_to_id(int index) const {
+    index = permute(index);
+    if (index >= static_cast<int>(item_ids.size()) || index == -1) return "";
     return item_ids[index];
 }
 
-unsigned int DataHolder::id_to_index(const std::string& id) const {
-    unsigned int index = std::find(item_ids.begin(), item_ids.end(), id) - item_ids.begin();
-    if (index >= item_ids.size()) return -1;
-    return index;
+int DataHolder::id_to_index(const std::string& id) const {
+    int index = std::find(item_ids.begin(), item_ids.end(), id) - item_ids.begin();
+    if (index >= static_cast<int>(item_ids.size())) return -1;
+    return permute_back(index);
 }
 
 void DataHolder::update() {
@@ -47,6 +58,7 @@ void DataHolder::update() {
         }
         item_subnames.push_back(QString::fromStdString(subname));
     }
+    sort_items();
 }
 
 int DataHolder::unlock(const QString& password) {
@@ -82,6 +94,9 @@ void DataHolder::lock() {
 
     item_ids = {};
     new_item_id = "";
+
+    permutation_vector = {};
+    reverse_permutaton_vector = {};
 }
 
 int DataHolder::save() {
@@ -154,23 +169,25 @@ int DataHolder::get_number_of_items() const {
     return wallet.size();
 }
 
-QString DataHolder::get_item_name(unsigned int index) const {
-    if (index >= item_names.size()) return "";
+QString DataHolder::get_item_name(int index) const {
+    index = permute(index);
+    if (index >= static_cast<int>(item_names.size()) || index == -1) return "";
     return item_names[index];
 }
 
-QString DataHolder::get_item_subname(unsigned int index) const {
-    if (index >= item_subnames.size()) return "";
+QString DataHolder::get_item_subname(int index) const {
+    index = permute(index);
+    if (index >= static_cast<int>(item_subnames.size()) || index == -1) return "";
     return item_subnames[index];
 }
 
-int DataHolder::get_number_of_item_fields(unsigned int index) const {
+int DataHolder::get_number_of_item_fields(int index) const {
     std::string id = index_to_id(index);
     return wallet[id].size();
 }
 
-QMap<QString, QVariant> DataHolder::get_item_field(unsigned int item_index, unsigned int field_index) const {
+QMap<QString, QVariant> DataHolder::get_item_field(int item_index, int field_index) const {
     std::string item_id = index_to_id(item_index);
-    if (wallet[item_id].size() <= field_index) return QMap<QString, QVariant>();
+    if (static_cast<int>(wallet[item_id].size()) <= field_index) return QMap<QString, QVariant>();
     return convert_field(wallet[item_id][field_index]);
 }
