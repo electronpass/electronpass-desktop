@@ -99,8 +99,8 @@ public:
     Q_INVOKABLE QString get_item_name(unsigned int index) const;
     Q_INVOKABLE QString get_item_subname(unsigned int index) const;
 
-    Q_INVOKABLE int get_number_of_item_fields(unsigned int index);
-    Q_INVOKABLE QMap<QString, QVariant> get_item_field(unsigned int item_index, unsigned int field_index);
+    Q_INVOKABLE int get_number_of_item_fields(unsigned int index) const;
+    Q_INVOKABLE QMap<QString, QVariant> get_item_field(unsigned int item_index, unsigned int field_index) const;
 
     // Returns index of first found item which contains string.
     Q_INVOKABLE int search(const QString& s) const;

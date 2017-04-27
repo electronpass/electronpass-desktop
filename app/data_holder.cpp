@@ -34,7 +34,7 @@ void DataHolder::update() {
     item_subnames = {};
 
     for (const std::string& id : item_ids) {
-        const electronpass::Wallet::Item item = wallet.items[id];
+        const electronpass::Wallet::Item item = wallet[id];
 
         item_names.push_back(QString::fromStdString(item.name));
         std::string subname = "";
@@ -107,7 +107,7 @@ int DataHolder::save() {
 int DataHolder::delete_item(int index) {
     std::string id = index_to_id(index);
 
-    wallet.items.erase(id);
+    wallet.delete_item(id);
 
     int error = save();
     return error != 0;
@@ -135,7 +135,8 @@ int DataHolder::add_item(const QString& item_template_) {
 
     fill_item_template(item, item_template);
 
-    wallet.add_item(item);
+    bool success = wallet.add_item(item);
+    if (!success) return -1;
 
     update();
 
@@ -145,12 +146,12 @@ int DataHolder::add_item(const QString& item_template_) {
 }
 
 void DataHolder::cancel_edit() {
-    wallet.items.erase(new_item_id);
+    wallet.delete_item(new_item_id);
     update();
 }
 
 int DataHolder::get_number_of_items() const {
-    return wallet.items.size();
+    return wallet.size();
 }
 
 QString DataHolder::get_item_name(unsigned int index) const {
@@ -163,13 +164,13 @@ QString DataHolder::get_item_subname(unsigned int index) const {
     return item_subnames[index];
 }
 
-int DataHolder::get_number_of_item_fields(unsigned int index) {
+int DataHolder::get_number_of_item_fields(unsigned int index) const {
     std::string id = index_to_id(index);
-    return wallet.items[id].size();
+    return wallet[id].size();
 }
 
-QMap<QString, QVariant> DataHolder::get_item_field(unsigned int item_index, unsigned int field_index) {
+QMap<QString, QVariant> DataHolder::get_item_field(unsigned int item_index, unsigned int field_index) const {
     std::string item_id = index_to_id(item_index);
-    if (wallet.items[item_id].size() <= field_index) return QMap<QString, QVariant>();
-    return convert_field(wallet.items[item_id][field_index]);
+    if (wallet[item_id].size() <= field_index) return QMap<QString, QVariant>();
+    return convert_field(wallet[item_id][field_index]);
 }
