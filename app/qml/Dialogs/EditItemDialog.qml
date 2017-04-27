@@ -83,7 +83,7 @@ Dialog {
             };
             field[i] = line;
         }
-        var success = dataHolder.change_item(itemsList.currentIndex, detailsTitleLabel.text, field);
+        var success = dataHolder.change_item(index, detailsTitleLabel.text, field);
 
         // Ugly solution. Propably there exist a better way to reload a model.
         itemsList.model = -1;
