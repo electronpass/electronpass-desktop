@@ -17,6 +17,15 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "data_holder.hpp"
 
+#define kFieldTypeUsername "username"
+#define kFieldTypePassword "password"
+#define kFieldTypeEmail "email"
+#define kFieldTypeUrl "url"
+#define kFieldTypePin "pin"
+#define kFieldTypeDate "date"
+#define kFieldTypeOther "other"
+#define kFieldTypeUndefined "undefined";
+
 QMap<QString, QVariant> DataHolder::convert_field(const electronpass::Wallet::Field& field) {
     QMap<QString, QVariant> new_field;
 
@@ -27,23 +36,28 @@ QMap<QString, QVariant> DataHolder::convert_field(const electronpass::Wallet::Fi
     QString type;
     switch (field.field_type) {
         case electronpass::Wallet::FieldType::USERNAME:
-            type = "username";
+            type = kFieldTypeUsername;
             break;
         case electronpass::Wallet::FieldType::PASSWORD:
-            type = "password";
+            type = kFieldTypePassword;
             break;
         case electronpass::Wallet::FieldType::EMAIL:
-            type = "email";
+            type = kFieldTypeEmail;
             break;
         case electronpass::Wallet::FieldType::URL:
-            type = "url";
+            type = kFieldTypeUrl;
             break;
         case electronpass::Wallet::FieldType::PIN:
-            type = "pin";
+            type = kFieldTypePin;
             break;
+        case electronpass::Wallet::FieldType::DATE:
+            type = kFieldTypeDate;
+            break;
+        case electronpass::Wallet::FieldType::OTHER:
+            type = kFieldTypeOther;
         case electronpass::Wallet::FieldType::UNDEFINED:
         default:
-            type = "undefinded";
+            type = kFieldTypeUndefined;
             break;
     }
     new_field["type"] = type;
@@ -60,11 +74,13 @@ electronpass::Wallet::Field DataHolder::convert_field(const QMap<QString, QVaria
 
     std::string type = field_list["type"].toString().toStdString();
 
-    if (type == "username") field.field_type = electronpass::Wallet::FieldType::USERNAME;
-    else if (type == "password") field.field_type = electronpass::Wallet::FieldType::PASSWORD;
-    else if (type == "email") field.field_type = electronpass::Wallet::FieldType::EMAIL;
-    else if (type == "url") field.field_type = electronpass::Wallet::FieldType::URL;
-    else if (type == "pin") field.field_type = electronpass::Wallet::FieldType::PIN;
+    if (type == kFieldTypeUsername) field.field_type = electronpass::Wallet::FieldType::USERNAME;
+    else if (type == kFieldTypePassword) field.field_type = electronpass::Wallet::FieldType::PASSWORD;
+    else if (type == kFieldTypeEmail) field.field_type = electronpass::Wallet::FieldType::EMAIL;
+    else if (type == kFieldTypeUrl) field.field_type = electronpass::Wallet::FieldType::URL;
+    else if (type == kFieldTypePin) field.field_type = electronpass::Wallet::FieldType::PIN;
+    else if (type == kFieldTypeDate) field.field_type = electronpass::Wallet::FieldType::DATE;
+    else if (type == kFieldTypeOther) field.field_type = electronpass::Wallet::FieldType::OTHER;
     else field.field_type = electronpass::Wallet::FieldType::UNDEFINED;
 
     return field;

@@ -23,7 +23,10 @@ void DataHolder::sort_items() {
 
     // Sort indices based on values in item_names.
     sort(permutation_vector.begin(), permutation_vector.end(),
-        [&] (int a, int b) { return item_names[a] < item_names[b]; }
+        [&] (int a, int b) {
+            if (item_names[a] == item_names[b]) return item_subnames[a] < item_subnames[b];
+            return item_names[a] < item_names[b];
+        }
     );
 
     reverse_permutaton_vector = std::vector<int>(item_ids.size());
