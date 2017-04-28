@@ -18,13 +18,21 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "data_holder.hpp"
 
 int DataHolder::permute(int index) const {
-    if (index >= static_cast<int>(permutation_vector.size())) return -1;
+    if (searching) {
+        if (index >= static_cast<int>(search_results.size())) index = -1;
+        else index = search_results[index];
+    }
+    if (index >= static_cast<int>(permutation_vector.size()) || index == -1) return -1;
     return permutation_vector[index];
 }
 
 int DataHolder::permute_back(int index) const {
-    if (index >= static_cast<int>(reverse_permutaton_vector.size())) return -1;
-    return reverse_permutaton_vector[index];
+    if (searching) {
+        if (index >= static_cast<int>(inverse_search_results.size())) index = -1;
+        else index = inverse_search_results[index];
+    }
+    if (index >= static_cast<int>(inverse_permutation_vector.size()) || index == -1) return -1;
+    return inverse_permutation_vector[index];
 }
 
 std::string DataHolder::index_to_id(int index) const {
@@ -44,6 +52,8 @@ void DataHolder::update() {
     item_names = {};
     item_subnames = {};
 
+    search_strings = {};
+
     new_item_id = "";
 
     for (const std::string& id : item_ids) {
@@ -51,14 +61,20 @@ void DataHolder::update() {
 
         item_names.push_back(QString::fromStdString(item.name));
         std::string subname = "";
+        std::string search_string = item.name + " ";
+        bool subname_found = false;
 
         for (unsigned int i = 0; i < item.size(); ++i) {
             if (!item[i].sensitive) {
-                subname = item[i].value;
-                break;
+                if (!subname_found) {
+                    subname = item[i].value;
+                    subname_found = true;
+                }
+                search_string += item[i].value;
             }
         }
         item_subnames.push_back(QString::fromStdString(subname));
+        search_strings.push_back(QString::fromStdString(search_string));
     }
     sort_items();
 }
@@ -98,7 +114,12 @@ void DataHolder::lock() {
     new_item_id = "";
 
     permutation_vector = {};
-    reverse_permutaton_vector = {};
+    inverse_permutation_vector = {};
+
+    search_strings = {};
+    search_results = {};
+    inverse_search_results = {};
+    searching = false;
 
     saving_error = -1;
 }
@@ -182,6 +203,7 @@ void DataHolder::cancel_edit() {
 }
 
 int DataHolder::get_number_of_items() const {
+    if (searching) return search_results.size();
     return wallet.size();
 }
 

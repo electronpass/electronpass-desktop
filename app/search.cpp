@@ -29,15 +29,40 @@ void DataHolder::sort_items() {
         }
     );
 
-    reverse_permutaton_vector = std::vector<int>(item_ids.size());
+    inverse_permutation_vector = std::vector<int>(item_ids.size());
     for (unsigned int i = 0; i < item_ids.size(); ++i) {
-        reverse_permutaton_vector[permutation_vector[i]] = i;
+        inverse_permutation_vector[permutation_vector[i]] = i;
     }
 }
 
-int DataHolder::search(const QString& s) const {
-    return 0;
+int DataHolder::search(const QString& s) {
+    searching = true;
+
+    int best_match = -1, best_match_index = std::numeric_limits<int>::max();
+    search_results = {};
+
+    for (unsigned int i = 0; i < item_ids.size(); ++i) {
+        int index = permutation_vector[i];
+        int found = search_strings[index].indexOf(s, 0, Qt::CaseInsensitive);
+        if (found != -1) {
+            search_results.push_back(i);
+            if (best_match_index > found) {
+                best_match_index = found;
+                best_match = i;
+            }
+        }
+    }
+
+    inverse_search_results = std::vector<int>(item_ids.size(), -1);
+    for (unsigned int i = 0; i < search_results.size(); ++i) {
+        inverse_search_results[search_results[i]] = i;
+    }
+
+    if (best_match == -1) return -1;
+    return inverse_search_results[best_match];
 }
 
-void DataHolder::stop_search() const {
+void DataHolder::stop_search() {
+    search_results = {};
+    searching = false;
 }

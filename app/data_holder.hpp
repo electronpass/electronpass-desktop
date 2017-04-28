@@ -49,7 +49,14 @@ class DataHolder: public QObject {
 
     // Items order is changed, because displayed items should be sorted in alphabetical order.
     std::vector<int> permutation_vector;
-    std::vector<int> reverse_permutaton_vector;
+    std::vector<int> inverse_permutation_vector;
+
+    // This is where indices of found items are stored.
+    std::vector<int> search_results;
+    std::vector<int> inverse_search_results;
+
+    std::vector<QString> search_strings;
+    bool searching = false;
 
     std::string new_item_id = "";
 
@@ -120,8 +127,8 @@ public:
     Q_INVOKABLE QMap<QString, QVariant> get_item_field(int item_index, int field_index) const;
 
     // Returns index of first found item which contains string.
-    Q_INVOKABLE int search(const QString& s) const;
-    Q_INVOKABLE void stop_search() const;
+    Q_INVOKABLE int search(const QString& s);
+    Q_INVOKABLE void stop_search();
 
     // Deletes item at index. Function save must be called afterwards to apply changes.
     // Returns 0 if everything was OK and 1 if not.
