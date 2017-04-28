@@ -99,25 +99,36 @@ void DataHolder::lock() {
 
     permutation_vector = {};
     reverse_permutaton_vector = {};
+
+    saving_error = -1;
 }
 
 int DataHolder::save() {
     // If locked, there is nothing to save.
-    if (!unlocked) return -1;
-
+    if (!unlocked) {
+        saving_error = -1;
+        return -1;
+    }
     std::string text = electronpass::serialization::serialize(wallet);
 
-    if (!crypto->check()) return 1;
-
+    if (!crypto->check()) {
+        saving_error = 1;
+        return 1;
+    }
     bool success = false;
     text = crypto->encrypt(text, success);
-    if (!success) return 1;
-
+    if (!success) {
+        saving_error = 1;
+        return 1;
+    }
     success = write_file(text);
-    if (!success) return 2;
-
+    if (!success) {
+        saving_error = 2;
+        return 2;
+    }
     update();
 
+    saving_error = 0;
     return 0;
 }
 
@@ -142,8 +153,8 @@ int DataHolder::change_item(int index, const QString& name_, const QVariantList&
 
     wallet.edit_item(id, name, wallet_fields);
 
-    int error = save();
-    return error != 0;
+    save();
+    return id_to_index(id);
 }
 
 int DataHolder::add_item(const QString& item_template_) {
@@ -163,8 +174,10 @@ int DataHolder::add_item(const QString& item_template_) {
 }
 
 void DataHolder::cancel_edit() {
-    wallet.delete_item(new_item_id);
-    new_item_id = "";
+    if (new_item_id != "") {
+        wallet.delete_item(new_item_id);
+        new_item_id = "";
+    }
     update();
 }
 
@@ -193,4 +206,8 @@ QMap<QString, QVariant> DataHolder::get_item_field(int item_index, int field_ind
     std::string item_id = index_to_id(item_index);
     if (static_cast<int>(wallet[item_id].size()) <= field_index) return QMap<QString, QVariant>();
     return convert_field(wallet[item_id][field_index]);
+}
+
+int DataHolder::get_saving_error() {
+    return saving_error;
 }

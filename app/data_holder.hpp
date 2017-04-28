@@ -87,7 +87,12 @@ class DataHolder: public QObject {
     //     -1 - Nothing to save, app is locked.
     //      1 - Encryption failed.
     //      2 - File write failed.
+    // Result is saved in saving_error variable.
     int save();
+
+    // -1 means that saving was not performed yet.
+    // See also: save
+    int saving_error = -1;
 
     // Updates item_names, search_strings...
     void update();
@@ -123,7 +128,8 @@ public:
     Q_INVOKABLE int delete_item(int index);
 
     // Replaces past item with new item and saves it.
-    // Returns 0 if OK and 1 othervise.
+    // Returns pair new index of element.
+    // get_saving_error() should be called afterwards to check if saving was sucessful.
     Q_INVOKABLE int change_item(int index, const QString& name, const QVariantList& fields);
 
     // Creates new item with given template.
@@ -133,6 +139,8 @@ public:
     // Deletes not saved items. Should be called after `add_item` if item is not saved.
     Q_INVOKABLE void cancel_edit();
 
+    // Returns last save() call's return value.
+    Q_INVOKABLE int get_saving_error();
 
 };
 

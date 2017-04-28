@@ -83,14 +83,14 @@ Dialog {
             };
             field[i] = line;
         }
-        var success = dataHolder.change_item(index, detailsTitleLabel.text, field);
+        var new_index = dataHolder.change_item(index, detailsTitleLabel.text, field);
 
         // Ugly solution. Propably there exist a better way to reload a model.
         itemsList.model = -1;
         itemsList.model = dataHolder.get_number_of_items();
-        itemsList.setItemIndex(index);
+        itemsList.setItemIndex(new_index);
 
-        if (success != 0) {
+        if (dataHolder.get_saving_error() != 0) {
             // TODO: report error
             console.log("[Error] Could not save wallet.");
         }
