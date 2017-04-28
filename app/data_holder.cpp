@@ -44,6 +44,8 @@ void DataHolder::update() {
     item_names = {};
     item_subnames = {};
 
+    new_item_id = "";
+
     for (const std::string& id : item_ids) {
         const electronpass::Wallet::Item item = wallet[id];
 
@@ -162,6 +164,7 @@ int DataHolder::add_item(const QString& item_template_) {
 
 void DataHolder::cancel_edit() {
     wallet.delete_item(new_item_id);
+    new_item_id = "";
     update();
 }
 
