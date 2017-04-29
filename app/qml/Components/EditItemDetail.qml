@@ -44,6 +44,7 @@ RowLayout {
         TextField {
             id: titleLabel
             text: editItemDetail.title
+            selectByMouse: true
             font.pixelSize: 14
             anchors.right: parent.right
             anchors.left: parent.left
@@ -74,6 +75,7 @@ RowLayout {
     }
     TextField {
         id: editItemDetailContent
+        selectByMouse: true
         Layout.fillWidth: true
         text: content
         font.pixelSize: 14

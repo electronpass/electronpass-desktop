@@ -111,6 +111,7 @@ ApplicationWindow {
                 }
                 TextField {
                     id: searchInput
+                    selectByMouse: true
                     font.pixelSize: 14
                     placeholderText: qsTr(" Search")
                     Keys.onPressed: handleKeys(event)

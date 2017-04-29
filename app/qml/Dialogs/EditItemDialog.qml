@@ -113,6 +113,7 @@ Dialog {
                 id: detailsTitleContainer
                 TextField {
                     id: detailsTitleLabel
+                    selectByMouse: true
                     font.pixelSize: 20
                     Layout.fillWidth: true
                     background.opacity: bcgOpacity

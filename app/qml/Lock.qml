@@ -48,6 +48,7 @@ Image {
 
             TextField {
                 id: passInput
+                selectByMouse: true
                 property int unlocked: 4  // not unlocked
                 focus: true
                 Layout.topMargin: 48
