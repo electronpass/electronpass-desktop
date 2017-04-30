@@ -29,8 +29,8 @@ Dialog {
 
     modal: true
 
-    width: Math.min(parent.width * 0.7, 600)
-    height: Math.min(parent.height * 0.7, 400)
+    width: Math.min(parent.width * 0.8, 600)
+    height: Math.min(parent.height * 0.8, 400)
 
     header: TabBar {
         id: tabBar
@@ -68,47 +68,55 @@ Dialog {
         }
 
         Page {
-            ColumnLayout {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                spacing: 32
-                y: 8 // to avoid overlaping
+          ListModel {
+            id: shortcutsModel
 
-                ShortcutItem {
-                    shortcut: qsTr("\u2191 and \u2193")
-                    description: "Move through items"
-                }
-
-                ShortcutItem {
-                    shortcut: qsTr("Ctrl+L")
-                    description: "Lock wallet"
-                }
-
-                ShortcutItem {
-                    shortcut: qsTr("Ctrl+E")
-                    description: "Edit currently selected item"
-                }
-
-                ShortcutItem {
-                    shortcut: qsTr("Ctrl+S")
-                    description: "Sync"
-                }
-
-                ShortcutItem {
-                    shortcut: qsTr("Ctrl+F")
-                    description: "Search"
-                }
-
-                ShortcutItem {
-                    shortcut: qsTr("Ctrl+D")
-                    description: "Copy the first password from the selected item"
-                }
-
-                ShortcutItem {
-                    shortcut: qsTr("Ctrl+W")
-                    description: "Close application"
-                }
+            ListElement {
+              text: qsTr("\u2191 and \u2193")
+              desc: "Move through items"
             }
+            ListElement {
+              text: qsTr("Ctrl+L")
+              desc: "Lock wallet"
+            }
+            ListElement {
+              text: qsTr("Ctrl+E")
+              desc: "Edit currently selected item"
+            }
+            ListElement {
+              text: qsTr("Ctrl+S")
+              desc: "Sync now"
+            }
+            ListElement {
+              text:qsTr("Ctrl+F")
+              desc: "Search"
+            }
+            ListElement {
+              text: qsTr("Ctrl+D")
+              desc: "Copy the first password from the selected item"
+            }
+            ListElement {
+              text: qsTr("Ctrl+W")
+              desc: "Close application"
+            }
+          }
+          ListView {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            spacing: 32
+            topMargin: 8
+            bottomMargin: 22
+            interactive: (contentHeight + 8 > height)
+
+            model: shortcutsModel
+
+            delegate: ShortcutItem {
+              shortcut: text
+              description: desc
+            }
+          }
         }
     }
 
