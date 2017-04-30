@@ -23,7 +23,9 @@ import QtQuick.Controls.Material 2.1
 Popup {
   id: passwordGenerator
   property string generatedPassword: ""
+  property bool numbersOnly: false
   property int passLength: settings.defaultPassLength
+  property int pinLength: 4
   property int numberOfDigitsInPassword: settings.numberOfDigitsInPassword
   property int numberOfSymbolsInPassword: settings.numberOfSymbolsInPassword
   property int numberOfUppercaseLettersInPassword: settings.numberOfUppercaseLettersInPassword
@@ -31,7 +33,9 @@ Popup {
   Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : Material.color(Material.Grey, Material.Shade100)
 
   function generateRandomPass(){
-    generatedPassword = passwordManager.generateRandomPassWithRecipe(passLength, numberOfDigitsInPassword, numberOfSymbolsInPassword, numberOfUppercaseLettersInPassword)
+    if (passwordGenerator.numbersOnly)
+      generatedPassword = passwordManager.generateRandomPassWithRecipe(pinLength, pinLength, 0, 0)
+    else generatedPassword = passwordManager.generateRandomPassWithRecipe(passLength, numberOfDigitsInPassword, numberOfSymbolsInPassword, numberOfUppercaseLettersInPassword);
   }
 
   onOpened: generateRandomPass()
@@ -85,6 +89,7 @@ Popup {
         }
     }
     RowLayout {
+      visible: !passwordGenerator.numbersOnly
       Item {
         Layout.topMargin: -16
         Layout.fillWidth: true
@@ -113,7 +118,34 @@ Popup {
       }
     }
     RowLayout {
+      visible: passwordGenerator.numbersOnly
+      Item {
+        Layout.topMargin: -16
+        Layout.fillWidth: true
+        Label {
+          text: "Lenght:"
+          font.pointSize: 10
+        }
+      }
+      SpinBox {
+        id: pinLengthInput
+        from: 1
+        to: 128
+        value: passwordGenerator.pinLength
+        scale: 0.75 //bad solution
+        editable: true
+        Layout.maximumWidth: 132
+        Layout.leftMargin: -20
+        Layout.rightMargin: -26
+        onValueChanged: {
+          passwordGenerator.pinLength = value;
+          passwordGenerator.generateRandomPass();
+        }
+      }
+    }
+    RowLayout {
       Layout.topMargin: -24
+      visible: !passwordGenerator.numbersOnly
       Item {
         Layout.fillWidth: true
         Layout.topMargin: -16
@@ -144,6 +176,7 @@ Popup {
     }
     RowLayout {
       Layout.topMargin: -24
+      visible: !passwordGenerator.numbersOnly
       Item {
         Layout.fillWidth: true
         Layout.topMargin: -16
@@ -174,6 +207,7 @@ Popup {
     }
     RowLayout {
       Layout.topMargin: -24
+      visible: !passwordGenerator.numbersOnly
       Item {
         Layout.fillWidth: true
         Layout.topMargin: -16

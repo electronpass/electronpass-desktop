@@ -117,6 +117,7 @@ RowLayout {
         Material.foreground: editItemDetail.contentColor
         onClicked: {
           passGenerator.toFill = editItemDetailContent;
+          passGenerator.numbersOnly = (editItemDetail.type == "pin");
           passGenerator.open();
         }
     }
