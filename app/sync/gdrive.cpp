@@ -36,8 +36,8 @@ Gdrive::Gdrive(QObject *parent): QObject(parent) {
 
 bool Gdrive::check_authentication_error(const Json::Value& json) {
     if (json["error"].isObject()) {
-        if (state == State::GET) emit wallet_downloaded("", 3);
-        else if (state == State::SET) emit wallet_uploaded(3);
+        if (state == State::GET) emit wallet_downloaded("", SyncManagerStatus::COULD_NOT_AUTHORIZE);
+        else if (state == State::SET) emit wallet_uploaded(SyncManagerStatus::COULD_NOT_AUTHORIZE);
         state = State::NONE;
         return true;
     }
@@ -68,10 +68,10 @@ void Gdrive::auth_server_request(std::string request) {
     if (!success) {
         switch (state) {
             case State::GET:
-                emit wallet_downloaded("", 3);
+                emit wallet_downloaded("", SyncManagerStatus::COULD_NOT_AUTHORIZE);
                 break;
             case State::SET:
-                emit wallet_uploaded(3);
+                emit wallet_uploaded(SyncManagerStatus::COULD_NOT_AUTHORIZE);
                 break;
             case State::NONE:
                 break;
@@ -79,6 +79,8 @@ void Gdrive::auth_server_request(std::string request) {
         state = State::NONE;
         return;
     }
+
+    network_state = NetworkState::AUTHORIZE;
 
     std::string code = code_match[1];
 
@@ -91,15 +93,14 @@ void Gdrive::auth_server_request(std::string request) {
 
     QNetworkRequest network_request(QUrl("https://www.googleapis.com/oauth2/v4/token"));
     network_request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-    current_reply = network_manager->post(network_request, post_data.toString(QUrl::FullyEncoded).toUtf8());
-    connect(current_reply, SIGNAL(readyRead()), this, SLOT(client_authentication_ready()));
+    reply = network_manager->post(network_request, post_data.toString(QUrl::FullyEncoded).toUtf8());
+    connect(reply, SIGNAL(finished()), this, SLOT(reply_finished()));
 }
 
-void Gdrive::client_authentication_ready() {
+void Gdrive::authorize_client(const std::string &reply) {
     Json::Value json;
     Json::Reader reader;
-    reader.parse(current_reply->readAll().data(), json);
-    current_reply->deleteLater();
+    reader.parse(reply.c_str(), json);
 
     globals::settings.gdrive_set_access_token(json["access_token"].asString());
     globals::settings.gdrive_set_refresh_token(json["refresh_token"].asString());
@@ -111,11 +112,15 @@ void Gdrive::client_authentication_ready() {
     resume_state();
 }
 
-void Gdrive::refresh_authentication_ready() {
+void Gdrive::refresh_token(const std::string &reply) {
     Json::Value json;
     Json::Reader reader;
-    reader.parse(current_reply->readAll().data(), json);
-    current_reply->deleteLater();
+    reader.parse(reply.c_str(), json);
+
+    if (!json["error"].empty()) {
+        authorize_client();
+        return;
+    }
 
     globals::settings.gdrive_set_access_token(json["access_token"].asString());
 
@@ -136,6 +141,8 @@ void Gdrive::refresh_token() {
 
     std::cout << "<gdrive.cpp> [Log] Refreshing access token." << std::endl;
 
+    network_state = NetworkState::REFRESH_TOKEN;
+
     QUrlQuery post_data;
     post_data.addQueryItem("refresh_token", QString(refresh_token.c_str()));
     post_data.addQueryItem("client_id", kGdriveClientID);
@@ -144,8 +151,8 @@ void Gdrive::refresh_token() {
 
     QNetworkRequest network_request(QUrl("https://www.googleapis.com/oauth2/v4/token"));
     network_request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
-    current_reply = network_manager->post(network_request, post_data.toString(QUrl::FullyEncoded).toUtf8());
-    connect(current_reply, SIGNAL(readyRead()), this, SLOT(refresh_authentication_ready()));
+    reply = network_manager->post(network_request, post_data.toString(QUrl::FullyEncoded).toUtf8());
+    connect(reply, SIGNAL(finished()), this, SLOT(reply_finished()));
 }
 
 void Gdrive::authorize_client() {
@@ -168,6 +175,8 @@ void Gdrive::authorize_client() {
 void Gdrive::get_wallet_id() {
     std::cout << "<gdrive.cpp> [Log] Getting wallet id." << std::endl;
 
+    network_state = NetworkState::GET_WALLET_ID;
+
     QUrl url("https://www.googleapis.com/drive/v3/files");
 
     QUrlQuery url_query;
@@ -178,15 +187,14 @@ void Gdrive::get_wallet_id() {
     QNetworkRequest network_request(url);
     network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
 
-    current_reply = network_manager->get(network_request);
-    connect(current_reply, SIGNAL(readyRead()), this, SLOT(wallet_id_ready()));
+    reply = network_manager->get(network_request);
+    connect(reply, SIGNAL(finished()), this, SLOT(reply_finished()));
 }
 
-void Gdrive::wallet_id_ready() {
+void Gdrive::get_wallet_id(const std::string &reply) {
     Json::Value json;
     Json::Reader reader;
-    reader.parse(current_reply->readAll().data(), json);
-    current_reply->deleteLater();
+    reader.parse(reply.c_str(), json);
 
     if (check_authentication_error(json)) return;
 
@@ -200,6 +208,8 @@ void Gdrive::wallet_id_ready() {
 }
 
 void Gdrive::create_wallet() {
+    network_state = NetworkState::CREATE_WALLET;
+
     std::cout << "<gdrive.cpp> [Log] Creating wallet." << std::endl;
 
     QUrl url("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart");
@@ -209,15 +219,14 @@ void Gdrive::create_wallet() {
     std::string access_token = globals::settings.gdrive_get_access_token();
     network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
 
-    current_reply = network_manager->post(network_request, upload_body("").c_str());
-    connect(current_reply, SIGNAL(readyRead()), this, SLOT(create_wallet_ready()));
+    reply = network_manager->post(network_request, upload_body("").c_str());
+    connect(reply, SIGNAL(finished()), this, SLOT(reply_finished()));
 }
 
-void Gdrive::create_wallet_ready() {
+void Gdrive::create_wallet(const std::string &reply) {
     Json::Value json;
     Json::Reader reader;
-    reader.parse(current_reply->readAll().data(), json);
-    current_reply->deleteLater();
+    reader.parse(reply.c_str(), json);
 
     if (check_authentication_error(json)) return;
 
@@ -225,19 +234,21 @@ void Gdrive::create_wallet_ready() {
     resume_state();
 }
 
-void Gdrive::download_wallet_ready() {
-    std::string wallet(current_reply->readAll().data());
-    current_reply->deleteLater();
-
+void Gdrive::download_wallet(const std::string &reply) {
     std::cout << "<gdrive.cpp> [Log] Wallet downloaded." << std::endl;
 
     state = State::NONE;
-    emit wallet_downloaded(wallet, 0);
+    emit wallet_downloaded(reply, SyncManagerStatus::SUCCESS);
 }
 
 void Gdrive::download_wallet() {
     if (state != State::NONE) {
-        emit wallet_downloaded("", 1);
+        emit wallet_downloaded("", SyncManagerStatus::ALREADY_SYNCING);
+        return;
+    }
+
+    if (network_manager->networkAccessible() != QNetworkAccessManager::NetworkAccessibility::Accessible) {
+        emit wallet_downloaded("", SyncManagerStatus::NO_NETWORK);
         return;
     }
 
@@ -255,6 +266,8 @@ void Gdrive::download_wallet() {
 
     std::cout << "<gdrive.cpp> [Log] Getting wallet." << std::endl;
 
+    network_state = NetworkState::DOWNLOAD_WALLET;
+
     std::string url_string = "https://www.googleapis.com/drive/v3/files/" + wallet_id + "?alt=media";
     QUrl url = QUrl::fromEncoded(QByteArray(url_string.c_str()));
 
@@ -262,23 +275,56 @@ void Gdrive::download_wallet() {
     QNetworkRequest network_request(url);
     network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
 
-    current_reply = network_manager->get(network_request);
-    connect(current_reply, SIGNAL(readyRead()), this, SLOT(download_wallet_ready()));
+    reply = network_manager->get(network_request);
+    connect(reply, SIGNAL(finished()), this, SLOT(reply_finished()));
 }
 
-void Gdrive::upload_wallet_ready() {
-    std::string reply(current_reply->readAll().data());
-    current_reply->deleteLater();
+void Gdrive::reply_finished() {
+    if (reply->error() != QNetworkReply::NoError) {
+        std::cout << "<gdrive.cpp> [Warning] QReply error code: " << reply->error() << std::endl;
+    }
+    std::string data(reply->readAll().data());
 
+    reply->deleteLater();
+
+    switch (network_state) {
+        case NetworkState::AUTHORIZE:
+            authorize_client(data);
+            break;
+        case NetworkState::REFRESH_TOKEN:
+            refresh_token(data);
+            break;
+        case NetworkState::GET_WALLET_ID:
+            get_wallet_id(data);
+            break;
+        case NetworkState::CREATE_WALLET:
+            create_wallet(data);
+        case NetworkState::DOWNLOAD_WALLET:
+            download_wallet(data);
+            break;
+        case NetworkState::UPLOAD_WALLET:
+            upload_wallet_reply(data);
+            break;
+        default:
+            break;
+    }
+}
+
+void Gdrive::upload_wallet_reply(const std::string &reply) {
     std::cout << "<gdrive.cpp> [Log] Wallet uploaded." << std::endl;
 
     state = State::NONE;
-    emit wallet_uploaded(0);
+    emit wallet_uploaded(SyncManagerStatus::SUCCESS);
 }
 
 void Gdrive::upload_wallet(const std::string &wallet) {
     if (state != State::NONE) {
-        emit wallet_uploaded(1);
+        emit wallet_uploaded(SyncManagerStatus::ALREADY_SYNCING);
+        return;
+    }
+
+    if (network_manager->networkAccessible() != QNetworkAccessManager::NetworkAccessibility::Accessible) {
+        emit wallet_uploaded(SyncManagerStatus::NO_NETWORK);
         return;
     }
 
@@ -297,6 +343,8 @@ void Gdrive::upload_wallet(const std::string &wallet) {
 
     std::cout << "<gdrive.cpp> [Log] Uploading wallet." << std::endl;
 
+    network_state = NetworkState::UPLOAD_WALLET;
+
     std::string url_string = "https://www.googleapis.com/upload/drive/v3/files/" + wallet_id + "?uploadType=multipart";
     QUrl url = QUrl::fromEncoded(QByteArray(url_string.c_str()));
 
@@ -305,6 +353,6 @@ void Gdrive::upload_wallet(const std::string &wallet) {
     network_request.setRawHeader("Authorization", QByteArray(("Bearer " + access_token).c_str()));
     network_request.setRawHeader("Content-Type", "multipart/related; boundary=" kRequestBoundary);
 
-    current_reply = network_manager->sendCustomRequest(network_request, "PATCH", upload_body(wallet).c_str());
-    connect(current_reply, SIGNAL(readyRead()), this, SLOT(upload_wallet_ready()));
+    reply = network_manager->sendCustomRequest(network_request, "PATCH", upload_body(wallet).c_str());
+    connect(reply, SIGNAL(finished()), this, SLOT(reply_finished()));
 }

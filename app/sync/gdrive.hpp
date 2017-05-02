@@ -39,7 +39,10 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "globals.hpp"
 #include "settings.hpp"
 #include "sync_base.hpp"
-#include <sync/keys.hpp>
+#include "sync/keys.hpp"
+#include "sync_manager.hpp"
+
+enum class SyncManagerStatus;
 
 class Gdrive: public QObject, public SyncBase {
     Q_OBJECT
@@ -48,17 +51,30 @@ class Gdrive: public QObject, public SyncBase {
         SET, GET, NONE
     };
 
-    Gdrive::State state = State::NONE;
+    enum class NetworkState {
+        NONE, AUTHORIZE, REFRESH_TOKEN, GET_WALLET_ID, CREATE_WALLET,
+        DOWNLOAD_WALLET, UPLOAD_WALLET
+    };
+
+    State state = State::NONE;
+    NetworkState network_state = NetworkState::NONE;
     std::string new_wallet;
     std::string wallet_id;
 
     QNetworkAccessManager *network_manager;
-    QNetworkReply *current_reply;
+    QNetworkReply *reply;
 
     void authorize_client();
     void refresh_token();
     void get_wallet_id();
     void create_wallet();
+
+    void authorize_client(const std::string &reply);
+    void refresh_token(const std::string &reply);
+    void get_wallet_id(const std::string &reply);
+    void create_wallet(const std::string &reply);
+    void download_wallet(const std::string &reply);
+    void upload_wallet_reply(const std::string &reply);
 
     void resume_state();
     bool check_authentication_error(const Json::Value&);
@@ -70,21 +86,11 @@ public:
 
 public slots:
     void auth_server_request(std::string request);
-    void client_authentication_ready();
-    void refresh_authentication_ready();
-    void wallet_id_ready();
-    void create_wallet_ready();
-    void download_wallet_ready();
-    void upload_wallet_ready();
+    void reply_finished();
 
 signals:
-    void wallet_downloaded(const std::string& wallet, int success);
-    void wallet_uploaded(int success);
-    // Success codes:
-    // 0: success
-    // 1: already syncing
-    // 2: no network
-    // 3: could not authorize
+    void wallet_downloaded(const std::string& wallet, SyncManagerStatus status);
+    void wallet_uploaded(SyncManagerStatus status);
 };
 
 

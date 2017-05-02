@@ -37,13 +37,13 @@ bool SyncManager::init() {
     if (service == Service::GDRIVE) sync_object = new Gdrive(this);
 
     connect(dynamic_cast<QObject*>(sync_object),
-            SIGNAL(wallet_downloaded(const std::string&, int)),
+            SIGNAL(wallet_downloaded(const std::string&, SyncManagerStatus)),
             this,
-            SLOT(service_did_download_wallet(const std::string&, int)));
+            SLOT(service_did_download_wallet(const std::string&, SyncManagerStatus)));
     connect(dynamic_cast<QObject*>(sync_object),
-            SIGNAL(wallet_uploaded(int)),
+            SIGNAL(wallet_uploaded(SyncManagerStatus)),
             this,
-            SLOT(service_did_upload_wallet(int)));
+            SLOT(service_did_upload_wallet(SyncManagerStatus)));
 
     return true;
 }
@@ -56,12 +56,12 @@ void SyncManager::upload_wallet(const std::string &wallet) {
     sync_object->upload_wallet(wallet);
 }
 
-void SyncManager::service_did_download_wallet(const std::string &wallet, int success) {
+void SyncManager::service_did_download_wallet(const std::string &wallet, SyncManagerStatus success) {
     std::cout << "<sync_manager.cpp> [Log] Downloaded wallet." << std::endl << wallet << std::endl;
-    emit wallet_downloaded(wallet, success);
+    emit wallet_downloaded(wallet, static_cast<int>(success));
 }
 
-void SyncManager::service_did_upload_wallet(int success) {
+void SyncManager::service_did_upload_wallet(SyncManagerStatus success) {
     std::cout << "<sync_manager.cpp> [Log] Uploaded wallet." << std::endl;
-    emit wallet_uploaded(success);
+    emit wallet_uploaded(static_cast<int>(success));
 }

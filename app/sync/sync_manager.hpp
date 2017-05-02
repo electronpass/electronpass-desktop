@@ -26,6 +26,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "sync_base.hpp"
 #include "gdrive.hpp"
 
+enum class SyncManagerStatus {
+    SUCCESS, ALREADY_SYNCING, NO_NETWORK, COULD_NOT_AUTHORIZE, UKNOWN_ERROR
+};
 
 class SyncManager: public QObject {
     Q_OBJECT
@@ -48,8 +51,8 @@ public:
     Q_INVOKABLE void upload_wallet(const std::string& wallet);
 
 public slots:
-    void service_did_download_wallet(const std::string& wallet, int success);
-    void service_did_upload_wallet(int success);
+    void service_did_download_wallet(const std::string& wallet, SyncManagerStatus success);
+    void service_did_upload_wallet(SyncManagerStatus success);
 
 signals:
     void wallet_downloaded(const std::string& wallet, int success);

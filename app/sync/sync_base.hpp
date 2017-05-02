@@ -19,6 +19,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #define ELECTRONPASS_SYNC_BASE_HPP
 
 #include <QObject>
+#include "sync_manager.hpp"
+
+enum class SyncManagerStatus;
 
 class SyncBase {
 public:
@@ -27,8 +30,8 @@ public:
     virtual void upload_wallet(const std::string&) = 0;
 
 signals:
-    virtual void wallet_downloaded(const std::string& wallet, int success) = 0;
-    virtual void wallet_uploaded(int success) = 0;
+    virtual void wallet_downloaded(const std::string& wallet, SyncManagerStatus success) = 0;
+    virtual void wallet_uploaded(SyncManagerStatus success) = 0;
 };
 
 #endif //ELECTRONPASS_SYNC_BASE_HPP
