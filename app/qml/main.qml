@@ -66,8 +66,21 @@ ApplicationWindow {
         sequence: "Ctrl+D"
         onActivated: {
             if (!lock.visible && itemsList.currentIndex >= 0){
-                //TODO: tell cpp part to copy password
-                onClicked: snackbar.open("Password copied to clipboard.")
+                onClicked: {
+                    var copied = false;
+                    var item = itemsList.currentIndex;
+                    var size = dataHolder.get_number_of_item_fields(item);
+                    for (var i = 0; i < size; ++i) {
+                        var field = dataHolder.get_item_field(item, i);
+                        if (field["sensitive"] == "true") {
+                            copied = true;
+                            clipboard.set_text(field["value"]);
+                            break;
+                        }
+                    }
+                    if (copied) snackbar.open("Password copied to clipboard.")
+                    else snackbar.open("Could not copy password.")
+                }
             }
         }
     }

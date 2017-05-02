@@ -24,10 +24,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <iostream>
 
 #include "globals.hpp"
-#include "data_holder.hpp"
-#include "settings.hpp"
 #include "passwords.hpp"
-#include "sync/gdrive.hpp"
 
 const char *ORGANIZATION_NAME = "ElectronPass";
 const char *APPLICATION_NAME = "ElectronPass";
