@@ -35,7 +35,7 @@ Gdrive::Gdrive(QObject *parent): QObject(parent) {
 }
 
 bool Gdrive::check_authentication_error(const Json::Value& json) {
-    if (json["error"].isObject()) {
+    if (!json["error"].empty()) {
         if (state == State::GET) emit wallet_downloaded("", SyncManagerStatus::COULD_NOT_AUTHORIZE);
         else if (state == State::SET) emit wallet_uploaded(SyncManagerStatus::COULD_NOT_AUTHORIZE);
         state = State::NONE;
@@ -312,6 +312,12 @@ void Gdrive::reply_finished() {
 
 void Gdrive::upload_wallet_reply(const std::string &reply) {
     std::cout << "<gdrive.cpp> [Log] Wallet uploaded." << std::endl;
+
+    Json::Value json;
+    Json::Reader reader;
+    reader.parse(reply.c_str(), json);
+
+    if (check_authentication_error(json)) return;
 
     state = State::NONE;
     emit wallet_uploaded(SyncManagerStatus::SUCCESS);
