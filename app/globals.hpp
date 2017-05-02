@@ -21,6 +21,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "data_holder.hpp"
 #include "settings.hpp"
 #include "sync/sync_manager.hpp"
+#include "clipboard.hpp"
 
 class DataHolder;
 class SyncManager;
@@ -32,6 +33,8 @@ namespace globals {
     extern DataHolder data_holder;
     extern SettingsManager settings;
     extern SyncManager sync_manager;
+    extern Clipboard clipboard;
+
 }
 
 #endif // GLOBALS_HPP

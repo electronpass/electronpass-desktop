@@ -38,6 +38,11 @@ ApplicationWindow {
     Material.primary: (Material.theme == Material.Dark) ? Material.color(Material.Blue, Material.Shade900) : Material.color(Material.Blue, Material.Shade800)
     Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade900) : Material.color(Material.Grey, Material.Shade100)
 
+    Component.onDestruction: {
+        dataHolder.lock();
+        lockGUI();
+    }
+
     // define shortcuts
     Shortcut {
         sequence: "Ctrl+F"
@@ -53,6 +58,7 @@ ApplicationWindow {
         onActivated: {
             //TODO: save work and lock before exiting
             dataHolder.lock()
+            lockGUI()
             Qt.quit()
         }
     }

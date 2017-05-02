@@ -17,7 +17,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "clipboard.hpp"
 
-Clipboard::Clipboard() {
+void Clipboard::init() {
     clipboard = QApplication::clipboard();
 }
 

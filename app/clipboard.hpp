@@ -29,7 +29,10 @@ class Clipboard : public QObject {
     QClipboard *clipboard;
 
 public:
-    Clipboard();
+    Clipboard() {};
+
+    // Init needs to be called after GuiApplication is created.
+    void init();
 
     Q_INVOKABLE void set_text(const QString& text);
 

@@ -27,7 +27,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "data_holder.hpp"
 #include "settings.hpp"
 #include "passwords.hpp"
-#include "clipboard.hpp"
 #include "sync/gdrive.hpp"
 
 const char *ORGANIZATION_NAME = "ElectronPass";
@@ -62,11 +61,10 @@ int main(int argc, char *argv[]) {
     // init global objects
     globals::settings.init(qsettings);
     if (!globals::sync_manager.init()) std::cout << "<main.cpp> [Warning] Sync manager not initialized; segfault on sync will happen." << std::endl;
-
+    globals::clipboard.init();
 
     Passwords passwords;
-    Clipboard clipboard;
-    engine.rootContext()->setContextProperty("clipboard", &clipboard);
+    engine.rootContext()->setContextProperty("clipboard", &globals::clipboard);
     engine.rootContext()->setContextProperty("passwordManager", &passwords);
     engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
     engine.rootContext()->setContextProperty("syncManager", &globals::sync_manager);
