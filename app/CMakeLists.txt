@@ -4,6 +4,7 @@ set(SOURCES
     settings.cpp
     passwords.cpp
     globals.cpp
+    clipboard.cpp
 
     data_holder.cpp
     search.cpp

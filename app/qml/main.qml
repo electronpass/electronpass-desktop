@@ -313,6 +313,7 @@ ApplicationWindow {
         lock.visible = true
         toolbar.visible = false
         lock.setFocus()
+        clipboard.clear()
     }
 
     function unlockGUI(){

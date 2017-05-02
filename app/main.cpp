@@ -27,7 +27,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "data_holder.hpp"
 #include "settings.hpp"
 #include "passwords.hpp"
-
+#include "clipboard.hpp"
 #include "sync/gdrive.hpp"
 
 const char *ORGANIZATION_NAME = "ElectronPass";
@@ -65,14 +65,15 @@ int main(int argc, char *argv[]) {
 
 
     Passwords passwords;
-    engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
+    Clipboard clipboard;
+    engine.rootContext()->setContextProperty("clipboard", &clipboard);
     engine.rootContext()->setContextProperty("passwordManager", &passwords);
+    engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
     engine.rootContext()->setContextProperty("syncManager", &globals::sync_manager);
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 
     // Print location, for testing only.
-    // For more see: Testing.md
     std::cout << "<main.cpp> [Log] Data location: " << globals::settings.get_data_location().toStdString() << std::endl;
 
     return app.exec();

@@ -102,6 +102,9 @@ RowLayout {
         text: qsTr("\uE14D")
         font.family: materialIconsFont.name
         Material.foreground: itemDetail.contentColor
-        onClicked: snackbar.open(itemDetail.title + " copied to clipboard.")
+        onClicked: {
+            clipboard.set_text(itemDetail.content)
+            snackbar.open(itemDetail.title + " copied to clipboard.")
+        }
     }
 }
