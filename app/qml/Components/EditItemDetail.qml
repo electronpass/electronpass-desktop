@@ -71,48 +71,23 @@ RowLayout {
     }
     Label {
         font.pixelSize: 14
+        id: separator
         text: editItemDetail.titlePostfix
     }
-    TextField {
+    Item {
+      id: editItemDetailContentHolder
+      Layout.fillWidth: true
+      EditItemDetailContentTextField {
         id: editItemDetailContent
-        selectByMouse: true
-        Layout.fillWidth: true
-        text: content
-        font.pixelSize: 14
-        color: greyTextColor
-        property string content: editItemDetail.content
-        property string type: editItemDetail.type
-        background.opacity: bcgOpacity
-        placeholderText: "Content"
-        validator: (editItemDetail.type == "pin") ? digitsOnlyRegex : titleLabel.validator
-
-        property real bcgOpacity: (activeFocus || editItemDetail.secure) ? 1 : 0
-
-        Behavior on bcgOpacity {
-            NumberAnimation {
-                duration: 200
-                easing.type: Easing.InOutCubic
-            }
-        }
-
-        onTextChanged: {
-            editItemDetail.content = text;
-            editDetailsModel.setProperty(model.index, "contentvar", text);
-        }
-
-        Component.onCompleted: {
-            if (editItemDetail.secure) {
-              font.family = robotoMonoFont.name;
-
-              var component = Qt.createComponent("PassStrengthIndicator.qml");
-              background = component.createObject(null, {"visible": editItemDetail.secure, "height": editItemDetailContent.height-8});
-            }
-        }
+      }
+      anchors.top: parent.top
+      anchors.topMargin: 4
     }
     ToolButton {
-        font.pixelSize: 14
+        font.pixelSize: 18
+        Layout.rightMargin: -16
         visible: editItemDetail.secure
-        text: qsTr("\uE899")
+        text: qsTr("\uE8B9")
         font.family: materialIconsFont.name
         Material.foreground: editItemDetail.contentColor
         onClicked: {
@@ -123,6 +98,23 @@ RowLayout {
     }
     ToolButton {
         font.pixelSize: 14
+        Layout.rightMargin: -16
+        text: (editItemDetail.secure) ? qsTr("\uE897") : qsTr("\uE898")
+        font.family: materialIconsFont.name
+        Material.foreground: editItemDetail.contentColor
+        onClicked: {
+          editItemDetail.secure = !editItemDetail.secure;
+          editDetailsModel.setProperty(model.index, "securevar", editItemDetail.secure);
+          for(var i = editItemDetailContentHolder.children.length; i > 0 ; i--) {
+              editItemDetailContentHolder.children[i-1].destroy()
+          }
+          var component = Qt.createComponent("EditItemDetailContentTextField.qml");
+          component.createObject(editItemDetailContentHolder, {"id": "editItemDetailContent"});
+        }
+    }
+    ToolButton {
+        font.pixelSize: 14
+        Layout.rightMargin: -16
         text: qsTr("\uE872")
         font.family: materialIconsFont.name
         Material.foreground: editItemDetail.contentColor
