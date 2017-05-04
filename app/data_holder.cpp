@@ -233,3 +233,30 @@ QMap<QString, QVariant> DataHolder::get_item_field(int item_index, int field_ind
 int DataHolder::get_saving_error() {
     return saving_error;
 }
+
+bool DataHolder::change_password(const QString& old_password, const QString& new_password) {
+    std::string old_password_string = old_password.toStdString();
+    std::string new_password_string = new_password.toStdString();
+
+    // Check if old_password is correct
+    bool success = false;
+    std::string text = read_file(success);
+    if (!success) return false;
+
+    // We use authenticated encryption. That means that if decryption was successful, the password
+    // is correct.
+    electronpass::Crypto c(old_password_string);
+    if (!c.check()) return false;
+    c.decrypt(text, success);
+    if (!success) return false;
+
+    // Now finally change password. Now we are changing crypto pointer because we need could need
+    // to encrypt some further changes with same password.
+    delete crypto;
+    crypto = new electronpass::Crypto(new_password_string);
+    if (!crypto->check()) return false;
+
+
+    int error = save();
+    return error == 0;
+}

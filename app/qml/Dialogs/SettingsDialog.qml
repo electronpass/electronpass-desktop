@@ -39,6 +39,9 @@ Dialog {
             text: qsTr("Interface")
         }
         TabButton {
+            text: qsTr("Security")
+        }
+        TabButton {
             text: qsTr("Sync")
         }
         TabButton {
@@ -61,8 +64,100 @@ Dialog {
         }
 
         Page {
+
+            GridLayout {
+                anchors.fill: parent
+
+                Label {
+                    text: qsTr("Change master password")
+                    font.bold: true
+                    Layout.row: 0
+                    Layout.column: 0
+                }
+                Label {
+                    text: qsTr("Current master password:")
+                    Layout.row: 1
+                    Layout.column: 0
+                }
+                TextField {
+                    id: curr_password
+                    Layout.row: 1
+                    Layout.column: 1
+                    placeholderText: qsTr(" Enter password. ")
+                    echoMode: TextInput.Password
+                }
+                Label {
+                    text: qsTr("New master password:")
+                    Layout.row: 2
+                    Layout.column: 0
+                }
+                TextField {
+                    id: new_password
+                    Layout.row: 2
+                    Layout.column: 1
+                    placeholderText: qsTr("  New password.  ")
+                    echoMode: TextInput.Password
+                }
+                Label {
+                    text: qsTr("Confirm master password:")
+                    Layout.row: 3
+                    Layout.column: 0
+                }
+                TextField {
+                    id: confirm_password
+                    Layout.row: 3
+                    Layout.column: 1
+                    placeholderText: qsTr("Confirm password.")
+                    echoMode: TextInput.Password
+                }
+                Button {
+                    text: qsTr("Change password")
+                    Layout.row: 4
+                    Layout.column: 1
+                    onClicked: {
+                        if (curr_password.text == "" || new_password.text == "") {
+                            toolTip.text = "Enter a password."
+                        } else if (new_password.text == confirm_password.text) {
+                            var success = dataHolder.change_password(curr_password.text, new_password.text)
+                            toolTip.text = success ? "Password successfully changed." : "Password changing failed."
+                        } else {
+                            toolTip.text = "Passwords do not match."
+                        }
+                        toolTip.show()
+                        curr_password.text = ""
+                        new_password.text = ""
+                        confirm_password.text = ""
+                    }
+                }
+            }
+
+            // Exact copy from Lock.qml
+            ToolTip {
+                id: toolTip
+                text: "Unknown error."
+                timeout: 2000
+                visible: false
+
+                function show() {
+                    timer.restart();
+                    visible = true;
+                }
+                Behavior on opacity {
+                    NumberAnimation { duration: 300 }
+                }
+                Timer {
+                    id: timer
+                    interval: toolTip.timeout
+                    onTriggered: {
+                        if (!running) { toolTip.visible = false; }
+                    }
+                }
+            }
+        }
+
+        Page {
             Label {
-                text: qsTr("Second page")
+                text: qsTr("Sync settings")
                 anchors.centerIn: parent
             }
         }

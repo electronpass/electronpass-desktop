@@ -149,6 +149,11 @@ public:
     // Returns last save() call's return value.
     Q_INVOKABLE int get_saving_error();
 
+    // Saves wallet with new password.
+    // Retuns true if password was successfully changed and false if not.
+    // If not, error code can be retrieved by calling get_saving_error().
+    Q_INVOKABLE bool change_password(const QString& old_password, const QString& new_password);
+
 };
 
 #endif // DATA_HOLDER_HPP
