@@ -125,11 +125,6 @@ void DataHolder::lock() {
 }
 
 int DataHolder::save() {
-    // If locked, there is nothing to save.
-    if (!unlocked) {
-        saving_error = -1;
-        return -1;
-    }
     std::string text = electronpass::serialization::serialize(wallet);
 
     if (!crypto->check()) {
@@ -256,6 +251,18 @@ bool DataHolder::change_password(const QString& old_password, const QString& new
     crypto = new electronpass::Crypto(new_password_string);
     if (!crypto->check()) return false;
 
+
+    int error = save();
+    return error == 0;
+}
+
+bool DataHolder::new_wallet(const QString& password) {
+    std::string password_string = password.toStdString();
+
+    crypto = new electronpass::Crypto(password_string);
+    if (!crypto->check()) return false;
+
+    wallet = electronpass::Wallet();
 
     int error = save();
     return error == 0;

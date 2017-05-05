@@ -37,51 +37,138 @@ Rectangle {
         }
     }
 
+
     ColumnLayout {
         anchors.fill: parent
 
+        // ElectronPass logo & stuff
         RowLayout {
-            Layout.alignment: Qt.AlignHCenter
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.topMargin: 15
+            Layout.bottomMargin: 20
+            Layout.preferredHeight: 64
+
             Image {
                 source: "qrc:/res/img/logo_transparent.png"
             }
             Label {
                 text: qsTr("  ElectronPass")
+                color: "white"
                 font.pixelSize: 24
                 horizontalAlignment: Qt.AlignHCenter
             }
         }
 
+        // First "page"
         ColumnLayout {
-            Layout.alignment: Qt.AlignHCenter
-            RadioButton {
-                id: new_user
-                checked: true
-                text: qsTr("I am a new ElectronPass user.")
+            id: firstPage
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.preferredWidth: 500
+
+            Label {
+                text: qsTr("Hi awesome user! Welcome to the ElectronPass.")
             }
-            RadioButton {
-                id: existing_user
-                text: qsTr("I have already used ElectronPass on other device(s).")
+            ColumnLayout {
+                RadioButton {
+                    id: newUser
+                    checked: true
+                    text: qsTr("I am a new ElectronPass user.")
+                }
+                RadioButton {
+                    id: existingUser
+                    text: qsTr("I have already used ElectronPass on other device(s).")
+                }
             }
-        }
 
-        Button {
-            Layout.alignment: Qt.AlignCenter
-            text: qsTr(" Continue ")
-            onClicked: {
-                if (new_user.checked) {
-                    console.log("[Log] New user.")
-                } else {
-                    // TODO: Existing user...
-                    console.log("[Log] Existing user file select is currently not supported.")
+            // Bad idea for vertical fill
+            ColumnLayout {}
 
-                    setupView.visible = false
-                    setup.finish()
+            Button {
+                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+                text: qsTr(" Continue ")
+                Layout.bottomMargin: 10
 
-                    lockGUI()
+                onClicked: {
+                    if (newUser.checked) {
+                        // TODO: somehow create animation
+                        firstPage.visible = false
+                        createPasswordForm.visible = true
+
+                    } else {
+                        // TODO: Existing user...
+                        console.log("[Log] Existing user file select is currently not supported.")
+
+                        setupView.visible = false
+                        setup.finish()
+
+                        lockGUI()
+                    }
                 }
             }
         }
+
+        ColumnLayout {
+            id: createPasswordForm
+            visible: false
+            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            Layout.preferredWidth: 500
+
+            Label {
+                text: qsTr("Please create your master password. Make sure you never forget your "
+                    + "\npassword, otherwise there is now way to recover your data.")
+            }
+
+            ColumnLayout {
+                Layout.topMargin: 10
+
+                RowLayout {
+                    Label {
+                        text: qsTr("Enter master password     ")
+                    }
+                    TextField {
+                        id: password
+                        Layout.leftMargin: 15
+                        echoMode: TextInput.Password
+                    }
+                }
+                RowLayout {
+                    Label {
+                        text: qsTr("Confirm master password")
+                    }
+                    TextField {
+                        id: confirmPassword
+                        Layout.leftMargin: 15
+                        echoMode: TextInput.Password
+                    }
+                }
+
+            }
+
+            // Bad idea for vertical fill
+            ColumnLayout {}
+
+            Button {
+                Layout.alignment: Qt.AlignRight
+                Layout.bottomMargin: 10
+                text: qsTr(" Continue ")
+
+                onClicked: {
+                    // TODO: Create a popup window to confirm creating master password.
+                    if (password.text == "") {
+                        console.log("Enter master password")
+                    } else if (password.text == confirmPassword.text) {
+                        if (setup.set_password(password.text)) {
+                            unlockGUI()
+                            setup.finish()
+                            setupView.visible = false
+                        } else console.log("error")
+                    } else {
+                        console.log("Passwords do not match")
+                    }
+                }
+            }
+        }
+
     }
 
 

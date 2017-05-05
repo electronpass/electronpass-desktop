@@ -22,6 +22,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QString>
 #include <string>
 #include <iostream>
+#include <electronpass/wallet.hpp>
 #include "globals.hpp"
 
 class Setup : public QObject {
@@ -33,9 +34,12 @@ public:
     // true if setup is needed (usually at first launch of this app).
     Q_INVOKABLE bool need_setup();
 
+    // Sets first_usage in settings to false.
     Q_INVOKABLE void finish();
 
-    // Q_INVOKABLE void set_password();
+    // Creates new empty wallet and saves it.
+    Q_INVOKABLE bool set_password(const QString& password);
+
     // Q_INVOKABLE void set_sync_service();
     // Q_INVOKABLE void set_file_path();
 };

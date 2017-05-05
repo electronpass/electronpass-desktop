@@ -91,7 +91,6 @@ class DataHolder: public QObject {
     // Also updates names in side bar and search strings.
     // Returns:
     //      0 - OK
-    //     -1 - Nothing to save, app is locked.
     //      1 - Encryption failed.
     //      2 - File write failed.
     // Result is saved in saving_error variable.
@@ -106,6 +105,9 @@ class DataHolder: public QObject {
 
 public:
     DataHolder() {}
+
+    // Creates new wallet object and saves it.
+    bool new_wallet(const QString& password);
 
     // Opens file and tries do decrypt it with password.
     // Also converts decrypted file (json string) to electronpass::Wallet object.
