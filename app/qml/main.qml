@@ -301,6 +301,7 @@ ApplicationWindow {
         id: settings
         property int theme: 0 // 1 for dark theme, anything else for light
 
+        property bool first_usage: true
         // passwordGenerator needs to remember password length and settings
         property int defaultPassLength: 16
         property int numberOfDigitsInPassword: 3

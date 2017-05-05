@@ -27,7 +27,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QStandardPaths>
 #include <QString>
 #include <QDateTime>
+#include <QDir>
 #include <string>
+#include <iostream>
 
 class SettingsManager {
 
@@ -39,22 +41,25 @@ public:
     void init(QSettings& settings_);
 
     // Returns location where the file with passwords is stored.
-    QString get_data_location();
+    QString get_data_location() const ;
 
     // TODO: Sets the location where the file with passowds will be stored.
     // TODO: File with passwords must be actually moved, which may cause some problems on different platforms.
     bool set_data_location(const QString& new_data_location);
 
+    bool get_first_usage() const;
+    void set_first_usage(bool value);
+
     // Google ouath2 settings
-    std::string gdrive_get_access_token();
-    std::string gdrive_get_refresh_token();
-    QDateTime gdrive_get_token_expiration();
+    std::string gdrive_get_access_token() const;
+    std::string gdrive_get_refresh_token() const;
+    QDateTime gdrive_get_token_expiration() const;
 
     void gdrive_set_access_token(const std::string& token);
     void gdrive_set_refresh_token(const std::string& token);
     void gdrive_set_token_expiration(const QDateTime& expire_date);
 
-    std::string sync_manager_get_service();
+    std::string sync_manager_get_service() const;
     void sync_manager_set_service(const std::string& service);
 
 
