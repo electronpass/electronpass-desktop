@@ -214,7 +214,7 @@ ApplicationWindow {
                     }
                 }
             }
-        }
+    }
 
     // basic devider
     RowLayout {
@@ -295,6 +295,10 @@ ApplicationWindow {
 
     Lock {
         id: lock
+    }
+
+    Setup {
+        id: setupView
     }
 
     Settings {

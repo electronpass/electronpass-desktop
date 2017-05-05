@@ -21,6 +21,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/ItemsList.qml</file>
         <file>qml/Details.qml</file>
         <file>qml/Lock.qml</file>
+        <file>qml/Setup.qml</file>
 
         <!--components-->
         <file>qml/Components/ItemDetail.qml</file>

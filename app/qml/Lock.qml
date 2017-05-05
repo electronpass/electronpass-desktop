@@ -114,8 +114,11 @@ Image {
         }
     }
 
-    function setFocus(a) {
+    function setFocus() {
         passInput.forceActiveFocus();
+    }
+    function removeFocus() {
+        passInput.focus = false;
     }
 
 }

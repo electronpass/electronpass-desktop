@@ -25,6 +25,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "globals.hpp"
 #include "passwords.hpp"
+#include "setup.hpp"
 
 const char *ORGANIZATION_NAME = "ElectronPass";
 const char *APPLICATION_NAME = "ElectronPass";
@@ -61,8 +62,10 @@ int main(int argc, char *argv[]) {
     globals::clipboard.init();
 
     Passwords passwords;
+    Setup setup;
     engine.rootContext()->setContextProperty("clipboard", &globals::clipboard);
     engine.rootContext()->setContextProperty("passwordManager", &passwords);
+    engine.rootContext()->setContextProperty("setup", &setup);
     engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
     engine.rootContext()->setContextProperty("syncManager", &globals::sync_manager);
 
