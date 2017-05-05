@@ -60,7 +60,7 @@ script:
   # clone and decrypt API keys
   # refer to https://github.com/electronpass/credentials for more information
   - git clone https://github.com/electronpass/credentials.git
-  - python3 credentials/configure.py credentials/keys.enc ${keys_encryption_password} credentials/desktop.tpl app/sync/keys.txt
+  - python3 credentials/configure.py credentials/keys.json.asc ${keys_encryption_password} credentials/desktop.tpl app/sync/keys.txt
 
   # build binaries and generate appimage
   - mkdir -p ./appdir
