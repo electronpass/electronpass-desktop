@@ -67,6 +67,10 @@ class DataHolder: public QObject {
     // Writes single-line string to file.
     static bool write_file(const std::string& data);
 
+    // Copies content from file at old_location to new location.
+    // If new_location is not given, then file is copied to location saved in settings as `data_location`.
+    static bool copy_file(std::string old_location, std::string new_location = "");
+
     // Functions to convert from QMap to Field object and reverse.
     static QMap<QString, QVariant> convert_field(const electronpass::Wallet::Field& field);
     static electronpass::Wallet::Field convert_field(const QMap<QString, QVariant>& field);

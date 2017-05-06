@@ -40,7 +40,7 @@ bool DataHolder::write_file(const std::string& data) {
     std::ofstream file(path);
 
     if (!file.is_open()) {
-        std::cout << "<data_holder.cpp> [Error] Could not open file." << std::endl;
+        std::cout << "<file_stream.cpp> [Error] Could not open file." << std::endl;
         std::cout << "File path: " << path << '\n';
         return false;
     }
@@ -48,5 +48,24 @@ bool DataHolder::write_file(const std::string& data) {
     file << data << '\n';
 
     file.close();
+    return true;
+}
+
+bool DataHolder::copy_file(std::string old_location, std::string new_location) {
+    if (new_location == "") new_location = globals::settings.get_data_location().toStdString();
+
+    std::string data;
+
+    std::ifstream in_file(old_location, std::ios::binary);
+    std::ofstream out_file(new_location, std::ios::binary);
+
+    // Could not open file at old_location.
+    if (!in_file.is_open() || !out_file.is_open()) {
+        std::cout << "<file_stream.cpp> [Error] Could not open file." << std::endl;
+        std::cout << "File locatons: " << old_location << " " << new_location << std::endl;
+        return false;
+    }
+
+    out_file << in_file.rdbuf();
     return true;
 }

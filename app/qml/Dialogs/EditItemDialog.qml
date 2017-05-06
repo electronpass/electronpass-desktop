@@ -38,6 +38,7 @@ Dialog {
         destroyEditDetails()
         dataHolder.cancel_edit()
         itemsList.model = dataHolder.get_number_of_items()
+        itemsList.setItemIndex(-1)
     }
     width: Math.min(parent.width * 0.9, 420)
     height: Math.min(parent.height * 0.9, 600)
