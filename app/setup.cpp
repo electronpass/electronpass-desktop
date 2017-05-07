@@ -36,3 +36,10 @@ bool Setup::set_password(const QString& password) {
     }
     return success;
 }
+
+bool Setup::restore_data_from_file(const QString& file_path) {
+    std::string path = file_path.toStdString();
+
+    bool success = globals::data_holder.copy_file(path);
+    return success;
+}

@@ -19,6 +19,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
+import QtQuick.Dialogs 1.0
 import "Components"
 
 Rectangle {
@@ -39,11 +40,13 @@ Rectangle {
     }
 
     function continueButtonEnabled(){
-      if (setupSwipeView.currentIndex == 0){
-          if (newUser.checked) return true;
-          return false;
-      }else if (setupSwipeView.currentIndex == 1){
+      if (setupSwipeView.currentIndex == 0) {
+          return true;
+      } else if (setupSwipeView.currentIndex == 1) {
           if (password.text != "" && confirmPassword.text == password.text) return true;
+          return false;
+      } else if (setupSwipeView.currentIndex == 2) {
+          if (backupFile.checked) return true;
           return false;
       }
     }
@@ -187,6 +190,36 @@ Rectangle {
                     Layout.alignment: Qt.AlignBottom
                 }
               }
+           }
+        Page {
+            background: Rectangle{ color: "transparent" }
+
+            ColumnLayout {
+
+                Label {
+                    text: qsTr("Please select an option from where you want to restore your data.")
+                }
+
+                ColumnLayout {
+                    Layout.topMargin: 16
+                    Layout.leftMargin: 16
+                    spacing: -16
+                    RadioButton {
+                        id: backupFile
+                        checked: true
+                        text: qsTr("From backup file")
+                    }
+                    RadioButton {
+                        id: restoreGDrive
+                        text: qsTr("Google Drive")
+                    }
+                    RadioButton {
+                        id: restoreDropbox
+                        text: qsTr("Dropbox")
+                    }
+                }
+
+             }
           }
         }
 
@@ -203,7 +236,11 @@ Rectangle {
                 anchors.rightMargin: 16
                 text: qsTr("Back")
                 enabled: (setupSwipeView.currentIndex > 0)
-                onClicked: setupSwipeView.currentIndex -= 1;
+                onClicked: {
+                    if (setupSwipeView.currentIndex == 1 || setupSwipeView.currentIndex) {
+                        setupSwipeView.currentIndex = 0;
+                    }
+                }
             }
 
             Button {
@@ -215,15 +252,44 @@ Rectangle {
                 onClicked: {
                     if (setupSwipeView.currentIndex == 0){
                         if (newUser.checked) setupSwipeView.currentIndex = 1;
+                        else setupSwipeView.currentIndex = 2;
                     } else if (setupSwipeView.currentIndex == 1) {
                       if (setup.set_password(password.text)) {
                           unlockGUI()
                           setup.finish()
                           setupView.visible = false
                       } else console.log("error")
+                    } else if (setupSwipeView.currentIndex == 2) {
+                        if (existingUser.checked) {
+                            fileDialog.open()
+                            if (fileDialog.success) {
+                                var success = setup.restore_data_from_file(fileDialog.fileUrl)
+                                if (success) {
+                                    setup.finish()
+                                    setupView.visible = false
+                                } else {
+                                    console.log("Could not restore data.")
+                                }
+                            }
+                        }
                     }
                 }
             }
+        }
+    }
+
+
+    FileDialog {
+        id: fileDialog
+        title: "Please choose a backup wallet file."
+        folder: shortcuts.home
+        selectMultiple: false
+        property bool success: false
+        onAccepted: {
+            success = true
+        }
+        onRejected: {
+            success = false
         }
     }
 }
