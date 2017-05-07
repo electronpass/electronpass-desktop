@@ -20,7 +20,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 void SettingsManager::init(QSettings& settings_) {
     settings = &settings_;
 
-    if (!settings->contains("theme")) settings->setValue("theme", 0);
     if (!settings->contains("first_usage")) settings->setValue("first_usage", true);
 
     if (!settings->contains("data_folder") || !settings->contains("data_location")) {
