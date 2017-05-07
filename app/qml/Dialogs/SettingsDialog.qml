@@ -138,6 +138,9 @@ Dialog {
                     onClicked: {
                         if (dataHolder.change_password(curr_password.text, new_password.text)) {
                             toolTip.text = "Password changed successfully."
+                            curr_password.text = ""
+                            new_password.text = ""
+                            confirm_password.text = ""
                         } else {
                             toolTip.text = "Incorrect master password."
                             curr_password.forceActiveFocus();

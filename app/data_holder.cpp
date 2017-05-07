@@ -89,8 +89,9 @@ int DataHolder::unlock(const QString& password) {
     std::string text = read_file(success);
     if (!success) return 2;
 
-    wallet = electronpass::serialization::load(text, *crypto, success);
-    if (!success) return 3;
+    int error = -1;
+    wallet = electronpass::serialization::load(text, *crypto, error);
+    if (error != 0) return 3;
 
     update();
 
@@ -128,14 +129,14 @@ int DataHolder::save() {
         return 1;
     }
 
-    bool success = false;
-    std::string text = electronpass::serialization::save(wallet, *crypto, success);
+    int error = 0;
+    std::string text = electronpass::serialization::save(wallet, *crypto, error);
 
-    if (!success) {
+    if (error != 0) {
         saving_error = 1;
         return 1;
     }
-    success = write_file(text);
+    bool success = write_file(text);
     if (!success) {
         saving_error = 2;
         return 2;
@@ -240,8 +241,10 @@ bool DataHolder::change_password(const QString& old_password, const QString& new
     // is correct.
     electronpass::Crypto c(old_password_string);
     if (!c.check()) return false;
-    electronpass::serialization::load(text, c, success);
-    if (!success) return false;
+
+    int error = -1;
+    electronpass::serialization::load(text, c, error);
+    if (error != 0) return false;
 
     // Now finally change password. Now we are changing crypto pointer because we need could need
     // to encrypt some further changes with same password.
@@ -249,7 +252,7 @@ bool DataHolder::change_password(const QString& old_password, const QString& new
     crypto = new electronpass::Crypto(new_password_string);
     if (!crypto->check()) return false;
 
-    int error = save();
+    error = save();
     return error == 0;
 }
 
