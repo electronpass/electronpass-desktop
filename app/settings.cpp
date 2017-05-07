@@ -21,18 +21,21 @@ void SettingsManager::init(QSettings& settings_) {
     settings = &settings_;
 
     if (!settings->contains("theme")) settings->setValue("theme", 0);
-    if (!settings->contains("first_usage")) settings->setValue("first_usage", true);    
+    if (!settings->contains("first_usage")) settings->setValue("first_usage", true);
 
-    if (!settings->contains("data_location")) {
+    if (!settings->contains("data_folder") || !settings->contains("data_location")) {
         QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
-        path = QDir(path + QDir::separator() + "electronpass.wallet").absolutePath();
+        // Create folders if necessary
+        QDir qdir;
+        bool success = qdir.mkpath(path);
+        assert(success && "Error creating folder at app writable location.");
 
-        settings->setValue("data_location", path);
+        settings->setValue("data_folder", path);
 
-        // The data file should be created.
-        // The problem is that because it will be encrypted, we need a password, so it cannot be
-        // created before the app is unlocked.
+        QString data_path = QDir(path + QDir::separator() + "electronpass.wallet").absolutePath();
+
+        settings->setValue("data_location", data_path);
     }
 
     if (!settings->contains(kGdriveAccessToken)) settings->setValue(kGdriveAccessToken, "");
@@ -46,6 +49,10 @@ void SettingsManager::init(QSettings& settings_) {
 
 QString SettingsManager::get_data_location() const {
     return settings->value("data_location").toString();
+}
+
+QString SettingsManager::get_data_folder() const {
+    return settings->value("data_folder").toString();
 }
 
 bool SettingsManager::set_data_location(const QString& new_data_location) {

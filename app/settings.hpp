@@ -29,6 +29,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QDateTime>
 #include <QDir>
 #include <string>
+#include <cassert>
 #include <iostream>
 
 class SettingsManager {
@@ -41,10 +42,13 @@ public:
     void init(QSettings& settings_);
 
     // Returns location where the file with passwords is stored.
-    QString get_data_location() const ;
+    QString get_data_location() const;
+    QString get_data_folder() const;
 
     // TODO: Sets the location where the file with passowds will be stored.
     // TODO: File with passwords must be actually moved, which may cause some problems on different platforms.
+    // When changing data_location in settings, both variables (data_location & data_folder)
+    // should be changed (for obvious reasons).
     bool set_data_location(const QString& new_data_location);
 
     bool get_first_usage() const;

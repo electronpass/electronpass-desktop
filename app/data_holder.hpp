@@ -21,6 +21,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QObject>
 #include <QString>
 #include <QList>
+#include <QDir>
 #include <string>
 #include <fstream>
 #include <vector>
