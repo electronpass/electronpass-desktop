@@ -34,23 +34,6 @@ Optionally install ElectronPass:
 
 ## Testing
 
-### Wallet
-
-Currently it is still impossible to set your own password and file location. Also, new file, where passwords will be stored is not automatically generated.
-
-For testing purposes create new file in `settings.data_location` folder, which is printed out when the app is launched. On linux it should look like this (you will probably have to make `ElectronPass` folders by yourself too):
-
-    /home/{username}/.local/share/ElectronPass/ElectronPass/electronpass.wallet
-
-And paste this string into file (one line only!):
-
-    C2btsjGWBEfNOSrgNYwzHSa1fJ/bFFnHwmQuMlFoJlOJlLJ8rGjKj448G1K28yzpN9bDR9KhI1EadmW0NsXHjgLXrp1eabnDRSekOVKYoSJmxBV49o8zhtQHp6k1kFgnslL23zBoiIKpkccRaoR+D9pCFYGiRwoPbOQ2o2hMsePhTW5XJ/+ruBB/1/v1FJ1K8CKv0nhgpm1ma3YBW7/gtXiHuNbLjzuMdH6l8t5beqj10Krt6soO3cSSdy8fnX4dF6b8cj/7DVmihBXRQSz05vs/R4sq1lI4waSvDAZdxAo3e3eYClDRZFvCgNBYMN6HL4QJMXwbwPn0AbjM6Ai4jmI3j0wN3DQ2laquWiWpU0fdD2pHKzLWXcSTRcLWKC/mA0WYvMPmeO1l8pXZp7cl6thvakIOSkxCjnUXJs5pm18016nQmcmXvUeN81cjYmHUsM2vgG2fPD8xYptxcZMWRuJOiWRZrvLdt385I/Mo3X9Me7LecihFzWGBtTahn7/6BCZKgFLWZyOEvvgI+QWPivMvK7hF3ZO3jP8U/VHS731jd8OZTrWeXgB7b6BIgSnEk50+KtL1kwwW8iUoUyG1K//hhed6si2GXKMMmdMmpbbq7Mnc1SRSJL+O4LPHQL875MdIcT45IcDK1CYTYme7s93TC8A5woUFrxin1M+i/EqxadRs9n4PWpVuCL+9P9SMuS3mmh6gkEpLZPFyb9fINt7X5jBjOgqbunhwA1dOnf1K+PQKAxw1y1aAfm8HC9bbvpLjSeGagBA6ausTvQ==
-
-The password is:
-
-    asdf
-
-
 ### Syncing
 
 For obvious reasons api keys are not included in the source repository. Copy `app/sync/keys.default.txt` to `app/sync/keys.txt` and change the keys inside the file. Refer to [electronpass/credentials](https://github.com/electronpass/credentials) for more information.

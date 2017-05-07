@@ -97,6 +97,15 @@ Dialog {
                     Layout.column: 1
                     placeholderText: qsTr("  New password.  ")
                     echoMode: TextInput.Password
+
+                    background: PassStrengthIndicator {
+                        height: new_password.height - 16
+                        password: new_password.text
+                        type: "password"
+                        anchors.centerIn: parent
+                        width: parent.width
+                    }
+
                 }
                 Label {
                     text: qsTr("Confirm master password:")
@@ -109,24 +118,32 @@ Dialog {
                     Layout.column: 1
                     placeholderText: qsTr("Confirm password.")
                     echoMode: TextInput.Password
+
+                    background: ConfirmPassIndicator {
+                        height: confirm_password.height-16
+                        valid: (confirm_password.text == new_password.text)
+                        anchors.centerIn: parent
+                        width: parent.width
+                    }
                 }
                 Button {
                     text: qsTr("Change password")
                     Layout.row: 4
                     Layout.column: 1
+                    enabled: {
+                        var empty = curr_password.text == "" || new_password.text == ""
+                        var match = confirm_password.text == new_password.text
+                        return !empty && match
+                    }
                     onClicked: {
-                        if (curr_password.text == "" || new_password.text == "") {
-                            toolTip.text = "Enter a password."
-                        } else if (new_password.text == confirm_password.text) {
-                            var success = dataHolder.change_password(curr_password.text, new_password.text)
-                            toolTip.text = success ? "Password successfully changed." : "Password changing failed."
+                        if (dataHolder.change_password(curr_password.text, new_password.text)) {
+                            toolTip.text = "Password changed successfully."
                         } else {
-                            toolTip.text = "Passwords do not match."
+                            toolTip.text = "Incorrect master password."
+                            curr_password.forceActiveFocus();
+                            curr_password.selectAll();
                         }
                         toolTip.show()
-                        curr_password.text = ""
-                        new_password.text = ""
-                        confirm_password.text = ""
                     }
                 }
             }

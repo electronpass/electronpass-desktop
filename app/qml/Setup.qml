@@ -215,7 +215,7 @@ Rectangle {
                 onClicked: {
                     if (setupSwipeView.currentIndex == 0){
                         if (newUser.checked) setupSwipeView.currentIndex = 1;
-                    }else if (setupSwipeView.currentIndex == 1){
+                    } else if (setupSwipeView.currentIndex == 1) {
                       if (setup.set_password(password.text)) {
                           unlockGUI()
                           setup.finish()

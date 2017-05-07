@@ -240,7 +240,7 @@ bool DataHolder::change_password(const QString& old_password, const QString& new
     // is correct.
     electronpass::Crypto c(old_password_string);
     if (!c.check()) return false;
-    c.decrypt(text, success);
+    electronpass::serialization::load(text, c, success);
     if (!success) return false;
 
     // Now finally change password. Now we are changing crypto pointer because we need could need
