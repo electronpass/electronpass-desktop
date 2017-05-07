@@ -21,6 +21,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import QtQuick.Controls.Material 2.1
 import "Dialogs"
+import "Components"
 
 ApplicationWindow {
     visible: true

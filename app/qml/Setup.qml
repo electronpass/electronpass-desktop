@@ -19,6 +19,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
+import "Components"
 
 Rectangle {
     width: window.width
@@ -37,12 +38,22 @@ Rectangle {
         }
     }
 
+    function continueButtonEnabled(){
+      if (setupSwipeView.currentIndex == 0){
+          if (newUser.checked) return true;
+          return false;
+      }else if (setupSwipeView.currentIndex == 1){
+          if (password.text != "" && confirmPassword.text == password.text) return true;
+          return false;
+      }
+    }
 
     ColumnLayout {
         anchors.fill: parent
 
         // ElectronPass logo & stuff
         RowLayout {
+            id: setupLogoContainer
             Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
             Layout.topMargin: 15
             Layout.bottomMargin: 20
@@ -59,118 +70,295 @@ Rectangle {
             }
         }
 
-        // First "page"
-        ColumnLayout {
-            id: firstPage
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-            Layout.preferredWidth: 500
+        SwipeView {
+          id: setupSwipeView
+          anchors.top: setupLogoContainer.bottom
+          anchors.bottom: buttonsRow.top
+          anchors.left: parent.left
+          anchors.right: parent.right
+          anchors.margins: 42
+          clip: true
+          interactive: false
 
-            Label {
-                text: qsTr("Hi awesome user! Welcome to the ElectronPass.")
-            }
+          Page {
+            background: Rectangle{ color: "transparent" }
+
             ColumnLayout {
-                RadioButton {
-                    id: newUser
-                    checked: true
-                    text: qsTr("I am a new ElectronPass user.")
+                Label {
+                    text: qsTr("Hi awesome user! Welcome to the ElectronPass.")
                 }
-                RadioButton {
-                    id: existingUser
-                    text: qsTr("I have already used ElectronPass on other device(s).")
+                ColumnLayout {
+                    Layout.topMargin: 16
+                    Layout.leftMargin: 16
+                    spacing: -16
+                    RadioButton {
+                        id: newUser
+                        checked: true
+                        text: qsTr("I am a new ElectronPass user.")
+                    }
+                    RadioButton {
+                        id: existingUser
+                        text: qsTr("I have already used ElectronPass on other device(s).")
+                    }
                 }
             }
+          }
 
-            // Bad idea for vertical fill
-            ColumnLayout {}
+          Page {
+            background: Rectangle{ color: "transparent" }
+
+            ColumnLayout {
+                width: parent.width
+                height: parent.height
+
+                Label {
+                    text: qsTr("Please create your master password.")
+                }
+
+                ColumnLayout {
+                    Layout.topMargin: -16
+                    Layout.leftMargin: 32
+
+                    RowLayout {
+                        Layout.maximumWidth: 330
+                        Item {
+                          width: 156
+                          Label {
+                              id: passLabel
+                              anchors.right: parent.right
+                              anchors.left: parent.left
+                              anchors.verticalCenter: parent.verticalCenter
+                              text: qsTr("Master password: ")
+                              font.weight: Font.Light
+                              horizontalAlignment: Text.AlignRight
+                          }
+                        }
+                        TextField {
+                            id: password
+                            width: 128
+                            font.pointSize: 8
+                            echoMode: TextInput.Password
+                            font.family: robotoMonoFont.name
+                            Layout.fillWidth: true
+
+                            background: PassStrengthIndicator {
+                                height: password.height-16
+                                password: password.text
+                                type: "password"
+                                anchors.centerIn: parent
+                                width: parent.width
+                            }
+                        }
+                    }
+                    RowLayout {
+                        Layout.maximumWidth: 330
+                        Item {
+                          width: 156
+                          Label {
+                              anchors.right: parent.right
+                              anchors.left: parent.left
+                              anchors.verticalCenter: parent.verticalCenter
+                              text: qsTr("Confirm password: ")
+                              font.weight: Font.Light
+                              horizontalAlignment: Text.AlignRight
+                          }
+                        }
+                        TextField {
+                            id: confirmPassword
+                            width: 128
+                            font.pointSize: 8
+                            echoMode: TextInput.Password
+                            font.family: robotoMonoFont.name
+                            Layout.fillWidth: true
+
+                            background: ConfirmPassIndicator {
+                                height: password.height-16
+                                valid: (confirmPassword.text == password.text)
+                                anchors.centerIn: parent
+                                width: parent.width
+                            }
+                        }
+                    }
+                }
+
+                Infobar {
+                    text: "Make sure you don't forget your password, there is no way to recover it."
+                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignBottom
+                }
+              }
+          }
+        }
+
+        // buttons row
+        RowLayout {
+            Layout.alignment: Qt.AlignBottom
+            anchors.right: parent.right
+            anchors.margins: 16
+            Layout.bottomMargin: 8
+            id: buttonsRow
 
             Button {
-                Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-                text: qsTr(" Continue ")
-                Layout.bottomMargin: 10
+                anchors.right: continueButton.left
+                anchors.rightMargin: 16
+                text: qsTr("Back")
+                enabled: (setupSwipeView.currentIndex > 0)
+                onClicked: setupSwipeView.currentIndex -= 1;
+            }
+
+            Button {
+                anchors.right: parent.right
+                text: qsTr("Continue")
+                id: continueButton
+                enabled: continueButtonEnabled()
 
                 onClicked: {
-                    if (newUser.checked) {
-                        // TODO: somehow create animation
-                        firstPage.visible = false
-                        createPasswordForm.visible = true
-
-                    } else {
-                        // TODO: Existing user...
-                        console.log("[Log] Existing user file select is currently not supported.")
-
-                        setupView.visible = false
-                        setup.finish()
-
-                        lockGUI()
+                    if (setupSwipeView.currentIndex == 0){
+                        if (newUser.checked) setupSwipeView.currentIndex = 1;
+                    }else if (setupSwipeView.currentIndex == 1){
+                      if (setup.set_password(password.text)) {
+                          unlockGUI()
+                          setup.finish()
+                          setupView.visible = false
+                      } else console.log("error")
                     }
                 }
             }
         }
-
-        ColumnLayout {
-            id: createPasswordForm
-            visible: false
-            Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
-            Layout.preferredWidth: 500
-
-            Label {
-                text: qsTr("Please create your master password. Make sure you never forget your "
-                    + "\npassword, otherwise there is now way to recover your data.")
-            }
-
-            ColumnLayout {
-                Layout.topMargin: 10
-
-                RowLayout {
-                    Label {
-                        text: qsTr("Enter master password     ")
-                    }
-                    TextField {
-                        id: password
-                        Layout.leftMargin: 15
-                        echoMode: TextInput.Password
-                    }
-                }
-                RowLayout {
-                    Label {
-                        text: qsTr("Confirm master password")
-                    }
-                    TextField {
-                        id: confirmPassword
-                        Layout.leftMargin: 15
-                        echoMode: TextInput.Password
-                    }
-                }
-
-            }
-
-            // Bad idea for vertical fill
-            ColumnLayout {}
-
-            Button {
-                Layout.alignment: Qt.AlignRight
-                Layout.bottomMargin: 10
-                text: qsTr(" Continue ")
-
-                onClicked: {
-                    // TODO: Create a popup window to confirm creating master password.
-                    if (password.text == "") {
-                        console.log("Enter master password")
-                    } else if (password.text == confirmPassword.text) {
-                        if (setup.set_password(password.text)) {
-                            unlockGUI()
-                            setup.finish()
-                            setupView.visible = false
-                        } else console.log("error")
-                    } else {
-                        console.log("Passwords do not match")
-                    }
-                }
-            }
-        }
-
     }
-
-
-
 }
+
+
+    // ColumnLayout {
+    //     anchors.fill: parent
+    //
+    //     // ElectronPass logo & stuff
+    //     RowLayout {
+    //         Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+    //         Layout.topMargin: 15
+    //         Layout.bottomMargin: 20
+    //         Layout.preferredHeight: 64
+    //
+    //         Image {
+    //             source: "qrc:/res/img/logo_transparent.png"
+    //         }
+    //         Label {
+    //             text: qsTr("  ElectronPass")
+    //             color: "white"
+    //             font.pixelSize: 24
+    //             horizontalAlignment: Qt.AlignHCenter
+    //         }
+    //     }
+    //
+    //     // First "page"
+    //     ColumnLayout {
+    //         id: firstPage
+    //         Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+    //         Layout.preferredWidth: 500
+    //
+    //         Label {
+    //             text: qsTr("Hi awesome user! Welcome to the ElectronPass.")
+    //         }
+    //         ColumnLayout {
+    //             RadioButton {
+    //                 id: newUser
+    //                 checked: true
+    //                 text: qsTr("I am a new ElectronPass user.")
+    //             }
+    //             RadioButton {
+    //                 id: existingUser
+    //                 text: qsTr("I have already used ElectronPass on other device(s).")
+    //             }
+    //         }
+    //
+    //         // Bad idea for vertical fill
+    //         ColumnLayout {}
+    //
+    //         Button {
+    //             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
+    //             text: qsTr(" Continue ")
+    //             Layout.bottomMargin: 10
+    //
+    //             onClicked: {
+    //                 if (newUser.checked) {
+    //                     // TODO: somehow create animation
+    //                     firstPage.visible = false
+    //                     createPasswordForm.visible = true
+    //
+    //                 } else {
+    //                     // TODO: Existing user...
+    //                     console.log("[Log] Existing user file select is currently not supported.")
+    //
+    //                     setupView.visible = false
+    //                     setup.finish()
+    //
+    //                     lockGUI()
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     ColumnLayout {
+    //         id: createPasswordForm
+    //         visible: false
+    //         Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+    //         Layout.preferredWidth: 500
+    //
+    //         Label {
+    //             text: qsTr("Please create your master password. Make sure you never forget your "
+    //                 + "\npassword, otherwise there is now way to recover your data.")
+    //         }
+    //
+    //         ColumnLayout {
+    //             Layout.topMargin: 10
+    //
+    //             RowLayout {
+    //                 Label {
+    //                     text: qsTr("Enter master password     ")
+    //                 }
+    //                 TextField {
+    //                     id: password
+    //                     Layout.leftMargin: 15
+    //                     echoMode: TextInput.Password
+    //                 }
+    //             }
+    //             RowLayout {
+    //                 Label {
+    //                     text: qsTr("Confirm master password")
+    //                 }
+    //                 TextField {
+    //                     id: confirmPassword
+    //                     Layout.leftMargin: 15
+    //                     echoMode: TextInput.Password
+    //                 }
+    //             }
+    //
+    //         }
+    //
+    //         // Bad idea for vertical fill
+    //         ColumnLayout {}
+    //
+    //         Button {
+    //             Layout.alignment: Qt.AlignRight
+    //             Layout.bottomMargin: 10
+    //             text: qsTr(" Continue ")
+    //
+    //             onClicked: {
+    //                 // TODO: Create a popup window to confirm creating master password.
+    //                 if (password.text == "") {
+    //                     console.log("Enter master password")
+    //                 } else if (password.text == confirmPassword.text) {
+    //                     if (setup.set_password(password.text)) {
+    //                         unlockGUI()
+    //                         setup.finish()
+    //                         setupView.visible = false
+    //                     } else console.log("error")
+    //                 } else {
+    //                     console.log("Passwords do not match")
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    // }
+// }
