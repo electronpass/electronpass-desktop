@@ -109,6 +109,7 @@ Rectangle {
 
           Page {
             background: Rectangle{ color: "transparent" }
+            visible: newUser.checked
 
             ColumnLayout {
                 width: parent.width
