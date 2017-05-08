@@ -19,6 +19,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
+import QtQuick.Dialogs 1.0
 import "../Components"
 
 Dialog {
@@ -43,6 +44,9 @@ Dialog {
         }
         TabButton {
             text: qsTr("Sync")
+        }
+        TabButton {
+            text: qsTr("Backup")
         }
         TabButton {
             text: qsTr("Shortcuts")
@@ -150,35 +154,27 @@ Dialog {
                     }
                 }
             }
-
-            // Exact copy from Lock.qml
-            ToolTip {
-                id: toolTip
-                text: "Unknown error."
-                timeout: 2000
-                visible: false
-
-                function show() {
-                    timer.restart();
-                    visible = true;
-                }
-                Behavior on opacity {
-                    NumberAnimation { duration: 300 }
-                }
-                Timer {
-                    id: timer
-                    interval: toolTip.timeout
-                    onTriggered: {
-                        if (!running) { toolTip.visible = false; }
-                    }
-                }
-            }
         }
 
         Page {
             Label {
                 text: qsTr("Sync settings")
                 anchors.centerIn: parent
+            }
+        }
+
+        Page {
+            ColumnLayout {
+                Label {
+                    text: qsTr("Backup all your passwords to encrypted file")
+                }
+                Button {
+                    text: qsTr("Backup")
+                    onClicked: {
+                        console.log("Open file dialog mabye?")
+                        backupFileDialog.open()
+                    }
+                }
             }
         }
 
@@ -233,6 +229,47 @@ Dialog {
             }
           }
         }
+    }
+
+    // Exact copy from Lock.qml
+    ToolTip {
+        id: toolTip
+        text: "Unknown error."
+        timeout: 2000
+        visible: false
+
+        function show() {
+            timer.restart();
+            visible = true;
+        }
+        Behavior on opacity {
+            NumberAnimation { duration: 300 }
+        }
+        Timer {
+            id: timer
+            interval: toolTip.timeout
+            onTriggered: {
+                if (!running) { toolTip.visible = false; }
+            }
+        }
+    }
+
+    FileDialog {
+        id: backupFileDialog
+        title: "Please choose a backup location."
+        folder: shortcuts.home
+        selectMultiple: false
+        selectExisting: false
+        onAccepted: {
+            var success = dataHolder.backup_wallet(Qt.resolvedUrl(backupFileDialog.fileUrl));
+            if (success) {
+                toolTip.text = "Backup file created successfully."
+            } else {
+                toolTip.text = "Backup failed"
+            }
+            toolTip.show()
+        }
+        onRejected: {}
     }
 
 

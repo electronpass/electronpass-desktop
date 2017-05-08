@@ -74,3 +74,13 @@ bool DataHolder::copy_file(std::string old_location, std::string new_location) {
     out_file << in_file.rdbuf();
     return true;
 }
+
+bool DataHolder::backup_wallet(const QString& file_url) {
+    QUrl url(file_url);
+
+    std::string backup_path = url.toLocalFile().toStdString();
+    std::string current_path = globals::settings.get_data_location().toStdString();
+
+    bool success = copy_file(current_path, backup_path);
+    return success;
+}

@@ -22,6 +22,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QString>
 #include <QList>
 #include <QDir>
+#include <QUrl>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -126,6 +127,10 @@ public:
     // If new_location is not given, then file is copied to location saved in settings as `data_location`.
     static bool copy_file(std::string old_location, std::string new_location = "");
 
+    // Saves wallet file to file_url location.
+    Q_INVOKABLE bool backup_wallet(const QString& file_url);
+
+    // Different functions for display of items in GUI
     Q_INVOKABLE int get_number_of_items() const;
     Q_INVOKABLE QString get_item_name(int index) const;
     Q_INVOKABLE QString get_item_subname(int index) const;

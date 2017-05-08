@@ -312,8 +312,6 @@ Rectangle {
                 console.log("[Error] Could not copy file.")
             }
         }
-        onRejected: {
-            success = false
-        }
+        onRejected: {}
     }
 }
