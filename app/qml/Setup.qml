@@ -263,15 +263,6 @@ Rectangle {
                     } else if (setupSwipeView.currentIndex == 2) {
                         if (existingUser.checked) {
                             fileDialog.open()
-                            if (fileDialog.success) {
-                                var success = setup.restore_data_from_file(fileDialog.fileUrl)
-                                if (success) {
-                                    setup.finish()
-                                    setupView.visible = false
-                                } else {
-                                    console.log("Could not restore data.")
-                                }
-                            }
                         }
                     }
                 }
@@ -285,9 +276,15 @@ Rectangle {
         title: "Please choose a backup wallet file."
         folder: shortcuts.home
         selectMultiple: false
-        property bool success: false
         onAccepted: {
-            success = true
+            var success = setup.restore_data_from_file(Qt.resolvedUrl(fileDialog.fileUrl));
+            if (success) {
+                setup.finish()
+                setupView.visible = false
+                lockGUI()
+            } else {
+                console.log("[Error] Could not copy file.")
+            }
         }
         onRejected: {
             success = false

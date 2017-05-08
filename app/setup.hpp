@@ -20,6 +20,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <QObject>
 #include <QString>
+#include <QUrl>
 #include <string>
 #include <iostream>
 #include <electronpass/wallet.hpp>
@@ -40,8 +41,8 @@ public:
     // Creates new empty wallet and saves it.
     Q_INVOKABLE bool set_password(const QString& password);
 
-    Q_INVOKABLE bool restore_data_from_file(const QString& file_path);
-    
+    Q_INVOKABLE bool restore_data_from_file(const QString& file_url);
+
     // Q_INVOKABLE void set_sync_service();
     // Q_INVOKABLE void set_file_path();
 };

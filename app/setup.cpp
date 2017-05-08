@@ -37,8 +37,9 @@ bool Setup::set_password(const QString& password) {
     return success;
 }
 
-bool Setup::restore_data_from_file(const QString& file_path) {
-    std::string path = file_path.toStdString();
+bool Setup::restore_data_from_file(const QString& file_url) {
+    QUrl url(file_url);
+    std::string path = url.toLocalFile().toStdString();
 
     bool success = globals::data_holder.copy_file(path);
     return success;
