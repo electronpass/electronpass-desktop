@@ -19,12 +19,14 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 SyncManager::Service SyncManager::string_to_service(const std::string& string) {
     if (string == "gdrive") return SyncManager::Service::GDRIVE;
+    if (string == "dropbox") return SyncManager::Service::DROPBOX;
     return SyncManager::Service::NONE;
 }
 
 std::string SyncManager::service_to_string(const Service& service) {
     if (service == SyncManager::Service::GDRIVE) return "gdrive";
-    else return "none";
+    if (service == SyncManager::Service::DROPBOX) return "dropbox";
+    return "none";
 }
 
 SyncManager::SyncManager(QObject *parent): QObject(parent) {}
@@ -35,6 +37,7 @@ bool SyncManager::init() {
     if (service == Service::NONE) return false;
 
     if (service == Service::GDRIVE) sync_object = new Gdrive(this);
+    if (service == Service::DROPBOX) sync_object = new Dropbox(this);
 
     connect(dynamic_cast<QObject*>(sync_object),
             SIGNAL(wallet_downloaded(const std::string&, SyncManagerStatus)),

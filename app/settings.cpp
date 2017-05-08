@@ -17,6 +17,12 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "settings.hpp"
 
+#define kGdriveAccessToken "gdrive_access_token"
+#define kGdriveRefreshToken "gdrive_refresh_token"
+#define kGdriveTokenExpiration "gdrive_token_expiration"
+#define kDropboxAccessToken "dropbox_access_token"
+#define kSyncManagerService "sync_manager"
+
 void SettingsManager::init(QSettings& settings_) {
     settings = &settings_;
 
@@ -40,6 +46,8 @@ void SettingsManager::init(QSettings& settings_) {
     if (!settings->contains(kGdriveAccessToken)) settings->setValue(kGdriveAccessToken, "");
     if (!settings->contains(kGdriveRefreshToken)) settings->setValue(kGdriveRefreshToken, "");
     if (!settings->contains(kGdriveTokenExpiration)) settings->setValue(kGdriveTokenExpiration, QDateTime::currentDateTimeUtc());
+
+    if (!settings->contains(kDropboxAccessToken)) settings->setValue(kDropboxAccessToken, "");
 
     if (!settings->contains(kSyncManagerService)) settings->setValue(kSyncManagerService, "none");
 
@@ -93,6 +101,14 @@ void SettingsManager::gdrive_set_refresh_token(const std::string &token) {
 
 void SettingsManager::gdrive_set_token_expiration(const QDateTime& expire_date) {
     settings->setValue(kGdriveTokenExpiration, expire_date);
+}
+
+std::string SettingsManager::dropbox_get_access_token() const {
+    return settings->value(kDropboxAccessToken).toString().toStdString();
+}
+
+void SettingsManager::dropbox_set_access_token(const std::string &token) {
+    settings->setValue(kDropboxAccessToken, token.c_str());
 }
 
 std::string SettingsManager::sync_manager_get_service() const {

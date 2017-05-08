@@ -5,5 +5,6 @@
 #define kGdriveClientSecret "@GDRIVE_CLIENT_SECRET@"
 
 #define kDropboxClientID "@DROPBOX_CLIENT_ID@"
+#define kDropboxClientSecret "@DROPBOX_CLIENT_SECRET@"
 
 #endif //ELECTRONPASS_KEYS_HPP

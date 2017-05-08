@@ -18,11 +18,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #ifndef SETTINGS_HPP
 #define SETTINGS_HPP
 
-#define kGdriveAccessToken "gdrive_access_token"
-#define kGdriveRefreshToken "gdrive_refresh_token"
-#define kGdriveTokenExpiration "gdrive_token_expiration"
-#define kSyncManagerService "sync_manager"
-
 #include <QSettings>
 #include <QStandardPaths>
 #include <QString>
@@ -63,6 +58,11 @@ public:
     void gdrive_set_refresh_token(const std::string& token);
     void gdrive_set_token_expiration(const QDateTime& expire_date);
 
+    // Dropbox oauth2 settings
+    std::string dropbox_get_access_token() const;
+    void dropbox_set_access_token(const std::string &token);
+
+    // Sync manager settings
     std::string sync_manager_get_service() const;
     void sync_manager_set_service(const std::string& service);
 

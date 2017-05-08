@@ -25,6 +25,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "globals.hpp"
 #include "sync_base.hpp"
 #include "gdrive.hpp"
+#include "dropbox.hpp"
 
 enum class SyncManagerStatus {
     SUCCESS, ALREADY_SYNCING, NO_NETWORK, COULD_NOT_AUTHORIZE, UKNOWN_ERROR
@@ -41,7 +42,7 @@ public:
     bool init();
 
     enum class Service {
-        NONE, GDRIVE
+        NONE, GDRIVE, DROPBOX
     };
 
     static Service string_to_service(const std::string &);
