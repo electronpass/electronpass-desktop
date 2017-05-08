@@ -46,7 +46,7 @@ Rectangle {
           if (password.text != "" && confirmPassword.text == password.text) return true;
           return false;
       } else if (setupSwipeView.currentIndex == 2) {
-          if (backupFile.checked) return true;
+          if (syncList.currentIndex == 0) return true;
           return false;
       }
     }
@@ -196,29 +196,55 @@ Rectangle {
             background: Rectangle{ color: "transparent" }
 
             ColumnLayout {
+                anchors.fill: parent
 
                 Label {
                     text: qsTr("Please select an option from where you want to restore your data.")
                 }
 
-                ColumnLayout {
+                Rectangle {
                     Layout.topMargin: 16
-                    Layout.leftMargin: 16
-                    spacing: -16
-                    RadioButton {
-                        id: backupFile
-                        checked: true
-                        text: qsTr("From backup file")
-                    }
-                    RadioButton {
-                        id: restoreGDrive
-                        text: qsTr("Google Drive")
-                    }
-                    RadioButton {
-                        id: restoreDropbox
-                        text: qsTr("Dropbox")
+                    Layout.alignment: Qt.AlignHCenter
+                    Layout.preferredHeight: 300
+                    Layout.preferredWidth: parent.width
+                    color: Material.color(Material.Grey, Material.Shade100)
+
+                    ListView {
+                        id: syncList
+                        anchors.fill: parent
+                        model: ListModel {
+                            ListElement {
+                                name: "Backup file"
+                            }
+                            ListElement {
+                                name: "Google Drive"
+                            }
+                            ListElement {
+                                name: "Dropbox"
+                            }
+                        }
+                        delegate: Component {
+                            Item {
+                                width: parent.width
+                                height: 40
+                                Column {
+                                    padding: 10
+                                    Text {
+                                        text: name
+                                        font.pixelSize: 16
+                                    }
+                                }
+                            }
+                        }
+                        highlight: Rectangle { color: Material.color(Material.Blue, Material.Shade200) }
+                        focus: true
+
                     }
                 }
+
+
+
+
 
              }
           }
@@ -261,7 +287,7 @@ Rectangle {
                           setupView.visible = false
                       } else console.log("error")
                     } else if (setupSwipeView.currentIndex == 2) {
-                        if (existingUser.checked) {
+                        if (syncList.currentIndex == 0) {
                             fileDialog.open()
                         }
                     }
