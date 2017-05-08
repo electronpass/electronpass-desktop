@@ -28,6 +28,7 @@ class AuthServer: public QObject {
     Q_OBJECT
 public:
     explicit AuthServer(QObject *parent = 0);
+    bool init();
 
 public slots:
     void new_connection();

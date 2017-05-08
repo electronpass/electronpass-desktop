@@ -20,17 +20,25 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 AuthServer::AuthServer(QObject *parent): QObject(parent) {
     server = new QTcpServer(this);
     connect(server, SIGNAL(newConnection()), this, SLOT(new_connection()));
+}
+
+bool AuthServer::init() {
     if (!server->listen(QHostAddress::Any, 5160)) {
-        std::cout << "Server could not start!" << std::endl;
+        std::cout << "<auth_server.cpp> [Error] Server could not start!" << std::endl;
         delete server;
         delete this;
+        return false;
     }
+    return true;
 }
 
 void AuthServer::new_connection() {
     QTcpSocket *socket = server->nextPendingConnection();
 
-    socket->waitForReadyRead();
+    if (!socket->waitForReadyRead(-1)) {
+        emit auth_success("");
+        this->deleteLater();
+    }
 
     QByteArray data = socket->readAll();
     socket->write("HTTP/1.0 200 No Error\nContent-Type: text/html; charset=UTF-8\n\n");
@@ -40,11 +48,11 @@ void AuthServer::new_connection() {
 
     socket->close();
     server->close();
-    delete socket;
-    delete server;
+    socket->deleteLater();
+    server->deleteLater();
 
     std::string str(data.data());
     emit auth_success(str);
 
-    delete this;
+    this->deleteLater();
 }

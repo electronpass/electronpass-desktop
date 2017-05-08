@@ -168,6 +168,18 @@ void Gdrive::authorize_client() {
     url.setQuery(url_query);
 
     AuthServer *server = new AuthServer(this);
+    if (!server->init()) {
+        if (state == State::GET) {
+            state = State::NONE;
+            emit wallet_downloaded("", SyncManagerStatus::COULD_NOT_AUTHORIZE);
+        } else if (state == State::NONE) {
+            state = State::NONE;
+            emit wallet_uploaded(SyncManagerStatus::COULD_NOT_AUTHORIZE);
+        }
+
+        return;
+    }
+
     connect(server, SIGNAL(auth_success(std::string)), this, SLOT(auth_server_request(std::string)));
     QDesktopServices::openUrl(url);
 }
