@@ -267,3 +267,9 @@ bool DataHolder::new_wallet(const QString& password) {
     int error = save();
     return error == 0;
 }
+
+
+void DataHolder::open_url(const QString& url) {
+    QDesktopServices::openUrl(QUrl(url, QUrl::TolerantMode));
+    
+}

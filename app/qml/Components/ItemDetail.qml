@@ -74,7 +74,7 @@ RowLayout {
         wrapMode: Text.WrapAnywhere
         color: greyTextColor
         onLinkActivated: {
-            Qt.openUrlExternally(link)
+            dataHolder.open_url(link)
         }
 
         Component.onCompleted: {

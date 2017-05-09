@@ -23,6 +23,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QList>
 #include <QDir>
 #include <QUrl>
+#include <QDesktopServices>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -160,6 +161,9 @@ public:
 
     // Returns last save() call's return value.
     Q_INVOKABLE int get_saving_error();
+    
+    // Opens url in tolerant mode (also works for google.com)
+    Q_INVOKABLE void open_url(const QString& url);
 
     // Saves wallet with new password.
     // Retuns true if password was successfully changed and false if not.
