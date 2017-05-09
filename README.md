@@ -16,7 +16,7 @@ Desktop client written in qml.
 
 To install all dependencies on Arch Linux:
 
-    sudo pacman -S qt5-base qt5-declarative qt5-quckcontrols qt5-quickcontrols2 extra-cmake-modules
+    sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-quickcontrols2 extra-cmake-modules
 
 Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet).
 
