@@ -30,23 +30,20 @@ Dialog {
 
     modal: true
 
-    width: Math.min(parent.width * 0.8, 600)
-    height: Math.min(parent.height * 0.8, 400)
+    width: Math.min(parent.width * 0.9, 700)
+    height: Math.min(parent.height * 0.9, 500)
 
     header: TabBar {
         id: tabBar
         currentIndex: swipeView.currentIndex
         TabButton {
-            text: qsTr("Interface")
+            text: qsTr("General")
         }
         TabButton {
             text: qsTr("Security")
         }
         TabButton {
             text: qsTr("Sync")
-        }
-        TabButton {
-            text: qsTr("Backup")
         }
         TabButton {
             text: qsTr("Shortcuts")
@@ -60,98 +57,147 @@ Dialog {
         currentIndex: tabBar.currentIndex
 
         Page {
-            Switch {
-                id: themeSwitch
-                text: qsTr("Dark theme (restart application to apply)")
-                checked: settings.theme
+            ColumnLayout {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                Label {
+                    text: "Backup"
+                    font.weight: Font.Bold
+                }
+                Button {
+                    id: backupButton
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    Layout.leftMargin: 8
+                    text: qsTr("Create encrypted backup file")
+                    font.pointSize: 8
+                    onClicked: backupFileDialog.open()
+                }
+                Button {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: backupButton.width
+                    Layout.leftMargin: 8
+                    Layout.topMargin: -8
+                    text: qsTr("Export to csv")
+                    font.pointSize: 8
+                }
+
+                Label {
+                    text: "Interface"
+                    font.weight: Font.Bold
+                    Layout.topMargin: 8
+                }
+                Switch {
+                    Layout.leftMargin: 8
+                    id: themeSwitch
+                    text: qsTr("Dark theme (restart application to apply)")
+                    checked: settings.theme
+                }
             }
         }
 
         Page {
-
-            GridLayout {
-                anchors.fill: parent
-
+            ColumnLayout {
                 Label {
-                    text: qsTr("Change master password")
-                    font.bold: true
-                    Layout.row: 0
-                    Layout.column: 0
+                    text: "Change master password"
+                    font.weight: Font.Bold
                 }
-                Label {
-                    text: qsTr("Current master password:")
-                    Layout.row: 1
-                    Layout.column: 0
-                }
-                TextField {
-                    id: curr_password
-                    Layout.row: 1
-                    Layout.column: 1
-                    placeholderText: qsTr(" Enter password. ")
-                    echoMode: TextInput.Password
-                }
-                Label {
-                    text: qsTr("New master password:")
-                    Layout.row: 2
-                    Layout.column: 0
-                }
-                TextField {
-                    id: new_password
-                    Layout.row: 2
-                    Layout.column: 1
-                    placeholderText: qsTr("  New password.  ")
-                    echoMode: TextInput.Password
-
-                    background: PassStrengthIndicator {
-                        height: new_password.height - 16
-                        password: new_password.text
-                        type: "password"
-                        anchors.centerIn: parent
-                        width: parent.width
-                    }
-
-                }
-                Label {
-                    text: qsTr("Confirm master password:")
-                    Layout.row: 3
-                    Layout.column: 0
-                }
-                TextField {
-                    id: confirm_password
-                    Layout.row: 3
-                    Layout.column: 1
-                    placeholderText: qsTr("Confirm password.")
-                    echoMode: TextInput.Password
-
-                    background: ConfirmPassIndicator {
-                        height: confirm_password.height-16
-                        valid: (confirm_password.text == new_password.text)
-                        anchors.centerIn: parent
-                        width: parent.width
-                    }
-                }
-                Button {
-                    text: qsTr("Change password")
-                    Layout.row: 4
-                    Layout.column: 1
-                    enabled: {
-                        var empty = curr_password.text == "" || new_password.text == ""
-                        var match = confirm_password.text == new_password.text
-                        return !empty && match
-                    }
-                    onClicked: {
-                        if (dataHolder.change_password(curr_password.text, new_password.text)) {
-                            toolTip.text = "Password changed successfully."
-                            curr_password.text = ""
-                            new_password.text = ""
-                            confirm_password.text = ""
-                        } else {
-                            toolTip.text = "Incorrect master password."
-                            curr_password.forceActiveFocus();
-                            curr_password.selectAll();
+                ColumnLayout {
+                    Layout.leftMargin: 8
+                    RowLayout {
+                        Item {
+                          width: 156
+                          Label {
+                            text: qsTr("Current master password:")
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                          }
                         }
-                        toolTip.show()
+                        TextField {
+                            id: curr_password
+                            Layout.leftMargin: 8
+                            font.pointSize: 10
+                            echoMode: TextInput.Password
+                            font.family: robotoMonoFont.name
+                        }
                     }
+
+                    RowLayout {
+                      Layout.topMargin: -8
+                        Item {
+                          width: 156
+                          Label {
+                            text: qsTr("New master password:")
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                          }
+                        }
+                        TextField {
+                            id: new_password
+                            Layout.leftMargin: 8
+                            font.pointSize: 10
+                            echoMode: TextInput.Password
+                            font.family: robotoMonoFont.name
+                            width: curr_password.width
+
+                            background: PassStrengthIndicator {
+                                height: new_password.height-22
+                                password: new_password.text
+                                type: "password"
+                                anchors.centerIn: parent
+                                width: parent.width
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                      Layout.topMargin: -8
+                        Item {
+                          width: 156
+                          Label {
+                            text: qsTr("Confirm password:")
+                            anchors.left: parent.left
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                          }
+                        }
+                        TextField {
+                            id: confirm_password
+                            Layout.leftMargin: 8
+                            font.pointSize: 10
+                            echoMode: TextInput.Password
+                            font.family: robotoMonoFont.name
+                            width: curr_password.width
+
+                            background: ConfirmPassIndicator {
+                                height: confirm_password.height-22
+                                valid: (confirm_password.text == new_password.text)
+                                anchors.centerIn: parent
+                                width: parent.width
+                            }
+                        }
+                    }
+
+                    Button {
+                        text: qsTr("Change password")
+                        Layout.topMargin: -8
+                        enabled: !(curr_password.text == "" || new_password.text == "") && (confirm_password.text == new_password.text)
+                        onClicked: {
+                            if (dataHolder.change_password(curr_password.text, new_password.text)) {
+                                toolTip.text = "Password changed successfully."
+                                curr_password.text = ""
+                                new_password.text = ""
+                                confirm_password.text = ""
+                            } else {
+                                toolTip.text = "Incorrect master password."
+                                curr_password.forceActiveFocus();
+                                curr_password.selectAll();
+                            }
+                            toolTip.show()
+                        }
+                    }
+
                 }
             }
         }
@@ -160,21 +206,6 @@ Dialog {
             Label {
                 text: qsTr("Sync settings")
                 anchors.centerIn: parent
-            }
-        }
-
-        Page {
-            ColumnLayout {
-                Label {
-                    text: qsTr("Backup all your passwords to encrypted file")
-                }
-                Button {
-                    text: qsTr("Backup")
-                    onClicked: {
-                        console.log("Open file dialog mabye?")
-                        backupFileDialog.open()
-                    }
-                }
             }
         }
 
@@ -237,6 +268,7 @@ Dialog {
         text: "Unknown error."
         timeout: 2000
         visible: false
+        y: parent.height - 32
 
         function show() {
             timer.restart();
