@@ -36,6 +36,10 @@ std::string SyncManager::service_to_string(const Service& service) {
 SyncManager::SyncManager(QObject *parent): QObject(parent) {}
 
 bool SyncManager::init() {
+    if (initialized) {
+        std::cout << "<sync_manager.cpp> [Warning] Sync manager already initialized. Ignoring init() call." << std::endl;
+        return false;
+    }
     Service service = string_to_service(globals::settings.sync_manager_get_service());
 
     if (service == Service::NONE) {
@@ -55,23 +59,20 @@ bool SyncManager::init() {
             this,
             SLOT(service_did_upload_wallet(SyncManagerStatus)));
 
+    initialized = true;
     return true;
 }
 
 void SyncManager::download_wallet() {
-    if (sync_object == nullptr) {
-        std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
-        return;
-    }
-    sync_object->download_wallet();
+    if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring download_wallet() call." << std::endl;
+    else if (sync_object == nullptr) std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
+    else sync_object->download_wallet();
 }
 
 void SyncManager::upload_wallet(const std::string &wallet) {
-    if (sync_object == nullptr) {
-        std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
-        return;
-    }
-    sync_object->upload_wallet(wallet);
+    if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring upload_wallet() call." << std::endl;
+    else if (sync_object == nullptr) std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
+    else sync_object->upload_wallet(wallet);
 }
 
 void SyncManager::service_did_download_wallet(const std::string &wallet, SyncManagerStatus success) {

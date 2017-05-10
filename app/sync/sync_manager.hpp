@@ -35,6 +35,7 @@ class SyncManager: public QObject {
     Q_OBJECT
 
     SyncBase *sync_object;
+    bool initialized = false;
 public:
     SyncManager(QObject *parent = 0);
 
