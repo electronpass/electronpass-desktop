@@ -56,9 +56,10 @@ int main(int argc, char *argv[]) {
     QQmlApplicationEngine engine;
 
     QSettings qsettings(ORGANIZATION_NAME, APPLICATION_NAME);
+
     // init global objects
     globals::settings.init(qsettings);
-    if (!globals::sync_manager.init()) std::cout << "<main.cpp> [Warning] Sync manager not initialized; segfault on sync will happen." << std::endl;
+    globals::sync_manager.init();
     globals::clipboard.init();
 
     Passwords passwords;

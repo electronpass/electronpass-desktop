@@ -17,16 +17,20 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "sync_manager.hpp"
 
+#define kGdrive "gdrive"
+#define kDropbox "dropbox"
+#define kNone "none"
+
 SyncManager::Service SyncManager::string_to_service(const std::string& string) {
-    if (string == "gdrive") return SyncManager::Service::GDRIVE;
-    if (string == "dropbox") return SyncManager::Service::DROPBOX;
+    if (string == kGdrive) return SyncManager::Service::GDRIVE;
+    if (string == kDropbox) return SyncManager::Service::DROPBOX;
     return SyncManager::Service::NONE;
 }
 
 std::string SyncManager::service_to_string(const Service& service) {
-    if (service == SyncManager::Service::GDRIVE) return "gdrive";
-    if (service == SyncManager::Service::DROPBOX) return "dropbox";
-    return "none";
+    if (service == SyncManager::Service::GDRIVE) return kGdrive;
+    if (service == SyncManager::Service::DROPBOX) return kDropbox;
+    return kNone;
 }
 
 SyncManager::SyncManager(QObject *parent): QObject(parent) {}
@@ -34,7 +38,10 @@ SyncManager::SyncManager(QObject *parent): QObject(parent) {}
 bool SyncManager::init() {
     Service service = string_to_service(globals::settings.sync_manager_get_service());
 
-    if (service == Service::NONE) return false;
+    if (service == Service::NONE) {
+        sync_object = nullptr;
+        return false;
+    }
 
     if (service == Service::GDRIVE) sync_object = new Gdrive(this);
     if (service == Service::DROPBOX) sync_object = new Dropbox(this);
@@ -52,10 +59,18 @@ bool SyncManager::init() {
 }
 
 void SyncManager::download_wallet() {
+    if (sync_object == nullptr) {
+        std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
+        return;
+    }
     sync_object->download_wallet();
 }
 
 void SyncManager::upload_wallet(const std::string &wallet) {
+    if (sync_object == nullptr) {
+        std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
+        return;
+    }
     sync_object->upload_wallet(wallet);
 }
 
