@@ -80,11 +80,17 @@ void SettingsManager::set_first_usage(bool value) {
 }
 
 std::string SettingsManager::gdrive_get_access_token() const {
-    return settings->value(kGdriveAccessToken).toString().toStdString();
+    std::string encrypted_token = settings->value(kGdriveAccessToken).toString().toStdString();
+
+    bool success;
+    return token_crypto.decrypt(encrypted_token, success);
 }
 
 std::string SettingsManager::gdrive_get_refresh_token() const {
-    return settings->value(kGdriveRefreshToken).toString().toStdString();
+    std::string encrypted_token = settings->value(kGdriveRefreshToken).toString().toStdString();
+
+    bool success;
+    return token_crypto.decrypt(encrypted_token, success);
 }
 
 QDateTime SettingsManager::gdrive_get_token_expiration() const {
@@ -92,11 +98,13 @@ QDateTime SettingsManager::gdrive_get_token_expiration() const {
 }
 
 void SettingsManager::gdrive_set_access_token(const std::string& token) {
-    settings->setValue(kGdriveAccessToken, QString(token.c_str()));
+    bool success;
+    settings->setValue(kGdriveAccessToken, token_crypto.encrypt(token, success).c_str());
 }
 
 void SettingsManager::gdrive_set_refresh_token(const std::string &token) {
-    settings->setValue(kGdriveRefreshToken, QString(token.c_str()));
+    bool success;
+    settings->setValue(kGdriveRefreshToken, token_crypto.encrypt(token, success).c_str());
 }
 
 void SettingsManager::gdrive_set_token_expiration(const QDateTime& expire_date) {
@@ -104,11 +112,14 @@ void SettingsManager::gdrive_set_token_expiration(const QDateTime& expire_date) 
 }
 
 std::string SettingsManager::dropbox_get_access_token() const {
-    return settings->value(kDropboxAccessToken).toString().toStdString();
+    std::string encrypted_token = settings->value(kDropboxAccessToken).toString().toStdString();
+    bool success;
+    return token_crypto.decrypt(encrypted_token, success);
 }
 
 void SettingsManager::dropbox_set_access_token(const std::string &token) {
-    settings->setValue(kDropboxAccessToken, token.c_str());
+    bool success;
+    settings->setValue(kDropboxAccessToken, token_crypto.encrypt(token, success).c_str());
 }
 
 std::string SettingsManager::sync_manager_get_service() const {

@@ -27,12 +27,18 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <cassert>
 #include <iostream>
 
+#include <electronpass/crypto.hpp>
+#include "sync/keys.hpp"
+
 class SettingsManager {
 
 private:
     QSettings *settings;
+    electronpass::Crypto token_crypto;
 
 public:
+    SettingsManager(): token_crypto(kTokenPassword) {}
+
     // Checks if all settings are initialized and sets default values if not.
     void init(QSettings& settings_);
 
