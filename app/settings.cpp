@@ -63,12 +63,11 @@ QString SettingsManager::get_data_folder() const {
 }
 
 bool SettingsManager::set_data_location(const QString& new_data_location) {
-    if (settings->value("data_location").toString() == new_data_location) return true;
+    return settings->value("data_location").toString() == new_data_location;
 
     // TODO:
     // Move the file
     // Change value in settings
-    return false;
 }
 
 bool SettingsManager::get_first_usage() const {
@@ -81,6 +80,7 @@ void SettingsManager::set_first_usage(bool value) {
 
 std::string SettingsManager::gdrive_get_access_token() const {
     std::string encrypted_token = settings->value(kGdriveAccessToken).toString().toStdString();
+    if (encrypted_token == "") return "";
 
     bool success;
     return token_crypto.decrypt(encrypted_token, success);
@@ -88,6 +88,7 @@ std::string SettingsManager::gdrive_get_access_token() const {
 
 std::string SettingsManager::gdrive_get_refresh_token() const {
     std::string encrypted_token = settings->value(kGdriveRefreshToken).toString().toStdString();
+    if (encrypted_token == "") return "";
 
     bool success;
     return token_crypto.decrypt(encrypted_token, success);
@@ -113,11 +114,14 @@ void SettingsManager::gdrive_set_token_expiration(const QDateTime& expire_date) 
 
 std::string SettingsManager::dropbox_get_access_token() const {
     std::string encrypted_token = settings->value(kDropboxAccessToken).toString().toStdString();
+    if (encrypted_token == "") return "";
+
     bool success;
     return token_crypto.decrypt(encrypted_token, success);
 }
 
 void SettingsManager::dropbox_set_access_token(const std::string &token) {
+    electronpass::Crypto token_crypto(kTokenPassword);
     bool success;
     settings->setValue(kDropboxAccessToken, token_crypto.encrypt(token, success).c_str());
 }
