@@ -122,14 +122,18 @@ public:
     static std::string read_file(bool& success);
 
     // Writes single-line string to file.
-    static bool write_file(const std::string& data);
+    // If path is not given, file is read from data location stored in settings.
+    static bool write_file(const std::string& data, std::string path = "");
 
     // Copies content from file at old_location to new location.
     // If new_location is not given, then file is copied to location saved in settings as `data_location`.
     static bool copy_file(std::string old_location, std::string new_location = "");
 
     // Saves wallet file to file_url location.
-    Q_INVOKABLE bool backup_wallet(const QString& file_url);
+    Q_INVOKABLE bool backup_wallet(const QString& file_url) const;
+
+    // Exports wallet to csv to a given location.
+    Q_INVOKABLE bool export_to_csv(const QString& file_url) const;
 
     // Different functions for display of items in GUI
     Q_INVOKABLE int get_number_of_items() const;
@@ -161,7 +165,7 @@ public:
 
     // Returns last save() call's return value.
     Q_INVOKABLE int get_saving_error();
-    
+
     // Opens url in tolerant mode (also works for google.com)
     Q_INVOKABLE void open_url(const QString& url);
 
@@ -169,6 +173,7 @@ public:
     // Retuns true if password was successfully changed and false if not.
     // If not, error code can be retrieved by calling get_saving_error().
     Q_INVOKABLE bool change_password(const QString& old_password, const QString& new_password);
+
 
 };
 

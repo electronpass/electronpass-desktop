@@ -34,8 +34,10 @@ std::string DataHolder::read_file(bool& success) {
     return data;
 }
 
-bool DataHolder::write_file(const std::string& data) {
-    std::string path = globals::settings.get_data_location().toStdString();
+bool DataHolder::write_file(const std::string& data, std::string path) {
+    if (path == "") {
+        std::string path = globals::settings.get_data_location().toStdString();
+    }
 
     // Create new directories if necessary.
     QDir qdir;
@@ -75,7 +77,7 @@ bool DataHolder::copy_file(std::string old_location, std::string new_location) {
     return true;
 }
 
-bool DataHolder::backup_wallet(const QString& file_url) {
+bool DataHolder::backup_wallet(const QString& file_url) const {
     QUrl url(file_url);
 
     std::string backup_path = url.toLocalFile().toStdString();
@@ -83,4 +85,13 @@ bool DataHolder::backup_wallet(const QString& file_url) {
 
     bool success = copy_file(current_path, backup_path);
     return success;
+}
+
+bool DataHolder::export_to_csv(const QString& file_url) const {
+    QUrl url(file_url);
+
+    std::string export_path = url.toLocalFile().toStdString();
+    std::string export_string = electronpass::serialization::csv_export(wallet);
+
+    return write_file(export_string, export_path);
 }

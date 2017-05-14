@@ -70,7 +70,10 @@ Dialog {
                     Layout.leftMargin: 8
                     text: qsTr("Create encrypted backup file")
                     font.pointSize: 8
-                    onClicked: backupFileDialog.open()
+                    onClicked: {
+                        setFileDialog(0);
+                        fileDialog.open();
+                    }
                 }
                 Button {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -79,6 +82,10 @@ Dialog {
                     Layout.topMargin: -8
                     text: qsTr("Export to csv")
                     font.pointSize: 8
+                    onClicked: {
+                        setFileDialog(1);
+                        fileDialog.open();
+                    }
                 }
 
                 Label {
@@ -286,18 +293,47 @@ Dialog {
         }
     }
 
+    function setFileDialog(exportType) {
+        if (exportType == 0) {
+            // backup
+            fileDialog.exportType = 0;
+            fileDialog.title = "Please choose a backup location.";
+            fileDialog.selectMultiple = false;
+            fileDialog.selectExisting = false;
+        } else if (exportType == 1) {
+            fileDialog.exportType = 1;
+            fileDialog.title = "Please choose a csv export location.";
+            fileDialog.selectMultiple = false;
+            fileDialog.selectExisting = false;
+        }
+    }
+
     FileDialog {
-        id: backupFileDialog
-        title: "Please choose a backup location."
+        id: fileDialog
+        title: "This title should be set from setFileDialog function."
         folder: shortcuts.home
         selectMultiple: false
         selectExisting: false
+        property int exportType: 0
+        // Backup types:
+        //  0 - create a backup file
+        //  1 - export to csv
         onAccepted: {
-            var success = dataHolder.backup_wallet(Qt.resolvedUrl(backupFileDialog.fileUrl));
-            if (success) {
-                toolTip.text = "Backup file created successfully."
-            } else {
-                toolTip.text = "Backup failed"
+            var url = Qt.resolvedUrl(fileDialog.fileUrl);
+            if (exportType == 0) {
+                var success = dataHolder.backup_wallet(url);
+                if (success) {
+                    toolTip.text = "Backup file created successfully."
+                } else {
+                    toolTip.text = "Backup failed"
+                }
+            } else if (exportType == 1) {
+                var success = dataHolder.export_to_csv(url);
+                if (success) {
+                    toolTip.text = "Exported to csv successfully."
+                } else {
+                    toolTip.text = "Export to csv failed"
+                }
             }
             toolTip.show()
         }
