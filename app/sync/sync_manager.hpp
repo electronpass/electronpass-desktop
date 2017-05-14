@@ -34,6 +34,13 @@ enum class SyncManagerStatus {
 class SyncManager: public QObject {
     Q_OBJECT
 
+    Q_PROPERTY(QString statusMessage
+        READ statusMessage
+        WRITE setStatusMessage
+        NOTIFY statusMessageChanged)
+
+    QString status_message = "Sync manager not initialized";
+
     SyncBase *sync_object;
     bool initialized = false;
 public:
@@ -45,6 +52,9 @@ public:
     enum class Service {
         NONE, GDRIVE, DROPBOX
     };
+
+    QString statusMessage() const;
+    void setStatusMessage(const QString& message);
 
     static Service string_to_service(const std::string &);
     static std::string service_to_string(const Service &);
@@ -65,6 +75,8 @@ signals:
     // 1: already syncing
     // 2: no network
     // 3: could not authorize
+
+    void statusMessageChanged();
 };
 
 

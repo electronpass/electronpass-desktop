@@ -21,6 +21,17 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #define kDropbox "dropbox"
 #define kNone "none"
 
+void SyncManager::setStatusMessage(const QString& message) {
+    if (status_message != message) {
+        status_message = message;
+        emit statusMessageChanged();
+    }
+}
+
+QString SyncManager::statusMessage() const {
+    return status_message;
+}
+
 SyncManager::Service SyncManager::string_to_service(const std::string& string) {
     if (string == kGdrive) return SyncManager::Service::GDRIVE;
     if (string == kDropbox) return SyncManager::Service::DROPBOX;
@@ -60,19 +71,26 @@ bool SyncManager::init() {
             SLOT(service_did_upload_wallet(SyncManagerStatus)));
 
     initialized = true;
+    setStatusMessage("Sync manager initialized");
     return true;
 }
 
 void SyncManager::download_wallet() {
     if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring download_wallet() call." << std::endl;
     else if (sync_object == nullptr) std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
-    else sync_object->download_wallet();
+    else {
+        setStatusMessage("Downloading wallet");
+        sync_object->download_wallet();
+    }
 }
 
 void SyncManager::upload_wallet(const std::string &wallet) {
     if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring upload_wallet() call." << std::endl;
     else if (sync_object == nullptr) std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
-    else sync_object->upload_wallet(wallet);
+    else {
+        setStatusMessage("Uploading wallet");
+        sync_object->upload_wallet(wallet);
+    }
 }
 
 void SyncManager::service_did_download_wallet(const std::string &wallet, SyncManagerStatus success) {

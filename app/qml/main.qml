@@ -87,7 +87,10 @@ ApplicationWindow {
     }
     Shortcut {
         sequence: "Ctrl+S"
-        onActivated: if(!lock.visible) syncManager.download_wallet()
+        onActivated: if(!lock.visible) {
+            syncDialog.open();
+            syncDialog.sync();
+        }
     }
     Shortcut {
         sequence: "Ctrl+L"
@@ -205,7 +208,8 @@ ApplicationWindow {
                         MenuItem {
                             text: "Sync now"
                             onTriggered: {
-                                syncManager.download_wallet();
+                                syncDialog.open();
+                                syncDialog.sync();
                             }
                         }
                         MenuItem {
@@ -315,7 +319,11 @@ ApplicationWindow {
     }
 
     SettingsDialog {
-            id: settingsDialog
+        id: settingsDialog
+    }
+
+    SyncDialog {
+        id: syncDialog
     }
 
     DeleteConfirmationDialog{

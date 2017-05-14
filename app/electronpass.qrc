@@ -40,5 +40,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/Dialogs/SettingsDialog.qml</file>
         <file>qml/Dialogs/DeleteConfirmationDialog.qml</file>
         <file>qml/Dialogs/EditItemDialog.qml</file>
+        <file>qml/Dialogs/SyncDialog.qml</file>
     </qresource>
 </RCC>
