@@ -44,3 +44,13 @@ bool Setup::restore_data_from_file(const QString& file_url) {
     bool success = globals::data_holder.copy_file(path);
     return success;
 }
+
+QString Setup::get_sync_service() const {
+    std::string service = globals::settings.sync_manager_get_service();
+    return QString::fromStdString(service);
+}
+
+void Setup::set_sync_service(const QString& service_name) {
+    std::string service = service_name.toStdString();
+    globals::settings.sync_manager_set_service(service);
+}

@@ -132,4 +132,5 @@ std::string SettingsManager::sync_manager_get_service() const {
 
 void SettingsManager::sync_manager_set_service(const std::string &service) {
     settings->setValue(kSyncManagerService, service.c_str());
+    std::cout << "set " << sync_manager_get_service() << std::endl;
 }

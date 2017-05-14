@@ -210,12 +210,53 @@ Dialog {
         }
 
         Page {
-            Label {
-                text: qsTr("Sync settings")
-                anchors.centerIn: parent
+            ColumnLayout {
+                anchors.left: parent.left
+                anchors.right: parent.right
+
+                RowLayout {
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+
+                    Label {
+                        text: "Select sync service:"
+                        font.weight: Font.Bold
+                    }
+
+                    ComboBox {
+                        id: syncDropdownMenu
+
+                        function setSyncServiceIndex() {
+                            var service = setup.get_sync_service();
+
+                            syncDropdownMenu.currentIndex = 0;
+                            if (service == "gdrive") syncDropdownMenu.currentIndex = 1;
+                            if (service == "dropbox") syncDropdownMenu.currentIndex = 2;
+                        }
+                        function getSyncServiceFromIndex() {
+                            if (syncDropdownMenu.currentIndex == 0) return "none";
+                            if (syncDropdownMenu.currentIndex == 1) return "gdrive";
+                            if (syncDropdownMenu.currentIndex == 2) return "dropbox";
+                            return "none";
+                        }
+                        width: 200
+                        Layout.leftMargin: 15
+                        model: ["No sync service", "Google Drive", "Dropbox"]
+
+                        property bool completed: false
+                        Component.onCompleted: {
+                            setSyncServiceIndex();
+                            completed = true;
+                        }
+                        onCurrentIndexChanged: {
+                            if (completed) {
+                                setup.set_sync_service(syncDropdownMenu.getSyncServiceFromIndex())
+                            }
+                        }
+                    }
+                }
             }
         }
-
         Page {
           ListModel {
             id: shortcutsModel

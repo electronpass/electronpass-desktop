@@ -43,8 +43,8 @@ public:
 
     Q_INVOKABLE bool restore_data_from_file(const QString& file_url);
 
-    // Q_INVOKABLE void set_sync_service();
-    // Q_INVOKABLE void set_file_path();
+    Q_INVOKABLE QString get_sync_service() const;
+    Q_INVOKABLE void set_sync_service(const QString& service_name);
 };
 
 #endif // SETUP_HPP

@@ -72,7 +72,6 @@ public:
     std::string sync_manager_get_service() const;
     void sync_manager_set_service(const std::string& service);
 
-
     //access token
     // refresh token
     // token expiration
