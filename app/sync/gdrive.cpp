@@ -167,8 +167,11 @@ void Gdrive::authorize_client() {
 
     url.setQuery(url_query);
 
-    AuthServer *server = new AuthServer(this);
-    if (!server->init()) {
+    auth_server = new AuthServer(this);
+
+    connect(auth_server, SIGNAL(did_delete()), this, SLOT(auth_server_did_delete()));
+
+    if (!auth_server->init()) {
         if (state == State::GET) {
             state = State::NONE;
             emit wallet_downloaded("", SyncManagerStatus::COULD_NOT_AUTHORIZE);
@@ -176,11 +179,10 @@ void Gdrive::authorize_client() {
             state = State::NONE;
             emit wallet_uploaded(SyncManagerStatus::COULD_NOT_AUTHORIZE);
         }
-
         return;
     }
 
-    connect(server, SIGNAL(auth_success(std::string)), this, SLOT(auth_server_request(std::string)));
+    connect(auth_server, SIGNAL(auth_success(std::string)), this, SLOT(auth_server_request(std::string)));
     QDesktopServices::openUrl(url);
 }
 
@@ -292,10 +294,15 @@ void Gdrive::download_wallet() {
 }
 
 void Gdrive::reply_finished() {
-    if (reply->error() != QNetworkReply::NoError) {
+    int error = reply->error();
+    std::string data;
+    if (error == QNetworkReply::OperationCanceledError) data = "";
+    else data = std::string(reply->readAll().data());
+
+    if (error != QNetworkReply::NoError && error != QNetworkReply::OperationCanceledError) {
         std::cout << "<gdrive.cpp> [Warning] QReply error code: " << reply->error() << std::endl;
     }
-    std::string data(reply->readAll().data());
+
 
     reply->deleteLater();
 
@@ -325,6 +332,10 @@ void Gdrive::reply_finished() {
     }
 }
 
+void Gdrive::auth_server_did_delete() {
+    auth_server = nullptr;
+}
+
 void Gdrive::abort() {
     if (network_state != NetworkState::NONE) {
         reply->abort();
@@ -335,6 +346,11 @@ void Gdrive::abort() {
     if (state == State::GET) emit wallet_downloaded("", SyncManagerStatus::ABORTED);
     if (state == State::SET) emit wallet_uploaded(SyncManagerStatus::ABORTED);
     state = State::NONE;
+
+    if (auth_server != nullptr) {
+        delete auth_server;
+        auth_server = nullptr;
+    }
 }
 
 void Gdrive::upload_wallet_reply(const std::string &reply) {

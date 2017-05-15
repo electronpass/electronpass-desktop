@@ -28,7 +28,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "dropbox.hpp"
 
 enum class SyncManagerStatus {
-    SUCCESS, ALREADY_SYNCING, NO_NETWORK, COULD_NOT_AUTHORIZE, ABORTED
+    SUCCESS, ALREADY_SYNCING, NO_NETWORK, COULD_NOT_AUTHORIZE, ABORTED, NO_SYNC_PROVIDER
 };
 
 class SyncManager: public QObject {

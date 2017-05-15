@@ -59,7 +59,7 @@ Dialog {
             text: qsTr("Cancel")
             Layout.alignment: Qt.AlignHCenter
             onClicked: {
-                syncManager.cancel_syncing();
+                syncManager.abort();
                 syncDialog.close();
             }
         }

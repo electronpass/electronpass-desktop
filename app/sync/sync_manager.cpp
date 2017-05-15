@@ -51,11 +51,13 @@ bool SyncManager::init() {
         std::cout << "<sync_manager.cpp> [Warning] Sync manager already initialized. Ignoring init() call." << std::endl;
         return false;
     }
+    initialized = true;
+
     Service service = string_to_service(globals::settings.sync_manager_get_service());
 
     if (service == Service::NONE) {
         sync_object = nullptr;
-        return false;
+        return true;
     }
 
     if (service == Service::GDRIVE) sync_object = new Gdrive(this);
@@ -70,14 +72,13 @@ bool SyncManager::init() {
             this,
             SLOT(service_did_upload_wallet(SyncManagerStatus)));
 
-    initialized = true;
     setStatusMessage("Sync manager initialized");
     return true;
 }
 
 void SyncManager::download_wallet() {
     if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring download_wallet() call." << std::endl;
-    else if (sync_object == nullptr) std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
+    else if (sync_object == nullptr) emit wallet_downloaded("", SyncManagerStatus::NO_SYNC_PROVIDER);
     else {
         setStatusMessage("Downloading wallet");
         sync_object->download_wallet();
@@ -86,7 +87,7 @@ void SyncManager::download_wallet() {
 
 void SyncManager::upload_wallet(const std::string &wallet) {
     if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring upload_wallet() call." << std::endl;
-    else if (sync_object == nullptr) std::cout << "<sync_manager.cpp> [Warning] Sync manager service is NONE - can't sync." << std::endl;
+    else if (sync_object == nullptr) emit wallet_uploaded(SyncManagerStatus::NO_SYNC_PROVIDER);
     else {
         setStatusMessage("Uploading wallet");
         sync_object->upload_wallet(wallet);

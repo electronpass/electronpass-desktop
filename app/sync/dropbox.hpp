@@ -54,6 +54,7 @@ class Dropbox: public QObject, public SyncBase {
     NetworkState network_state = NetworkState::NONE;
     std::string new_wallet;
 
+    AuthServer *auth_server = nullptr;
     QNetworkAccessManager *network_manager;
     QNetworkReply *reply;
 
@@ -75,6 +76,7 @@ public:
 public slots:
     void auth_server_request(std::string request);
     void reply_finished();
+    void auth_server_did_delete();
 
 signals:
     void wallet_downloaded(const std::string&, SyncManagerStatus);

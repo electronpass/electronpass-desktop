@@ -61,6 +61,7 @@ class Gdrive: public QObject, public SyncBase {
     std::string new_wallet;
     std::string wallet_id;
 
+    AuthServer *auth_server = nullptr;
     QNetworkAccessManager *network_manager;
     QNetworkReply *reply;
 
@@ -88,6 +89,7 @@ public:
 public slots:
     void auth_server_request(std::string request);
     void reply_finished();
+    void auth_server_did_delete();
 
 signals:
     void wallet_downloaded(const std::string& wallet, SyncManagerStatus status);

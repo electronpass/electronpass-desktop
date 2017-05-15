@@ -104,8 +104,10 @@ void Dropbox::authorize_client() {
 
     url.setQuery(url_query);
 
-    AuthServer *server = new AuthServer(this);
-    if (!server->init()) {
+    auth_server = new AuthServer(this);
+    connect(auth_server, SIGNAL(did_delete()), this, SLOT(auth_server_did_delete()));
+
+    if (!auth_server->init()) {
         if (state == State::GET) {
             state = State::NONE;
             emit wallet_downloaded("", SyncManagerStatus::COULD_NOT_AUTHORIZE);
@@ -117,8 +119,12 @@ void Dropbox::authorize_client() {
         return;
     }
 
-    connect(server, SIGNAL(auth_success(std::string)), this, SLOT(auth_server_request(std::string)));
+    connect(auth_server, SIGNAL(auth_success(std::string)), this, SLOT(auth_server_request(std::string)));
     QDesktopServices::openUrl(url);
+}
+
+void Dropbox::auth_server_did_delete() {
+    auth_server = nullptr;
 }
 
 void Dropbox::download_wallet(const std::string &reply) {
@@ -211,9 +217,14 @@ void Dropbox::upload_wallet(const std::string &wallet) {
 
 void Dropbox::reply_finished() {
     int error = reply->error();
-    std::string data(reply->readAll().data());
-
     bool log_error = error != 0;
+
+    std::string data;
+    if (error == QNetworkReply::OperationCanceledError) {
+        data = "";
+        log_error = false;
+    } else data = std::string(reply->readAll().data());
+
 
     reply->deleteLater();
 
@@ -253,4 +264,9 @@ void Dropbox::abort() {
     if (state == State::GET) emit wallet_downloaded("", SyncManagerStatus::ABORTED);
     if (state == State::SET) emit wallet_uploaded(SyncManagerStatus::ABORTED);
     state = State::NONE;
+
+    if (auth_server != nullptr) {
+        delete auth_server;
+        auth_server = nullptr;
+    }
 }

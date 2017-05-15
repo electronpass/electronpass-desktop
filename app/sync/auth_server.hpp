@@ -34,6 +34,7 @@ public slots:
     void new_connection();
 signals:
     void auth_success(std::string request);
+    void did_delete();
 
 private:
     QTcpServer *server;

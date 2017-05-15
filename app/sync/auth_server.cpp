@@ -24,9 +24,11 @@ AuthServer::AuthServer(QObject *parent): QObject(parent) {
 
 bool AuthServer::init() {
     if (!server->listen(QHostAddress::Any, 5160)) {
+        std::cout << "mami" << std::endl;
         std::cout << "<auth_server.cpp> [Error] Server could not start!" << std::endl;
         delete server;
         delete this;
+        emit did_delete();
         return false;
     }
     return true;
@@ -70,6 +72,7 @@ void AuthServer::new_connection() {
     socket->deleteLater();
     server->deleteLater();
 
+    emit did_delete();
     emit auth_success(str);
 
     this->deleteLater();
