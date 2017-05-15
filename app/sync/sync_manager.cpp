@@ -54,10 +54,18 @@ bool SyncManager::init() {
     initialized = true;
 
     Service service = string_to_service(globals::settings.sync_manager_get_service());
+    set_service(service);
+
+    return true;
+}
+
+void SyncManager::set_service(Service service) {
+    globals::settings.sync_manager_set_service(service_to_string(service));
+    if (sync_object != nullptr) delete sync_object;
 
     if (service == Service::NONE) {
         sync_object = nullptr;
-        return true;
+        return;
     }
 
     if (service == Service::GDRIVE) sync_object = new Gdrive(this);
@@ -73,7 +81,10 @@ bool SyncManager::init() {
             SLOT(service_did_upload_wallet(SyncManagerStatus)));
 
     setStatusMessage("Sync manager initialized");
-    return true;
+}
+
+SyncManager::Service SyncManager::get_service(Service) {
+    return string_to_service(globals::settings.sync_manager_get_service());
 }
 
 void SyncManager::download_wallet() {

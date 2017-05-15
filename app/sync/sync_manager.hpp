@@ -41,7 +41,7 @@ class SyncManager: public QObject {
 
     QString status_message = "Sync manager not initialized";
 
-    SyncBase *sync_object;
+    SyncBase *sync_object = nullptr;
     bool initialized = false;
 public:
     SyncManager(QObject *parent = 0);
@@ -58,6 +58,9 @@ public:
 
     static Service string_to_service(const std::string &);
     static std::string service_to_string(const Service &);
+
+    void set_service(Service);
+    Service get_service(Service);
 
     Q_INVOKABLE void download_wallet();
     Q_INVOKABLE void upload_wallet(const std::string& wallet);
