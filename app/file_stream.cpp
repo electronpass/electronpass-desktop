@@ -17,7 +17,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "data_holder.hpp"
 
-std::string DataHolder::read_file(bool& success) {
+std::string file_stream::read_file(bool& success) {
     std::string path = globals::settings.get_data_location().toStdString();
     std::string data;
 
@@ -34,7 +34,12 @@ std::string DataHolder::read_file(bool& success) {
     return data;
 }
 
-bool DataHolder::write_file(const std::string& data, std::string path) {
+// bool file_stream::write_file(const std::string& data) {
+//     std::string path = globals::settings.get_data_location().toStdString();
+//     return file_stream::write_file(data, path);
+// }
+
+bool file_stream::write_file(const std::string& data, std::string path /* = "" */) {
     if (path == "") {
         path = globals::settings.get_data_location().toStdString();
     }
@@ -57,7 +62,7 @@ bool DataHolder::write_file(const std::string& data, std::string path) {
     return true;
 }
 
-bool DataHolder::copy_file(std::string old_location, std::string new_location) {
+bool file_stream::copy_file(std::string old_location, std::string new_location /* = "" */) {
     if (new_location == "") new_location = globals::settings.get_data_location().toStdString();
 
     QDir qdir;
@@ -75,23 +80,4 @@ bool DataHolder::copy_file(std::string old_location, std::string new_location) {
 
     out_file << in_file.rdbuf();
     return true;
-}
-
-bool DataHolder::backup_wallet(const QString& file_url) const {
-    QUrl url(file_url);
-
-    std::string backup_path = url.toLocalFile().toStdString();
-    std::string current_path = globals::settings.get_data_location().toStdString();
-
-    bool success = copy_file(current_path, backup_path);
-    return success;
-}
-
-bool DataHolder::export_to_csv(const QString& file_url) const {
-    QUrl url(file_url);
-
-    std::string export_path = url.toLocalFile().toStdString();
-    std::string export_string = electronpass::serialization::csv_export(wallet);
-
-    return write_file(export_string, export_path);
 }

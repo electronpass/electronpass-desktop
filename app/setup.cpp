@@ -41,7 +41,7 @@ bool Setup::restore_data_from_file(const QString& file_url) {
     QUrl url(file_url);
     std::string path = url.toLocalFile().toStdString();
 
-    bool success = globals::data_holder.copy_file(path);
+    bool success = file_stream::copy_file(path);
     return success;
 }
 

@@ -86,7 +86,7 @@ int DataHolder::unlock(const QString& password) {
     if (!crypto->check()) return 1;
 
     bool success = false;
-    std::string text = read_file(success);
+    std::string text = file_stream::read_file(success);
     if (!success) return 2;
 
     int error = -1;
@@ -136,7 +136,7 @@ int DataHolder::save() {
         saving_error = 1;
         return 1;
     }
-    bool success = write_file(text);
+    bool success = file_stream::write_file(text);
     if (!success) {
         saving_error = 2;
         return 2;
@@ -234,7 +234,7 @@ bool DataHolder::change_password(const QString& old_password, const QString& new
 
     // Check if old_password is correct
     bool success = false;
-    std::string text = read_file(success);
+    std::string text = file_stream::read_file(success);
     if (!success) return false;
 
     // We use authenticated encryption. That means that if decryption was successful, the password
@@ -271,4 +271,23 @@ bool DataHolder::new_wallet(const QString& password) {
 
 void DataHolder::open_url(const QString& url) {
     QDesktopServices::openUrl(QUrl(url, QUrl::TolerantMode));
+}
+
+bool DataHolder::backup_wallet(const QString& file_url) const {
+    QUrl url(file_url);
+
+    std::string backup_path = url.toLocalFile().toStdString();
+    std::string current_path = globals::settings.get_data_location().toStdString();
+
+    bool success = file_stream::copy_file(current_path, backup_path);
+    return success;
+}
+
+bool DataHolder::export_to_csv(const QString& file_url) const {
+    QUrl url(file_url);
+
+    std::string export_path = url.toLocalFile().toStdString();
+    std::string export_string = electronpass::serialization::csv_export(wallet);
+
+    return file_stream::write_file(export_string, export_path);
 }

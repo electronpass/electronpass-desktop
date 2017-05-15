@@ -35,6 +35,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <electronpass/serialization.hpp>
 #include <electronpass/passwords.hpp>
 #include "globals.hpp"
+#include "file_stream.hpp"
 
 
 class DataHolder: public QObject {
@@ -116,18 +117,6 @@ public:
 
     // Deletes all decrypted data and electronpass::Crypto object used for decryption.
     Q_INVOKABLE void lock();
-
-    // Reads first line of encrypted file.
-    // Location of encrypted file is stored in settings.
-    static std::string read_file(bool& success);
-
-    // Writes single-line string to file.
-    // If path is not given, file is read from data location stored in settings.
-    static bool write_file(const std::string& data, std::string path = "");
-
-    // Copies content from file at old_location to new location.
-    // If new_location is not given, then file is copied to location saved in settings as `data_location`.
-    static bool copy_file(std::string old_location, std::string new_location = "");
 
     // Saves wallet file to file_url location.
     Q_INVOKABLE bool backup_wallet(const QString& file_url) const;
