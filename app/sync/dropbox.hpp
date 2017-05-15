@@ -70,7 +70,7 @@ public:
 
     void download_wallet();
     void upload_wallet(const std::string &wallet);
-    void cancel_syncing();
+    void abort();
 
 public slots:
     void auth_server_request(std::string request);

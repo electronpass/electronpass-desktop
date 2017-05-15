@@ -217,7 +217,10 @@ void Dropbox::reply_finished() {
 
     reply->deleteLater();
 
-    switch (network_state) {
+    NetworkState ns = network_state;
+    network_state = NetworkState::NONE;
+
+    switch (ns) {
         case NetworkState::AUTHORIZE:
             authorize_client(data);
             break;
@@ -240,9 +243,14 @@ void Dropbox::reply_finished() {
     }
 }
 
-void Dropbox::cancel_syncing() {
+void Dropbox::abort() {
+    if (network_state != NetworkState::NONE) {
+        reply->abort();
+        reply->deleteLater();
+        network_state = NetworkState::NONE;
+    }
+
+    if (state == State::GET) emit wallet_downloaded("", SyncManagerStatus::ABORTED);
+    if (state == State::SET) emit wallet_uploaded(SyncManagerStatus::ABORTED);
     state = State::NONE;
-    network_state = NetworkState::NONE;
-    reply->abort();
-    reply->deleteLater();
 }

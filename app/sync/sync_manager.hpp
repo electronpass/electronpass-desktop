@@ -28,7 +28,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "dropbox.hpp"
 
 enum class SyncManagerStatus {
-    SUCCESS, ALREADY_SYNCING, NO_NETWORK, COULD_NOT_AUTHORIZE
+    SUCCESS, ALREADY_SYNCING, NO_NETWORK, COULD_NOT_AUTHORIZE, ABORTED
 };
 
 class SyncManager: public QObject {
@@ -61,15 +61,15 @@ public:
 
     Q_INVOKABLE void download_wallet();
     Q_INVOKABLE void upload_wallet(const std::string& wallet);
-    Q_INVOKABLE void cancel_syncing();
+    Q_INVOKABLE void abort();
 
 public slots:
-    void service_did_download_wallet(const std::string& wallet, SyncManagerStatus success);
-    void service_did_upload_wallet(SyncManagerStatus success);
+    void service_did_download_wallet(const std::string& wallet, SyncManagerStatus status);
+    void service_did_upload_wallet(SyncManagerStatus status);
 
 signals:
-    void wallet_downloaded(const std::string& wallet, int success);
-    void wallet_uploaded(int success);
+    void wallet_downloaded(const std::string& wallet, SyncManagerStatus status);
+    void wallet_uploaded(SyncManagerStatus status);
 
     // Success codes:
     // 0: success
