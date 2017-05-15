@@ -39,7 +39,6 @@ Dialog {
             statusLabel.text = syncManager.statusMessage
         }
         onWallet_downloaded: {
-            console.log("wallet downloaded");
             syncDialog.close();
         }
     }
@@ -55,6 +54,14 @@ Dialog {
             id: statusLabel
             Layout.alignment: Qt.AlignHCenter
             text: syncManager.statusMessage
+        }
+        Button {
+            text: qsTr("Cancel")
+            Layout.alignment: Qt.AlignHCenter
+            onClicked: {
+                syncManager.cancel_syncing();
+                syncDialog.close();
+            }
         }
     }
 
