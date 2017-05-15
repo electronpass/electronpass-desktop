@@ -36,7 +36,7 @@ std::string DataHolder::read_file(bool& success) {
 
 bool DataHolder::write_file(const std::string& data, std::string path) {
     if (path == "") {
-        std::string path = globals::settings.get_data_location().toStdString();
+        path = globals::settings.get_data_location().toStdString();
     }
 
     // Create new directories if necessary.
