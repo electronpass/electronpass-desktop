@@ -322,6 +322,13 @@ void Gdrive::reply_finished() {
     }
 }
 
+void Gdrive::cancel_syncing() {
+    state = State::NONE;
+    network_state = NetworkState::NONE;
+    reply->abort();
+    reply->deleteLater();
+}
+
 void Gdrive::upload_wallet_reply(const std::string &reply) {
     std::cout << "<gdrive.cpp> [Log] Wallet uploaded." << std::endl;
 

@@ -61,6 +61,7 @@ public:
 
     Q_INVOKABLE void download_wallet();
     Q_INVOKABLE void upload_wallet(const std::string& wallet);
+    Q_INVOKABLE void cancel_syncing();
 
 public slots:
     void service_did_download_wallet(const std::string& wallet, SyncManagerStatus success);

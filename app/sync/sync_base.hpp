@@ -28,6 +28,7 @@ public:
     virtual ~SyncBase() {}
     virtual void download_wallet() = 0;
     virtual void upload_wallet(const std::string&) = 0;
+    virtual void cancel_syncing() = 0;
 
 signals:
     virtual void wallet_downloaded(const std::string& wallet, SyncManagerStatus success) = 0;

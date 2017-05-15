@@ -83,6 +83,7 @@ public:
 
     void download_wallet();
     void upload_wallet(const std::string&);
+    void cancel_syncing();
 
 public slots:
     void auth_server_request(std::string request);

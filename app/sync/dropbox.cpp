@@ -239,3 +239,10 @@ void Dropbox::reply_finished() {
         std::cout << "<dropbox.cpp> [Warning] QReply error code: " << error << std::endl;
     }
 }
+
+void Dropbox::cancel_syncing() {
+    state = State::NONE;
+    network_state = NetworkState::NONE;
+    reply->abort();
+    reply->deleteLater();
+}

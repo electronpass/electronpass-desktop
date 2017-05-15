@@ -93,6 +93,10 @@ void SyncManager::upload_wallet(const std::string &wallet) {
     }
 }
 
+void SyncManager::cancel_syncing() {
+    sync_object->cancel_syncing();
+}
+
 void SyncManager::service_did_download_wallet(const std::string &wallet, SyncManagerStatus success) {
     std::cout << "<sync_manager.cpp> [Log] Downloaded wallet." << std::endl << wallet << std::endl;
     emit wallet_downloaded(wallet, static_cast<int>(success));
