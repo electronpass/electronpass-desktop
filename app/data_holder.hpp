@@ -166,7 +166,6 @@ public:
     // If not, error code can be retrieved by calling get_saving_error().
     Q_INVOKABLE bool change_password(const QString& old_password, const QString& new_password);
 
-
 };
 
 #endif // DATA_HOLDER_HPP

@@ -117,17 +117,13 @@ void SyncManager::abort() {
 }
 
 void SyncManager::service_did_download_wallet(const std::string &wallet, SyncManagerStatus success) {
-    std::cout << "<sync_manager.cpp> [Log] Downloaded wallet." << std::endl << wallet << std::endl;
-
     if (success == SyncManagerStatus::SUCCESS) {
         setStatusMessage("Merging wallets");
         globals::wallet_merger.merge(wallet);
-        std::cout << "<sync_manager.cpp> [Log] Wallets merged" << std::endl;
     }
     emit wallet_downloaded(wallet, success);
 }
 
 void SyncManager::service_did_upload_wallet(SyncManagerStatus success) {
-    std::cout << "<sync_manager.cpp> [Log] Uploaded wallet." << std::endl;
     emit wallet_uploaded(success);
 }
