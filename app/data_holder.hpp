@@ -36,10 +36,13 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <electronpass/passwords.hpp>
 #include "globals.hpp"
 #include "file_stream.hpp"
+#include "wallet_merger.hpp"
 
 
 class DataHolder: public QObject {
     Q_OBJECT
+
+    friend class WalletMerger;
 
     bool unlocked = false;
 

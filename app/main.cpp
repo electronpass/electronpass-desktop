@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
     engine.rootContext()->setContextProperty("setup", &setup);
     engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
     engine.rootContext()->setContextProperty("syncManager", &globals::sync_manager);
+    engine.rootContext()->setContextProperty("walletMerger", &globals::wallet_merger);
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 

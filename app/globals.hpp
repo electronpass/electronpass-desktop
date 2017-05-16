@@ -22,9 +22,11 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "settings.hpp"
 #include "sync/sync_manager.hpp"
 #include "clipboard.hpp"
+#include "wallet_merger.hpp"
 
 class DataHolder;
 class SyncManager;
+class WalletMerger;
 
 // Namespace in which are few global objects like settings and so on.
 namespace globals {
@@ -34,6 +36,7 @@ namespace globals {
     extern SettingsManager settings;
     extern SyncManager sync_manager;
     extern Clipboard clipboard;
+    extern WalletMerger wallet_merger;
 
 }
 

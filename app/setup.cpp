@@ -53,4 +53,11 @@ QString Setup::get_sync_service() const {
 void Setup::set_sync_service(const QString& service_name) {
     std::string service = service_name.toStdString();
     globals::settings.sync_manager_set_service(service);
+
+    SyncManager::Service new_service = SyncManager::string_to_service(service_name.toStdString());
+
+    globals::sync_manager.set_service(new_service);
+
+    std::cout << "<setup.cpp> [Log] Sync service changed to ";
+    std::cout << SyncManager::service_to_string(new_service) << std::endl;
 }

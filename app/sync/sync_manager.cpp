@@ -83,7 +83,7 @@ void SyncManager::set_service(Service service) {
     setStatusMessage("Sync manager initialized");
 }
 
-SyncManager::Service SyncManager::get_service(Service) {
+SyncManager::Service SyncManager::get_service() {
     return string_to_service(globals::settings.sync_manager_get_service());
 }
 
@@ -96,12 +96,19 @@ void SyncManager::download_wallet() {
     }
 }
 
-void SyncManager::upload_wallet(const std::string &wallet) {
+void SyncManager::upload_wallet() {
     if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring upload_wallet() call." << std::endl;
     else if (sync_object == nullptr) emit wallet_uploaded(SyncManagerStatus::NO_SYNC_PROVIDER);
     else {
         setStatusMessage("Uploading wallet");
-        sync_object->upload_wallet(wallet);
+
+        bool success = false;
+        std::string wallet = file_stream::read_file(success);
+        if (!success) {
+            emit wallet_uploaded(SyncManagerStatus::COULD_NOT_OPEN_FILE);
+        } else {
+            sync_object->upload_wallet(wallet);
+        }
     }
 }
 
@@ -111,6 +118,12 @@ void SyncManager::abort() {
 
 void SyncManager::service_did_download_wallet(const std::string &wallet, SyncManagerStatus success) {
     std::cout << "<sync_manager.cpp> [Log] Downloaded wallet." << std::endl << wallet << std::endl;
+
+    if (success == SyncManagerStatus::SUCCESS) {
+        setStatusMessage("Merging wallets");
+        globals::wallet_merger.merge(wallet);
+        std::cout << "<sync_manager.cpp> [Log] Wallets merged" << std::endl;
+    }
     emit wallet_downloaded(wallet, success);
 }
 

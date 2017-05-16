@@ -325,16 +325,19 @@ ApplicationWindow {
     SyncDialog {
         id: syncDialog
     }
+    SyncOnlinePasswordDialog {
+        id: syncOnlinePasswordDialog
+    }
 
-    DeleteConfirmationDialog{
+    DeleteConfirmationDialog {
         id: deleteConfirmationDialog
     }
 
-    EditItemDialog{
+    EditItemDialog {
         id: editItemDialog
     }
 
-    Snackbar{
+    Snackbar {
         id: snackbar
         fullWidth: true
     }

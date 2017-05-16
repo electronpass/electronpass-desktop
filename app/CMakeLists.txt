@@ -6,7 +6,7 @@ set(SOURCES
     globals.cpp
     clipboard.cpp
     setup.cpp
-
+    wallet_merger.cpp
     data_holder.cpp
     search.cpp
     convert_field.cpp

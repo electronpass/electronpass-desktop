@@ -23,12 +23,14 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QObject>
 
 #include "globals.hpp"
+#include "wallet_merger.hpp"
+#include "file_stream.hpp"
 #include "sync_base.hpp"
 #include "gdrive.hpp"
 #include "dropbox.hpp"
 
 enum class SyncManagerStatus {
-    SUCCESS, ALREADY_SYNCING, NO_NETWORK, COULD_NOT_AUTHORIZE, ABORTED, NO_SYNC_PROVIDER
+    SUCCESS, ALREADY_SYNCING, NO_NETWORK, COULD_NOT_AUTHORIZE, ABORTED, NO_SYNC_PROVIDER, COULD_NOT_OPEN_FILE
 };
 
 class SyncManager: public QObject {
@@ -60,10 +62,10 @@ public:
     static std::string service_to_string(const Service &);
 
     void set_service(Service);
-    Service get_service(Service);
+    Service get_service();
 
     Q_INVOKABLE void download_wallet();
-    Q_INVOKABLE void upload_wallet(const std::string& wallet);
+    Q_INVOKABLE void upload_wallet();
     Q_INVOKABLE void abort();
 
 public slots:
