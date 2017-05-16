@@ -51,6 +51,9 @@ int WalletMerger::decrypt_online_wallet(const QString& password) {
     if (error != 0) return error;
 
     globals::data_holder.wallet = electronpass::Wallet::merge(globals::data_holder.wallet, online_wallet);
+
+    // TODO: If online wallet is newer, globals::data_holder.crypto object
+
     error = globals::data_holder.save();
     if (error != 0) return 3;
 

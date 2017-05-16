@@ -156,6 +156,7 @@ void Gdrive::refresh_token() {
 }
 
 void Gdrive::authorize_client() {
+    globals::sync_manager.setStatusMessage("Please authorize in browser.");
     std::cout << "<gdrive.cpp> [Log] Authorizing client." << std::endl;
 
     QUrl url("https://accounts.google.com/o/oauth2/v2/auth");

@@ -94,6 +94,7 @@ void Dropbox::authorize_client(const std::string &data) {
 }
 
 void Dropbox::authorize_client() {
+    globals::sync_manager.setStatusMessage("Please authorize in browser.");
     std::cout << "<dropbox.cpp> [Log] Authorizing client." << std::endl;
 
     QUrl url("https://www.dropbox.com/oauth2/authorize");
