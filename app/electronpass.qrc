@@ -42,5 +42,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/Dialogs/EditItemDialog.qml</file>
         <file>qml/Dialogs/SyncDialog.qml</file>
         <file>qml/Dialogs/SyncOnlinePasswordDialog.qml</file>
+        <file>qml/Dialogs/SyncOnlineFileCorruptedDialog.qml</file>  
     </qresource>
 </RCC>

@@ -50,6 +50,8 @@ Dialog {
         onWallet_downloaded: {
             if (walletMerger.need_decrypt_online_wallet()) {
                 syncOnlinePasswordDialog.open();
+            } else if (walletMerger.is_corrupted()) {
+                syncOnlineFileCorruptedDialog.open();
             } else {
                 sync_upload();
             }

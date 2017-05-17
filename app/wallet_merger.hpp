@@ -31,6 +31,7 @@ class WalletMerger : public QObject {
     Q_OBJECT
     std::string online_json = "";
     bool need_decrypt = false;
+    bool corrupted = false;
 
 public:
     // Returns:
@@ -53,6 +54,7 @@ public:
     Q_INVOKABLE int decrypt_online_wallet(const QString& password);
 
     Q_INVOKABLE bool need_decrypt_online_wallet() const;
+    Q_INVOKABLE bool is_corrupted() const;
 };
 
 #endif // WALLET_MERGER_HPP

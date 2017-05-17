@@ -21,16 +21,21 @@ int WalletMerger::merge(const std::string& online_string) {
     std::cout << "<wallet_merger.cpp> [Log] Merging wallets." << std::endl;
 
     need_decrypt = false;
+    corrupted = false;
 
     int error = -1;
     electronpass::Wallet online_wallet = electronpass::serialization::load(online_string,
                                                         *globals::data_holder.crypto, error);
 
     if (error != 0) {
-        if (error == 2) std::cout << "<wallet_merger.cpp> [Warning] Wallet json online is invalid." << std::endl;
-        if (error == 1) std::cout << "<wallet_merger.cpp> [Log] Online wallet is not encrypted with same password." << std::endl;
+        if (error == 2) {
+          corrupted = true;
+          std::cout << "<wallet_merger.cpp> [Warning] Wallet json online is invalid." << std::endl;
+        } else if (error == 1) {
+          need_decrypt = true;
+          std::cout << "<wallet_merger.cpp> [Log] Online wallet is not encrypted with same password." << std::endl;
+        }
 
-        need_decrypt = true;
         online_json = online_string;
         return error;
     }
@@ -66,4 +71,8 @@ int WalletMerger::decrypt_online_wallet(const QString& password) {
 
 bool WalletMerger::need_decrypt_online_wallet() const {
     return need_decrypt;
+}
+
+bool WalletMerger::is_corrupted() const {
+  return corrupted;
 }

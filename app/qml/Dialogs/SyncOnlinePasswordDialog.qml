@@ -61,6 +61,7 @@ Dialog {
                     } else if (error == 1) {
                         errorLabel.text = "Wrong password";
                     } else if (error == 2) {
+                        // should not happen, becuase, sync dialog must redirect on corrupted file dialog.
                         errorLabel.text = "Online wallet appears to be corrupted.";
                         confirmButton.active = false;
                     }

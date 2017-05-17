@@ -328,7 +328,9 @@ ApplicationWindow {
     SyncOnlinePasswordDialog {
         id: syncOnlinePasswordDialog
     }
-
+    SyncOnlineFileCorruptedDialog {
+        id: syncOnlineFileCorruptedDialog
+    }
     DeleteConfirmationDialog {
         id: deleteConfirmationDialog
     }
