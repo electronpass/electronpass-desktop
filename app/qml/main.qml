@@ -44,6 +44,17 @@ ApplicationWindow {
         lockGUI();
     }
 
+    Timer {
+        id: lockTimer
+        interval: settings.lockDelay != -1 ? settings.lockDelay * 1000 : -1
+        onTriggered: {
+            if (interval != -1) {
+                console.log("Locked after", interval / 1000, " seconds.")
+                dataHolder.lock();
+                lockGUI();
+            }
+        }
+    }
     // define shortcuts
     Shortcut {
         sequence: "Ctrl+F"
@@ -365,5 +376,6 @@ ApplicationWindow {
         searchInput.selectAll()
         itemsList.model = dataHolder.get_number_of_items()
         itemsList.setItemIndex(-1)
+        lockTimer.start()
     }
 }

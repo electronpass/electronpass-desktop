@@ -256,7 +256,6 @@ Dialog {
                     model: ["30 seconds", "1 minute", "2 minutes", "5 minutes", "10 minutes", "never"]
 
                     Component.onCompleted: {
-                        console.log(lockDelay)
                         changed_by_user = false;
                         switch (lockDelay) {
                             case 30:
@@ -281,7 +280,6 @@ Dialog {
                         changed_by_user = true;
                     }
                     onCurrentIndexChanged: {
-                        console.log(lockDelay, changed_by_user)
                         if (changed_by_user) {
                             switch (currentIndex) {
                                 case 0:
