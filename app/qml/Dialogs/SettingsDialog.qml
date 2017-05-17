@@ -33,6 +33,21 @@ Dialog {
     width: Math.min(parent.width * 0.9, 700)
     height: Math.min(parent.height * 0.9, 500)
 
+    function setSyncServiceIndex() {
+        var service = setup.get_sync_service();
+
+        syncDropdownMenu.changed_by_user = false;
+        if (service == "gdrive") syncDropdownMenu.currentIndex = 1;
+        else if (service == "dropbox") syncDropdownMenu.currentIndex = 2;
+        else syncDropdownMenu.currentIndex = 0;
+    }
+    function getSyncServiceFromIndex() {
+        if (syncDropdownMenu.currentIndex == 0) return "none";
+        if (syncDropdownMenu.currentIndex == 1) return "gdrive";
+        if (syncDropdownMenu.currentIndex == 2) return "dropbox";
+        return "none";
+    }
+
     header: TabBar {
         id: tabBar
         currentIndex: swipeView.currentIndex
@@ -247,32 +262,27 @@ Dialog {
                     ComboBox {
                         id: syncDropdownMenu
 
-                        function setSyncServiceIndex() {
-                            var service = setup.get_sync_service();
-
-                            syncDropdownMenu.currentIndex = 0;
-                            if (service == "gdrive") syncDropdownMenu.currentIndex = 1;
-                            if (service == "dropbox") syncDropdownMenu.currentIndex = 2;
-                        }
-                        function getSyncServiceFromIndex() {
-                            if (syncDropdownMenu.currentIndex == 0) return "none";
-                            if (syncDropdownMenu.currentIndex == 1) return "gdrive";
-                            if (syncDropdownMenu.currentIndex == 2) return "dropbox";
-                            return "none";
-                        }
                         width: 200
                         Layout.leftMargin: 15
                         model: ["No sync service", "Google Drive", "Dropbox"]
 
-                        property bool completed: false
+                        property bool changed_by_user: false
                         Component.onCompleted: {
-                            setSyncServiceIndex();
-                            completed = true;
+                            settingsDialog.setSyncServiceIndex();
                         }
                         onCurrentIndexChanged: {
-                            if (completed) {
-                                setup.set_sync_service(syncDropdownMenu.getSyncServiceFromIndex())
+                            if (changed_by_user) {
+                                if (settingsDialog.getSyncServiceFromIndex() == "none") {
+                                    settingsChangeSyncDialog.changeMessage("Your wallet will not be synced to cloud services anymore.\n" +
+                                                                        "Are you sure that to unset your sync provider?\n" +
+                                                                        "Your data on current sync service will not be changed.")
+                                } else {
+                                    settingsChangeSyncDialog.changeMessage("Are you sure that you want to change your sync service\n" +
+                                                "provider? Your data on current sync service will not\nbe changed.")
+                                }
+                                settingsChangeSyncDialog.open();
                             }
+                            changed_by_user = true;
                         }
                     }
                 }

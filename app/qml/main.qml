@@ -334,7 +334,9 @@ ApplicationWindow {
     DeleteConfirmationDialog {
         id: deleteConfirmationDialog
     }
-
+    SettingsChangeSyncDialog {
+        id: settingsChangeSyncDialog
+    }
     EditItemDialog {
         id: editItemDialog
     }

@@ -38,10 +38,11 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
         <!--dialogs-->
         <file>qml/Dialogs/SettingsDialog.qml</file>
+        <file>qml/Dialogs/SettingsChangeSyncDialog.qml</file>   
         <file>qml/Dialogs/DeleteConfirmationDialog.qml</file>
         <file>qml/Dialogs/EditItemDialog.qml</file>
         <file>qml/Dialogs/SyncDialog.qml</file>
         <file>qml/Dialogs/SyncOnlinePasswordDialog.qml</file>
-        <file>qml/Dialogs/SyncOnlineFileCorruptedDialog.qml</file>  
+        <file>qml/Dialogs/SyncOnlineFileCorruptedDialog.qml</file>
     </qresource>
 </RCC>
