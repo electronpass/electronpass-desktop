@@ -39,6 +39,7 @@ const char *DESKTOP_FILE_NAME = "electronpass.desktop";
 
 int main(int argc, char *argv[]) {
     QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    QApplication::setDesktopSettingsAware(false);
 
     QApplication app(argc, argv);
 
