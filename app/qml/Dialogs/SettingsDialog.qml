@@ -112,7 +112,7 @@ Dialog {
                     Layout.leftMargin: 8
                     RowLayout {
                         Item {
-                          width: 156
+                          width: 170
                           Label {
                             text: qsTr("Current master password:")
                             anchors.left: parent.left
@@ -132,7 +132,7 @@ Dialog {
                     RowLayout {
                       Layout.topMargin: -8
                         Item {
-                          width: 156
+                          width: 170
                           Label {
                             text: qsTr("New master password:")
                             anchors.left: parent.left
@@ -161,7 +161,7 @@ Dialog {
                     RowLayout {
                       Layout.topMargin: -8
                         Item {
-                          width: 156
+                          width: 170
                           Label {
                             text: qsTr("Confirm password:")
                             anchors.left: parent.left
