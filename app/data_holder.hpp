@@ -34,6 +34,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <electronpass/crypto.hpp>
 #include <electronpass/serialization.hpp>
 #include <electronpass/passwords.hpp>
+#include <electronpass/wallet.hpp>
 #include "globals.hpp"
 #include "file_stream.hpp"
 #include "wallet_merger.hpp"
@@ -123,6 +124,16 @@ public:
 
     // Saves wallet file to file_url location.
     Q_INVOKABLE bool backup_wallet(const QString& file_url) const;
+
+    /* Restore wallet from backup
+       Returns:
+        - 0: success
+        - 1: could not decrypt data
+        - 2: invalid json
+        - 3: could not read file
+        - 4: cold not copy
+    */
+    Q_INVOKABLE int restore_wallet(const QString& file_url, std::string password = "");
 
     // Exports wallet to csv to a given location.
     Q_INVOKABLE bool export_to_csv(const QString& file_url) const;

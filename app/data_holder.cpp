@@ -283,6 +283,26 @@ bool DataHolder::backup_wallet(const QString& file_url) const {
     return success;
 }
 
+int DataHolder::restore_wallet(const QString& file_url, std::string password) {
+    QUrl url(file_url);
+    std::string path = url.toLocalFile().toStdString();
+
+    bool read_success;
+    std::string data = file_stream::read_file(read_success, path);
+    if (!read_success) return 3;
+
+    electronpass::Crypto crypto(password);
+    int load_error;
+    electronpass::serialization::load(data, crypto, load_error);
+
+    if (!load_error) {
+        bool copy_success = file_stream::copy_file(path);
+        if (!copy_success) return 4;
+    }
+
+    return load_error;
+}
+
 bool DataHolder::export_to_csv(const QString& file_url) const {
     QUrl url(file_url);
 
