@@ -57,11 +57,6 @@ Dialog {
                     if (error == 0) {
                         syncOnlinePasswordDialog.close();
 
-                        var index = itemsList.currentIndex;
-                        itemsList.model = dataHolder.get_number_of_items();
-                        itemsList.setItemIndex(-1);
-                        itemsList.setItemIndex(index);
-
                         syncDialog.sync_upload();
                     } else if (error == 1) {
                         errorLabel.text = "Wrong password";

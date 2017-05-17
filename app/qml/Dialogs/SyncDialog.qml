@@ -32,6 +32,11 @@ Dialog {
         syncManager.download_wallet();
     }
     function sync_upload() {
+        var index = itemsList.currentIndex;
+        itemsList.model = 0;
+        itemsList.model = dataHolder.get_number_of_items();
+        itemsList.setItemIndex(index);
+        
         syncManager.upload_wallet();
     }
 
@@ -45,11 +50,6 @@ Dialog {
             if (walletMerger.need_decrypt_online_wallet()) {
                 syncOnlinePasswordDialog.open();
             } else {
-                var index = itemsList.currentIndex;
-                itemsList.model = dataHolder.get_number_of_items();
-                itemsList.setItemIndex(-1);
-                itemsList.setItemIndex(index);
-
                 sync_upload();
             }
         }
