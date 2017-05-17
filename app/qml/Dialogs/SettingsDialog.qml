@@ -61,27 +61,48 @@ Dialog {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 Label {
-                    text: "Backup"
+                    text: "Backup and Restore"
                     font.weight: Font.Bold
                 }
-                Button {
-                    id: backupButton
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Layout.leftMargin: 8
-                    text: qsTr("Create encrypted backup file")
-                    font.pointSize: 8
-                    onClicked: {
-                        setFileDialog(0);
-                        fileDialog.open();
+                Label {
+                    text: "After restore you need to lock and unlock your wallet manually"
+                }
+                RowLayout{
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    Button {
+                        anchors.right: parent.horizontalCenter
+                        text: qsTr("Export to backup file")
+                        font.pointSize: 10
+                        flat: true
+                        highlighted: true
+                        onClicked: {
+                            setFileDialog(0);
+                            fileDialog.open();
+                        }
+                    }
+                    Button {
+                        anchors.left: parent.horizontalCenter
+                        text: qsTr("Import from backup file")
+                        font.pointSize: 10
+                        flat: true
+                        highlighted: true
+                        onClicked: {
+                            setFileDialog(2)
+                            fileDialog.open()
+                        }
                     }
                 }
+
                 Button {
                     anchors.horizontalCenter: parent.horizontalCenter
-                    width: backupButton.width
                     Layout.leftMargin: 8
                     Layout.topMargin: -8
                     text: qsTr("Export to csv")
                     font.pointSize: 8
+                    flat: true
+
+                    highlighted: true
                     onClicked: {
                         setFileDialog(1);
                         fileDialog.open();
@@ -335,17 +356,18 @@ Dialog {
     }
 
     function setFileDialog(exportType) {
+        fileDialog.selectMultiple = false;
+        fileDialog.selectExisting = false;
         if (exportType == 0) {
-            // backup
             fileDialog.exportType = 0;
             fileDialog.title = "Please choose a backup location.";
-            fileDialog.selectMultiple = false;
-            fileDialog.selectExisting = false;
         } else if (exportType == 1) {
             fileDialog.exportType = 1;
             fileDialog.title = "Please choose a csv export location.";
-            fileDialog.selectMultiple = false;
-            fileDialog.selectExisting = false;
+        } else if (exportType == 2) {
+            fileDialog.exportType = 2
+            fileDialog.title = "Please choose a backup file."
+            fileDialog.selectExisting = true
         }
     }
 
@@ -359,6 +381,7 @@ Dialog {
         // Backup types:
         //  0 - create a backup file
         //  1 - export to csv
+        //  2 - import from backup file
         onAccepted: {
             var url = Qt.resolvedUrl(fileDialog.fileUrl);
             if (exportType == 0) {
@@ -374,6 +397,16 @@ Dialog {
                     toolTip.text = "Exported to csv successfully."
                 } else {
                     toolTip.text = "Export to csv failed"
+                }
+            } else if (exportType == 2) {
+                var success = setup.restore_data_from_file(url)
+                if (success) {
+                    toolTip.text = "Import successful."
+                    settingsDialog.close()
+                    dataHolder.lock()
+                    lockGUI()
+                } else {
+                    toolTip.text = "Import failed."
                 }
             }
             toolTip.show()
