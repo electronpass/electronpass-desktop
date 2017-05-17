@@ -26,8 +26,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 void SettingsManager::init(QSettings& settings_) {
     settings = &settings_;
 
-    if (!settings->contains("first_usage")) settings->setValue("first_usage", true);
-
     if (!settings->contains("data_folder") || !settings->contains("data_location")) {
         QString path = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
@@ -42,6 +40,8 @@ void SettingsManager::init(QSettings& settings_) {
 
         settings->setValue("data_location", data_path);
     }
+
+    if (!settings->contains("first_usage")) settings->setValue("first_usage", true);
 
     if (!settings->contains(kGdriveAccessToken)) settings->setValue(kGdriveAccessToken, "");
     if (!settings->contains(kGdriveRefreshToken)) settings->setValue(kGdriveRefreshToken, "");
