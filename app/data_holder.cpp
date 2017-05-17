@@ -270,7 +270,7 @@ bool DataHolder::new_wallet(const QString& password) {
 
 
 void DataHolder::open_url(const QString& url) {
-    QDesktopServices::openUrl(QUrl(url, QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl::fromUserInput(url));
 }
 
 bool DataHolder::backup_wallet(const QString& file_url) const {
