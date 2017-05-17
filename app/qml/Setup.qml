@@ -212,6 +212,11 @@ Rectangle {
                     ListView {
                         id: syncList
                         anchors.fill: parent
+                        highlight: Rectangle { color: Material.color(Material.Blue, Material.Shade200) }
+                        focus: true
+                        highlightMoveDuration: 0
+                        currentIndex: -1
+
                         model: ListModel {
                             ListElement {
                                 name: "Backup file"
@@ -223,22 +228,37 @@ Rectangle {
                                 name: "Dropbox"
                             }
                         }
-                        delegate: Component {
-                            Item {
-                                width: parent.width
-                                height: 40
-                                Column {
-                                    padding: 10
-                                    Text {
-                                        text: name
-                                        font.pixelSize: 16
-                                    }
+                        delegate: ItemDelegate {
+                            id: delegate
+
+                            Control {
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.top: parent.top
+                                anchors.bottom: parent.bottom
+
+                                Label {
+                                    id: title
+                                    text: name
+                                    anchors.left: parent.left
+                                    anchors.right: parent.right
+                                    anchors.top: parent.top
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    leftPadding: 16
+                                    rightPadding: 16
+                                    topPadding: 16
+                                    font.weight: Font.Medium
+                                    color: "black"
+
                                 }
+
+                            }
+
+                            width: syncList.width
+                            onClicked: {
+                                syncList.currentIndex = model.index;
                             }
                         }
-                        highlight: Rectangle { color: Material.color(Material.Blue, Material.Shade200) }
-                        focus: true
-
                     }
                 }
 
