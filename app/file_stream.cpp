@@ -17,8 +17,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "data_holder.hpp"
 
-std::string file_stream::read_file(bool& success) {
-    std::string path = globals::settings.get_data_location().toStdString();
+std::string file_stream::read_file(bool& success, std::string path_) {
+    std::string path = path_ == "" ? globals::settings.get_data_location().toStdString() : path_;
     std::string data;
 
     std::ifstream file(path);

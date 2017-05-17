@@ -27,7 +27,7 @@ namespace file_stream {
 
     // Reads first line of encrypted file.
     // Location of encrypted file is stored in settings.
-    std::string read_file(bool& success);
+    std::string read_file(bool& success, std::string path_ = "");
 
     // Writes single-line string to file.
     // If path is not given, file is read from data location stored in settings.
