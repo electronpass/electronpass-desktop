@@ -477,7 +477,6 @@ Dialog {
                 var success = setup.restore_data_from_file(url)
                 if (success) {
                     toolTip.text = "Import successful."
-                    settingsDialog.close()
                     dataHolder.lock()
                     lockGUI()
                 } else {

@@ -25,6 +25,11 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet
 
 ## Building
 
+#### Syncing
+
+For obvious reasons api keys are not included in the source repository. Copy `app/sync/keys.default.txt` to `app/sync/keys.txt` and change the keys inside the file. Refer to [electronpass/credentials](https://github.com/electronpass/credentials) for more information.
+
+    cp app/sync/keys.default.txt app/sync/keys.txt
     mkdir build; cd build
     cmake ..
     make electronpass -j8
@@ -32,12 +37,6 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet
 Optionally install ElectronPass:
 
     sudo make install
-
-## Testing
-
-### Syncing
-
-For obvious reasons api keys are not included in the source repository. Copy `app/sync/keys.default.txt` to `app/sync/keys.txt` and change the keys inside the file. Refer to [electronpass/credentials](https://github.com/electronpass/credentials) for more information.
 
 ## Graphical assets
 Icons in this project are displayed as a [Material Icons Font](). To preview and find their unicode representations use [CharacterMap](http://bluejamesbond.github.io/CharacterMap/) tool and load ttf file from app/res/fonts/.

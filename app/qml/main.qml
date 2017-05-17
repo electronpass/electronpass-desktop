@@ -46,9 +46,9 @@ ApplicationWindow {
 
     Timer {
         id: lockTimer
-        interval: settings.lockDelay != -1 ? settings.lockDelay * 1000 : -1
+        interval: settings.lockDelay != -1 ? settings.lockDelay * 1000 : 0
         onTriggered: {
-            if (interval != -1) {
+            if (interval != 0) {
                 console.log("Locked after", interval / 1000, " seconds.")
                 dataHolder.lock();
                 lockGUI();
@@ -322,7 +322,7 @@ ApplicationWindow {
         id: settings
         property int theme: 0 // 1 for dark theme, anything else for light
         // number of seconds after lock, if -1 lock never
-        property int lockDelay: 300  // Delay after 5 minutes of inactivity
+        property int lockDelay: 300  // Lock after 5 minutes of inactivity
 
         // passwordGenerator needs to remember password length and settings
         property int defaultPassLength: 16
@@ -360,6 +360,7 @@ ApplicationWindow {
     }
 
     function lockGUI(){
+        settingsDialog.close()
         details.destroyDetails()
         itemsList.setItemIndex(-1)
         itemsList.model = 0
