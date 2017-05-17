@@ -310,6 +310,8 @@ ApplicationWindow {
     Settings {
         id: settings
         property int theme: 0 // 1 for dark theme, anything else for light
+        // number of seconds after lock, if -1 lock never
+        property int lockDelay: 300  // Delay after 5 minutes of inactivity
 
         // passwordGenerator needs to remember password length and settings
         property int defaultPassLength: 16

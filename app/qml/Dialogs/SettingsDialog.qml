@@ -242,6 +242,73 @@ Dialog {
                     }
 
                 }
+
+                Label {
+                    text: "Lock app after idle for:"
+                    font.weight: Font.Bold
+                }
+                ComboBox {
+                    id: autoLockSettings
+                    property int lockDelay: settings.lockDelay
+                    property bool changed_by_user: false
+                    width: 200
+                    Layout.leftMargin: 15
+                    model: ["30 seconds", "1 minute", "2 minutes", "5 minutes", "10 minutes", "never"]
+
+                    Component.onCompleted: {
+                        console.log(lockDelay)
+                        changed_by_user = false;
+                        switch (lockDelay) {
+                            case 30:
+                                currentIndex = 0;
+                                break;
+                            case 60:
+                                currentIndex = 1;
+                                break;
+                            case 120:
+                                currentIndex = 2;
+                                break;
+                            case 300:
+                                currentIndex = 3;
+                                break;
+                            case 600:
+                                currentIndex = 4;
+                                break;
+                            default:
+                                currentIndex = 5;
+                                break;
+                        }
+                        changed_by_user = true;
+                    }
+                    onCurrentIndexChanged: {
+                        console.log(lockDelay, changed_by_user)
+                        if (changed_by_user) {
+                            switch (currentIndex) {
+                                case 0:
+                                    lockDelay = 30;
+                                    break;
+                                case 1:
+                                    lockDelay = 60;
+                                    break;
+                                case 2:
+                                    lockDelay = 120;
+                                    break;
+                                case 3:
+                                    lockDelay = 300;
+                                    break;
+                                case 4:
+                                    lockDelay = 600;
+                                    break;
+                                case 5:
+                                default:
+                                    lockDelay = -1;
+                                    break;
+                            }
+                        }
+                        settings.lockDelay = lockDelay;
+                    }
+                }
+
             }
         }
 
