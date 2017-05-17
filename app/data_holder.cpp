@@ -293,11 +293,15 @@ int DataHolder::restore_wallet(const QString& file_url, std::string password) {
 
     electronpass::Crypto crypto(password);
     int load_error;
-    electronpass::serialization::load(data, crypto, load_error);
+    electronpass::Wallet new_wallet = electronpass::serialization::load(data, crypto, load_error);
 
     if (!load_error) {
         bool copy_success = file_stream::copy_file(path);
         if (!copy_success) return 4;
+
+        this->wallet = new_wallet;
+        if (this->crypto != 0) delete this->crypto;
+        this->crypto = new electronpass::Crypto(password);
     }
 
     return load_error;
