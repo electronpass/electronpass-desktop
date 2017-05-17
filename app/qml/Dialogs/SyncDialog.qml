@@ -22,6 +22,7 @@ import QtQuick.Controls 2.1
 Dialog {
     id: syncDialog
     modal: true
+    width: 250
 
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
@@ -36,7 +37,7 @@ Dialog {
         itemsList.model = 0;
         itemsList.model = dataHolder.get_number_of_items();
         itemsList.setItemIndex(index);
-        
+
         syncManager.upload_wallet();
     }
 
@@ -73,6 +74,11 @@ Dialog {
         Button {
             text: qsTr("Cancel")
             Layout.alignment: Qt.AlignHCenter
+            anchors.left: parent.left
+            anchors.right: parent.right
+            Layout.bottomMargin: -16
+            highlighted: true
+            flat: true
             onClicked: {
                 syncManager.abort();
                 syncDialog.close();
