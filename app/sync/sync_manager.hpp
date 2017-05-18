@@ -47,7 +47,7 @@ class SyncManager: public QObject {
     bool initialized = false;
 
     // If true: after wallet is downloaded, it is merged with current wallet
-    // If false: offline wallet will be overwritten by onlline wallet (used for setup)
+    // If false: offline wallet will be overwritten by online wallet (used for setup)
     bool need_to_merge = true;
 
 public:
@@ -78,15 +78,17 @@ public slots:
     void service_did_upload_wallet(SyncManagerStatus status);
 
 signals:
-    void wallet_downloaded(const std::string& wallet, SyncManagerStatus status);
-    void wallet_uploaded(SyncManagerStatus status);
-
-    // Success codes:
-    // 0: success
-    // 1: already syncing
-    // 2: no network
-    // 3: could not authorize
-
+    void wallet_downloaded(const QString& wallet, int error);
+    void wallet_uploaded(int error);
+    /* Error codes are static cast of SyncManagerStatus enum to int, therefore:
+     * - 0: SUCCESS
+     * - 1: ALREADY_SYNCING
+     * - 2: NO_NETWORK
+     * - 3: COULD_NOT_AUTHORIZE
+     * - 4: ABORTED
+     * - 5: NO_SYNC_PROVIDER
+     * - 6: COULD_NOT_OPEN_FILE
+     */
     void statusMessageChanged();
 };
 

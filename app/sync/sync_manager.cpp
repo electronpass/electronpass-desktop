@@ -90,7 +90,7 @@ SyncManager::Service SyncManager::get_service() {
 void SyncManager::download_wallet(bool merge /* = true */) {
     need_to_merge = merge;
     if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring download_wallet() call." << std::endl;
-    else if (sync_object == nullptr) emit wallet_downloaded("", SyncManagerStatus::NO_SYNC_PROVIDER);
+    else if (sync_object == nullptr) emit wallet_downloaded("", static_cast<int>(SyncManagerStatus::NO_SYNC_PROVIDER));
     else {
         setStatusMessage("Downloading wallet");
         sync_object->download_wallet();
@@ -99,14 +99,14 @@ void SyncManager::download_wallet(bool merge /* = true */) {
 
 void SyncManager::upload_wallet() {
     if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring upload_wallet() call." << std::endl;
-    else if (sync_object == nullptr) emit wallet_uploaded(SyncManagerStatus::NO_SYNC_PROVIDER);
+    else if (sync_object == nullptr) emit wallet_uploaded(static_cast<int>(SyncManagerStatus::NO_SYNC_PROVIDER));
     else {
         setStatusMessage("Uploading wallet");
 
         bool success = false;
         std::string wallet = file_stream::read_file(success);
         if (!success) {
-            emit wallet_uploaded(SyncManagerStatus::COULD_NOT_OPEN_FILE);
+            emit wallet_uploaded(static_cast<int>(SyncManagerStatus::COULD_NOT_OPEN_FILE));
         } else {
             sync_object->upload_wallet(wallet);
         }
@@ -127,9 +127,9 @@ void SyncManager::service_did_download_wallet(const std::string &wallet, SyncMan
             file_stream::write_file(wallet);
         }
     }
-    emit wallet_downloaded(wallet, success);
+    emit wallet_downloaded(QString(wallet.c_str()), static_cast<int>(success));
 }
 
 void SyncManager::service_did_upload_wallet(SyncManagerStatus success) {
-    emit wallet_uploaded(success);
+    emit wallet_uploaded(static_cast<int>(success));
 }
