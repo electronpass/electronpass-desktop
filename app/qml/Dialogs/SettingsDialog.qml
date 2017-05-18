@@ -36,7 +36,6 @@ Dialog {
     function setSyncServiceIndex() {
         var service = setup.get_sync_service();
 
-        syncDropdownMenu.changed_by_user = false;
         if (service == "gdrive") syncDropdownMenu.currentIndex = 1;
         else if (service == "dropbox") syncDropdownMenu.currentIndex = 2;
         else syncDropdownMenu.currentIndex = 0;
@@ -250,13 +249,11 @@ Dialog {
                 ComboBox {
                     id: autoLockSettings
                     property int lockDelay: settings.lockDelay
-                    property bool changed_by_user: false
                     width: 200
                     Layout.leftMargin: 15
                     model: ["30 seconds", "1 minute", "2 minutes", "5 minutes", "10 minutes", "never"]
 
                     Component.onCompleted: {
-                        changed_by_user = false;
                         switch (lockDelay) {
                             case 30:
                                 currentIndex = 0;
@@ -277,31 +274,28 @@ Dialog {
                                 currentIndex = 5;
                                 break;
                         }
-                        changed_by_user = true;
                     }
-                    onCurrentIndexChanged: {
-                        if (changed_by_user) {
-                            switch (currentIndex) {
-                                case 0:
-                                    lockDelay = 30;
-                                    break;
-                                case 1:
-                                    lockDelay = 60;
-                                    break;
-                                case 2:
-                                    lockDelay = 120;
-                                    break;
-                                case 3:
-                                    lockDelay = 300;
-                                    break;
-                                case 4:
-                                    lockDelay = 600;
-                                    break;
-                                case 5:
-                                default:
-                                    lockDelay = -1;
-                                    break;
-                            }
+                    onActivated: {
+                        switch (currentIndex) {
+                            case 0:
+                                lockDelay = 30;
+                                break;
+                            case 1:
+                                lockDelay = 60;
+                                break;
+                            case 2:
+                                lockDelay = 120;
+                                break;
+                            case 3:
+                                lockDelay = 300;
+                                break;
+                            case 4:
+                                lockDelay = 600;
+                                break;
+                            case 5:
+                            default:
+                                lockDelay = -1;
+                                break;
                         }
                         settings.lockDelay = lockDelay;
                     }
@@ -331,23 +325,19 @@ Dialog {
                         Layout.leftMargin: 15
                         model: ["No sync service", "Google Drive", "Dropbox"]
 
-                        property bool changed_by_user: false
                         Component.onCompleted: {
                             settingsDialog.setSyncServiceIndex();
                         }
-                        onCurrentIndexChanged: {
-                            if (changed_by_user) {
-                                if (settingsDialog.getSyncServiceFromIndex() == "none") {
-                                    settingsChangeSyncDialog.changeMessage("Your wallet will not be synced to cloud services anymore.\n" +
-                                                                        "Are you sure that to unset your sync provider?\n" +
-                                                                        "Your data on current sync service will not be changed.")
-                                } else {
-                                    settingsChangeSyncDialog.changeMessage("Are you sure that you want to change your sync service\n" +
-                                                "provider? Your data on current sync service will not\nbe changed.")
-                                }
-                                settingsChangeSyncDialog.open();
+                        onActivated: {
+                            if (settingsDialog.getSyncServiceFromIndex() == "none") {
+                                settingsChangeSyncDialog.changeMessage("Your wallet will not be synced to cloud services anymore.\n" +
+                                                                    "Are you sure that to unset your sync provider?\n" +
+                                                                    "Your data on current sync service will not be changed.")
+                            } else {
+                                settingsChangeSyncDialog.changeMessage("Are you sure that you want to change your sync service\n" +
+                                            "provider? Your data on current sync service will not\nbe changed.")
                             }
-                            changed_by_user = true;
+                            settingsChangeSyncDialog.open();
                         }
                     }
                 }
