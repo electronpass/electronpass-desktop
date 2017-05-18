@@ -91,7 +91,8 @@ int DataHolder::unlock(const QString& password) {
 
     int error = -1;
     wallet = electronpass::serialization::load(text, *crypto, error);
-    if (error != 0) return 3;
+    if (error == 1) return 3;
+    if (error == 2) return 4;
 
     update();
 

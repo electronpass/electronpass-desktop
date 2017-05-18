@@ -74,6 +74,11 @@ Image {
                         case 3:
                             toolTip.text = "Wrong password."
                             break
+                        case 4:
+                            toolTip.text = "Wallet file is corrupted."
+                            break
+                        default:
+                            toolTip.text = "Unknown error."
                     }
                     if (passInput.unlocked != 0) {
                         toolTip.show()

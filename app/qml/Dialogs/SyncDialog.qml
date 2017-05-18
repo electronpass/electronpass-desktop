@@ -45,19 +45,26 @@ Dialog {
         target: syncManager
 
         onStatusMessageChanged: {
-            statusLabel.text = syncManager.statusMessage
+            if (syncDialog.visible) {
+                statusLabel.text = syncManager.statusMessage
+            }
         }
         onWallet_downloaded: {
-            if (walletMerger.need_decrypt_online_wallet()) {
-                syncOnlinePasswordDialog.open();
-            } else if (walletMerger.is_corrupted()) {
-                syncOnlineFileCorruptedDialog.open();
-            } else {
-                sync_upload();
+            // TODO: Check if wallet was downloaded successfully
+            if (syncDialog.visible) {
+                if (walletMerger.need_decrypt_online_wallet()) {
+                    syncOnlinePasswordDialog.open();
+                } else if (walletMerger.is_corrupted()) {
+                    syncOnlineFileCorruptedDialog.open();
+                } else {
+                    sync_upload();
+                }
             }
         }
         onWallet_uploaded: {
-            syncDialog.close();
+            if (syncDialog.visible) {
+                syncDialog.close();
+            }
         }
     }
 

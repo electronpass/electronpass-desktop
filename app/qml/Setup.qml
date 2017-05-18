@@ -46,8 +46,7 @@ Rectangle {
           if (password.text != "" && confirmPassword.text == password.text) return true;
           return false;
       } else if (setupSwipeView.currentIndex == 2) {
-          if (syncList.currentIndex == 0) return true;
-          return false;
+          return true;
       }
     }
 
@@ -300,15 +299,23 @@ Rectangle {
                     if (setupSwipeView.currentIndex == 0){
                         if (newUser.checked) setupSwipeView.currentIndex = 1;
                         else setupSwipeView.currentIndex = 2;
+
                     } else if (setupSwipeView.currentIndex == 1) {
+
                       if (setup.set_password(password.text)) {
                           unlockGUI()
                           setup.finish()
                           setupView.visible = false
-                      } else console.log("error")
+
+                      } else console.log("[Error] Error in Setup.qml")
                     } else if (setupSwipeView.currentIndex == 2) {
                         if (syncList.currentIndex == 0) {
                             fileDialog.open()
+                        } else {
+                            if (syncList.currentIndex == 1) setup.set_sync_service("gdrive");
+                            if (syncList.currentIndex == 2) setup.set_sync_service("dropbox");
+
+                            setupFromSyncServiceDialog.open();
                         }
                     }
                 }

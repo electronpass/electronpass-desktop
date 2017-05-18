@@ -116,7 +116,8 @@ public:
     //     0 - success.
     //     1 - electronpass::Crypto initialization was not successful
     //     2 - can't open file at globals::settings.get_data_location()
-    //     3 - decryption was not succuessful (probably wrong password)
+    //     3 - decryption was not succuessful (wrong password)
+    //     4 - file contains invalid json (corrupted file)
     Q_INVOKABLE int unlock(const QString& password);
 
     // Deletes all decrypted data and electronpass::Crypto object used for decryption.

@@ -45,6 +45,11 @@ class SyncManager: public QObject {
 
     SyncBase *sync_object = nullptr;
     bool initialized = false;
+
+    // If true: after wallet is downloaded, it is merged with current wallet
+    // If false: offline wallet will be overwritten by onlline wallet (used for setup)
+    bool need_to_merge = true;
+
 public:
     SyncManager(QObject *parent = 0);
 
@@ -64,7 +69,7 @@ public:
     void set_service(Service);
     Service get_service();
 
-    Q_INVOKABLE void download_wallet();
+    Q_INVOKABLE void download_wallet(bool merge = true);
     Q_INVOKABLE void upload_wallet();
     Q_INVOKABLE void abort();
 
