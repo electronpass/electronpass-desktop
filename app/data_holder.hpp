@@ -134,7 +134,7 @@ public:
         - 3: could not read file
         - 4: cold not copy
     */
-    Q_INVOKABLE int restore_wallet(const QString& file_url, std::string password = "");
+    Q_INVOKABLE int restore_wallet(const QString& file_url, QString password = "");
 
     // Exports wallet to csv to a given location.
     Q_INVOKABLE bool export_to_csv(const QString& file_url) const;

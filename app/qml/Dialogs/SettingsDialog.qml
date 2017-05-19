@@ -456,6 +456,7 @@ Dialog {
                 } else {
                     toolTip.text = "Backup failed"
                 }
+                toolTip.show()
             } else if (exportType == 1) {
                 var success = dataHolder.export_to_csv(url);
                 if (success) {
@@ -463,19 +464,92 @@ Dialog {
                 } else {
                     toolTip.text = "Export to csv failed"
                 }
+                toolTip.show()
             } else if (exportType == 2) {
-                var success = setup.restore_data_from_file(url)
-                if (success) {
+                var success = dataHolder.restore_wallet(url, "");
+                if (success == 0) {
                     toolTip.text = "Import successful."
-                    dataHolder.lock()
-                    lockGUI()
-                } else {
+                } else if (success == 1) {
+                    passwordDialog.path = url
+                    passwordDialog.open()
+                } else if (success ==  2) {
+                    messageDialog.setMessage("Wallet is corrupted.")
+                    messageDialog.open()
                     toolTip.text = "Import failed."
+                    toolTip.show()
+                } else if (success == 3) {
+                    messageDialog.setMessage("File could not be read.")
+                    messageDialog.open()
+                    toolTip.text = "Import failed."
+                    toolTip.show()
                 }
             }
-            toolTip.show()
         }
         onRejected: {}
+    }
+
+    Dialog {
+        id: passwordDialog
+        modal: true
+
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        closePolicy: Popup.NoAutoClose
+
+        property string path: ""
+
+        ColumnLayout {
+            anchors.fill: parent
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("Please enter the password for backuped wallet.")
+            }
+            TextField {
+                id: passwordText
+                Layout.alignment: Qt.AlignHCenter
+                echoMode: TextInput.Password
+                placeholderText: qsTr("Password")
+            }
+            RowLayout {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                Button {
+                    anchors.right: parent.horizontalCenter
+                    anchors.rightMargin: 8
+                    text: qsTr("Restore")
+                    onClicked: {
+                        var success = dataHolder.restore_wallet(passwordDialog.path, passwordText.text)
+                        if (success == 0) {
+                            passwordDialog.close()
+                            toolTip.text = "Import successful."
+                            tooltip.show()
+                        } else if (success == 1) {
+                            passwordText.text = ""
+                            toolTip.text = "Wrong password."
+                            toolTip.show()
+                        } else if (success == 4) {
+                            passwordDialog.close()
+                            messageDialog.setMessage("Wallet could not be copied.")
+                            messageDialog.open()
+                            toolTip.text = "Import failed."
+                            toolTip.show()
+                        }
+                    }
+                }
+                Button {
+                    anchors.left: parent.horizontalCenter
+                    anchors.leftMargin: 8
+                    text: qsTr("Cancel")
+                    onClicked: {
+                        passwordDialog.close()
+                        toolTip.text = "Import canceled."
+                        toolTip.show()
+                    }
+                }
+            }
+
+        }
     }
 
 

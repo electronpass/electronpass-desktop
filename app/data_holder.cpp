@@ -284,7 +284,7 @@ bool DataHolder::backup_wallet(const QString& file_url) const {
     return success;
 }
 
-int DataHolder::restore_wallet(const QString& file_url, std::string password) {
+int DataHolder::restore_wallet(const QString& file_url, QString password) {
     QUrl url(file_url);
     std::string path = url.toLocalFile().toStdString();
 
@@ -292,17 +292,17 @@ int DataHolder::restore_wallet(const QString& file_url, std::string password) {
     std::string data = file_stream::read_file(read_success, path);
     if (!read_success) return 3;
 
-    electronpass::Crypto crypto(password);
+    electronpass::Crypto new_crypto(password.toStdString());
     int load_error;
-    electronpass::Wallet new_wallet = electronpass::serialization::load(data, crypto, load_error);
+    electronpass::Wallet new_wallet = electronpass::serialization::load(data, new_crypto, load_error);
 
     if (!load_error) {
         bool copy_success = file_stream::copy_file(path);
         if (!copy_success) return 4;
 
-        this->wallet = new_wallet;
-        if (this->crypto != 0) delete this->crypto;
-        this->crypto = new electronpass::Crypto(password);
+        wallet = new_wallet;
+        if (crypto != 0) delete crypto;
+        crypto = new electronpass::Crypto(password.toStdString());
     }
 
     return load_error;
