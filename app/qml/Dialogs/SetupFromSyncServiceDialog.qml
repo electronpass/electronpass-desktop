@@ -46,10 +46,21 @@ Dialog {
             }
         }
         onWallet_downloaded: {
-            // TODO: check if wallet was downloaded successfully
-            if (setupFromSyncServiceDialog.visible) {
+            if (setupFromSyncServiceDialog.visible && error == 0) {
                 downloadLayout.visible = false;
                 passwordLayout.visible = true;
+            } else if (setupFromSyncServiceDialog.visible) {
+                if (error == 1 || error == 4 || error == 5) return;
+                // error codes, that shouldn't happen here or don't have to be explicitly prompted
+                // aborted, no sync provider selected, syncing in progress
+
+                var msg;
+                if (error == 2) msg = "Connection error, network server is unreachable";
+                else if (error == 3) msg = "Could not login to network server";
+                else if (error == 6) msg = "Could not save downloaded wallet";
+                messageDialog.setMessage(msg);
+                messageDialog.open();
+                setupFromSyncServiceDialog.close();
             }
         }
     }

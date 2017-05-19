@@ -20,7 +20,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
 
 Dialog {
-    id: syncOnlineFileCorruptedDialog
+    id: messageDialog
     modal: true
 
     x: (parent.width - width) / 2
@@ -28,11 +28,21 @@ Dialog {
 
     closePolicy: Popup.NoAutoClose
 
+    function setMessage(message) {
+        messageLabel.text = message;
+    }
+
+    onClosed: {
+        // to avoid wrong message reporting if message is forgotten to set
+        messageLabel.text = qsTr("Message")
+    }
+
     ColumnLayout {
         anchors.fill: parent
         Label {
+            id: messageLabel
             Layout.alignment: Qt.AlignHCenter
-            text: qsTr("Online wallet appears to be corrupted.\nOnline wallet will be overwritten\nwith current offline wallet.")
+            text: qsTr("Message")
         }
 
         Button {
@@ -40,8 +50,7 @@ Dialog {
             text: qsTr("Dismiss")
             Layout.alignment: Qt.AlignHCenter
             onClicked: {
-                syncOnlineFileCorruptedDialog.close();
-                syncDialog.sync_upload();
+                messageDialog.close();
             }
         }
     }

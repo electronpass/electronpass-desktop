@@ -49,7 +49,7 @@ Dialog {
         Label {
             id: changeSyncMessage
             Layout.alignment: Qt.AlignHCenter
-            text: qsTr("This message has to be changes from seettingsDialog.qml")
+            text: qsTr("This message has to be changes from settingsDialog.qml")
         }
 
     }

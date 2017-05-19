@@ -334,15 +334,14 @@ ApplicationWindow {
     SettingsDialog {
         id: settingsDialog
     }
-
+    MessageDialog {
+        id: messageDialog
+    }
     SyncDialog {
         id: syncDialog
     }
     SyncOnlinePasswordDialog {
         id: syncOnlinePasswordDialog
-    }
-    SyncOnlineFileCorruptedDialog {
-        id: syncOnlineFileCorruptedDialog
     }
     DeleteConfirmationDialog {
         id: deleteConfirmationDialog
