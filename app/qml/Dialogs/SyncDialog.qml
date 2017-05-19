@@ -63,14 +63,15 @@ Dialog {
                     sync_upload();
                 }
             } else if (syncDialog.visible) {
-                if (error == 4 || error == 5 || error == 6) return;
+                if (error == 4 || error == 6) return;
                 // error codes, that shouldn't happen here or don't have to be explicitly prompted
                 // aborted, no sync provider selected
 
                 var msg;
                 if (error == 1) msg = "Syncing already in progress";
-                if (error == 2) msg = "Connection error, network server is unreachable";
-                if (error == 3) msg = "Could not login to network server";
+                else if (error == 2) msg = "Connection error, network server is unreachable";
+                else if (error == 3) msg = "Could not login to network server";
+                else if (error == 5) msg = "No sync service selected"
                 messageDialog.setMessage(msg);
                 messageDialog.open();
                 syncDialog.close();
