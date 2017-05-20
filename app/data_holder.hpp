@@ -108,7 +108,7 @@ public:
     DataHolder() {}
 
     // Creates new wallet object and saves it.
-    bool new_wallet(const QString& password);
+    Q_INVOKABLE bool new_wallet(const QString& password);
 
     // Opens file and tries do decrypt it with password.
     // Also converts decrypted file (json string) to electronpass::Wallet object.

@@ -19,6 +19,7 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
+import "Components"
 
 Image {
     source: "qrc:/res/img/lock_background.jpg"
@@ -35,13 +36,11 @@ Image {
         color: "black"
         opacity: 0.85
 
-        GridLayout {
+        ColumnLayout {
             anchors.centerIn: parent
-            columns: 1
-            rowSpacing: 64
 
             Image {
-                anchors.centerIn: parent
+                anchors.horizontalCenter: parent.horizontalCenter
                 mipmap: true
                 source: "qrc:/res/img/logo_transparent.png"
             }
@@ -51,7 +50,6 @@ Image {
                 selectByMouse: true
                 property int unlocked: 4  // not unlocked
                 focus: true
-                Layout.topMargin: 48
                 font.family: robotoMonoFont.name
                 placeholderText: qsTr(" Type password to unlock ") // 6 spaces on each side to make textfield wider (if it's stupid but it works it ain't stupid)
                 echoMode: TextInput.Password
@@ -87,8 +85,18 @@ Image {
                 }
             }
 
+            Button {
+                anchors.horizontalCenter: parent.horizontalCenter
+                flat: true
+                text: "Reset wallet"
+                onClicked: {
+                    resetDialog.open()
+                }
+            }
+
             RowLayout {
-               ToolTip {
+                Layout.topMargin: 64
+                ToolTip {
                    id: toolTip
                    text: "Locked."
                    timeout: 2000
@@ -115,7 +123,120 @@ Image {
                        }
                    }
                }
+           }
+        }
+
+        Dialog {
+            id: resetDialog
+
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
+
+            ColumnLayout {
+                anchors.fill: parent
+                Label {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "Warning: your current wallet will be deleted!"
+                    font.weight: Font.Bold
+                    font.pointSize: 12
+                }
+
+                RowLayout {
+                    Layout.maximumWidth: 330
+                    Item {
+                      width: 156
+                      Label {
+                          id: passLabel
+                          anchors.right: parent.right
+                          anchors.left: parent.left
+                          anchors.verticalCenter: parent.verticalCenter
+                          text: qsTr("Master password: ")
+                          font.weight: Font.Light
+                          horizontalAlignment: Text.AlignRight
+                      }
+                    }
+                    TextField {
+                        id: password
+                        width: 128
+                        font.pointSize: 8
+                        focus: true
+                        echoMode: TextInput.Password
+                        font.family: robotoMonoFont.name
+                        placeholderText: "Password"
+                        Layout.fillWidth: true
+
+                        background: PassStrengthIndicator {
+                            height: password.height-16
+                            password: password.text
+                            type: "password"
+                            anchors.centerIn: parent
+                            width: parent.width
+                        }
+                    }
+                }
+                RowLayout {
+                    Layout.maximumWidth: 330
+                    Item {
+                      width: 156
+                      Label {
+                          anchors.right: parent.right
+                          anchors.left: parent.left
+                          anchors.verticalCenter: parent.verticalCenter
+                          text: qsTr("Confirm password: ")
+                          font.weight: Font.Light
+                          horizontalAlignment: Text.AlignRight
+                      }
+                    }
+                    TextField {
+                        id: confirmPassword
+                        width: 128
+                        font.pointSize: 8
+                        echoMode: TextInput.Password
+                        placeholderText: "Password again"
+                        font.family: robotoMonoFont.name
+                        Layout.fillWidth: true
+
+                        background: ConfirmPassIndicator {
+                            height: password.height-16
+                            valid: (confirmPassword.text == password.text)
+                            anchors.centerIn: parent
+                            width: parent.width
+                        }
+                    }
+                }
+
+                RowLayout {
+                    Button {
+                        flat: true
+                        text: "I understand, delete my wallet"
+                        font.pointSize: 8
+                        enabled: password.text != "" && password.text == confirmPassword.text
+                        onClicked: {
+                            resetDialog.close()
+                            dataHolder.new_wallet(password.text)
+                            dataHolder.unlock(password.text)
+                            setup.set_sync_service("none")
+                            unlockGUI()
+                        }
+                    }
+
+                    Button {
+                        flat: true
+                        highlighted: true
+                        text: "Cancel"
+                        onClicked: {
+                            resetDialog.close()
+                        }
+                    }
+                }
             }
+        }
+
+        Dialog {
+            id: setPasswordDialog
+
+            x: (parent.width - width) / 2
+            y: (parent.height - height) / 2
         }
     }
 
