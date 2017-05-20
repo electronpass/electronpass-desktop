@@ -30,6 +30,7 @@ Dialog {
         messageLabel.text = message;
     }
 
+    onOpened: okButton.forceActiveFocus();
     onClosed: {
         // to avoid wrong message reporting if message is forgotten to set
         messageLabel.text = qsTr("Message")
@@ -52,6 +53,7 @@ Dialog {
             Layout.bottomMargin: -16
             highlighted: true
             flat: true
+            Keys.onReturnPressed: okButton.clicked();
             onClicked: {
                 messageDialog.close();
             }

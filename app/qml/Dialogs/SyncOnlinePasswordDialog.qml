@@ -32,6 +32,9 @@ Dialog {
         errorLabel.text = ""
         onlinePassword.text = ""
     }
+    onOpened: {
+        onlinePassword.forceActiveFocus();
+    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -50,7 +53,9 @@ Dialog {
             Layout.alignment: Qt.AlignHCenter
             font.pointSize: 10
             echoMode: TextInput.Password
+            placeholderText: "Password"
             font.family: robotoMonoFont.name
+            Keys.onReturnPressed: confirmButton.clicked()
         }
         RowLayout {
             Button {

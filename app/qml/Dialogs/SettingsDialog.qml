@@ -145,6 +145,9 @@ Dialog {
                 }
                 ColumnLayout {
                     Layout.leftMargin: 8
+                    Keys.onReturnPressed: {
+                        if (changePasswordButton.enabled) changePasswordButton.clicked()
+                    }
                     RowLayout {
                         Item {
                           width: 170
@@ -222,6 +225,7 @@ Dialog {
                     }
 
                     Button {
+                        id: changePasswordButton
                         text: qsTr("Change password")
                         Layout.topMargin: -8
                         enabled: !(curr_password.text == "" || new_password.text == "") && (confirm_password.text == new_password.text)
@@ -492,12 +496,13 @@ Dialog {
         id: passwordDialog
         modal: true
 
-        onClosed: {
-            passwordText.text = ""
-        }
+        onOpened: passwordText.forceActiveFocus()
+        onClosed: passwordText.text = ""
+
 
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
+
 
         closePolicy: Popup.NoAutoClose
 
@@ -514,11 +519,13 @@ Dialog {
                 Layout.alignment: Qt.AlignHCenter
                 echoMode: TextInput.Password
                 placeholderText: qsTr("Password")
+                Keys.onReturnPressed: restoreButton.clicked()
             }
             RowLayout {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 Button {
+                    id: restoreButton
                     anchors.right: parent.horizontalCenter
                     anchors.rightMargin: 8
                     text: qsTr("Restore")

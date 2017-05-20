@@ -50,7 +50,6 @@ Dialog {
             }
         }
         onWallet_downloaded: {
-            // TODO: Check if wallet was downloaded successfully
             if (syncDialog.visible && error == 0) {
                 if (walletMerger.need_decrypt_online_wallet()) {
                     syncOnlinePasswordDialog.open();

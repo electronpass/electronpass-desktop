@@ -36,6 +36,7 @@ Rectangle {
         if (setup.need_setup()) {
             lock.visible = false
             lock.removeFocus()
+            newUser.forceActiveFocus()
         }
     }
 
@@ -97,10 +98,12 @@ Rectangle {
                         id: newUser
                         checked: true
                         text: qsTr("I am a new ElectronPass user.")
+                        Keys.onReturnPressed: continueButton.clicked()
                     }
                     RadioButton {
                         id: existingUser
                         text: qsTr("I have already used ElectronPass on other device(s).")
+                        Keys.onReturnPressed: continueButton.clicked()
                     }
                 }
             }
@@ -122,6 +125,9 @@ Rectangle {
                     Layout.topMargin: -16
                     Layout.leftMargin: 32
 
+                    Keys.onReturnPressed: {
+                        if (continueButtonEnabled()) continueButton.clicked()
+                    }
                     RowLayout {
                         Layout.maximumWidth: 330
                         Item {
@@ -140,8 +146,10 @@ Rectangle {
                             id: password
                             width: 128
                             font.pointSize: 8
+                            focus: true
                             echoMode: TextInput.Password
                             font.family: robotoMonoFont.name
+                            placeholderText: "Password"
                             Layout.fillWidth: true
 
                             background: PassStrengthIndicator {
@@ -171,6 +179,7 @@ Rectangle {
                             width: 128
                             font.pointSize: 8
                             echoMode: TextInput.Password
+                            placeholderText: "Password again"
                             font.family: robotoMonoFont.name
                             Layout.fillWidth: true
 
@@ -214,7 +223,8 @@ Rectangle {
                         highlight: Rectangle { color: Material.color(Material.Blue, Material.Shade200) }
                         focus: true
                         highlightMoveDuration: 0
-                        currentIndex: -1
+                        currentIndex: 0
+                        Keys.onReturnPressed: continueButton.clicked()
 
                         model: ListModel {
                             ListElement {
@@ -283,7 +293,8 @@ Rectangle {
                 text: qsTr("Back")
                 enabled: (setupSwipeView.currentIndex > 0)
                 onClicked: {
-                    if (setupSwipeView.currentIndex == 1 || setupSwipeView.currentIndex) {
+                    if (setupSwipeView.currentIndex == 1 || setupSwipeView.currentIndex == 2) {
+                        newUser.forceActiveFocus();
                         setupSwipeView.currentIndex = 0;
                     }
                 }
@@ -297,9 +308,13 @@ Rectangle {
 
                 onClicked: {
                     if (setupSwipeView.currentIndex == 0){
-                        if (newUser.checked) setupSwipeView.currentIndex = 1;
-                        else setupSwipeView.currentIndex = 2;
-
+                        if (newUser.checked) {
+                            password.forceActiveFocus();
+                            setupSwipeView.currentIndex = 1;
+                        } else {
+                            syncList.forceActiveFocus();
+                            setupSwipeView.currentIndex = 2;
+                        }
                     } else if (setupSwipeView.currentIndex == 1) {
 
                       if (setup.set_password(password.text)) {
@@ -361,8 +376,9 @@ Rectangle {
             passwordText.text = ""
             errorLabel.text = ""
         }
-
-        closePolicy: Popup.NoAutoClose
+        onOpened: {
+            passwordText.forceActiveFocus();
+        }
 
         property string path: ""
 
@@ -382,11 +398,15 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
                 echoMode: TextInput.Password
                 placeholderText: qsTr("Password")
+                Keys.onReturnPressed: {
+                    restoreButton.clicked()
+                }
             }
             RowLayout {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 Button {
+                    id: restoreButton
                     anchors.right: parent.horizontalCenter
                     anchors.rightMargin: 8
                     text: qsTr("Restore")

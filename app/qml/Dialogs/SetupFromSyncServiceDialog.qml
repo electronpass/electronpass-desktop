@@ -49,6 +49,7 @@ Dialog {
             if (setupFromSyncServiceDialog.visible && error == 0) {
                 downloadLayout.visible = false;
                 passwordLayout.visible = true;
+                passwordField.forceActiveFocus();
             } else if (setupFromSyncServiceDialog.visible) {
                 if (error == 1 || error == 4 || error == 5) return;
                 // error codes, that shouldn't happen here or don't have to be explicitly prompted
@@ -114,7 +115,10 @@ Dialog {
                 Layout.alignment: Qt.AlignHCenter
                 font.pointSize: 10
                 echoMode: TextInput.Password
+                placeholderText: "Password"
+                focus: true
                 font.family: robotoMonoFont.name
+                Keys.onReturnPressed: unlockButton.clicked()
             }
             RowLayout {
                 Button {
