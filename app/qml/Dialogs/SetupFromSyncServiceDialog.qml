@@ -124,6 +124,7 @@ Dialog {
                         if (passwordField.text != "") {
                             var error = dataHolder.unlock(passwordField.text);
                             if (error == 0) {
+                                errorLabel.text = ""
                                 setupFromSyncServiceDialog.close();
                                 unlockGUI();
                                 passwordField.clear();

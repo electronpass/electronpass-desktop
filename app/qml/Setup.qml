@@ -339,10 +339,10 @@ Rectangle {
             } else if (error == 1) {
                 passwordDialog.path = url
                 passwordDialog.open()
-            } else if (success == 2) {
+            } else if (error == 2) {
                 messageDialog.setMessage("Wallet is corrupted.")
                 messageDialog.open()
-            } else if (success == 3) {
+            } else if (error == 3) {
                 messageDialog.setMessage("File could not be read.")
                 messageDialog.open()
             }
@@ -357,6 +357,11 @@ Rectangle {
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
 
+        onClosed: {
+            passwordText.text = ""
+            errorLabel.text = ""
+        }
+
         closePolicy: Popup.NoAutoClose
 
         property string path: ""
@@ -366,6 +371,11 @@ Rectangle {
             Label {
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("Please enter the password for backuped wallet.")
+            }
+            Label {
+                id: errorLabel
+                text: ""
+                color: "red"
             }
             TextField {
                 id: passwordText
@@ -383,14 +393,16 @@ Rectangle {
                     onClicked: {
                         var success = dataHolder.restore_wallet(passwordDialog.path, passwordText.text)
                         if (success == 0) {
+                            errorLabel.text = ""
+                            passwordText.text = ""
                             passwordDialog.close()
                             setup.finish()
                             setupView.visible = false
                             unlockGUI()
                         } else if (success == 1) {
-                            passwordText.text = ""
-                            messageDialog.setMessage("Wrong password.")
-                            messageDialog.open()
+                            errorLabel.text = qsTr("Wrong password.")
+                            passwordText.forceActiveFocus()
+                            passwordText.selectAll()
                         } else if (success == 4) {
                             passwordDialog.close()
                             messageDialog.setMessage("Wallet could not be copied.")

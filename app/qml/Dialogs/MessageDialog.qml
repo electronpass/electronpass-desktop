@@ -26,8 +26,6 @@ Dialog {
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
-    closePolicy: Popup.NoAutoClose
-
     function setMessage(message) {
         messageLabel.text = message;
     }

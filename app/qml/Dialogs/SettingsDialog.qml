@@ -492,6 +492,10 @@ Dialog {
         id: passwordDialog
         modal: true
 
+        onClosed: {
+            passwordText.text = ""
+        }
+
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
 
@@ -523,9 +527,10 @@ Dialog {
                         if (success == 0) {
                             passwordDialog.close()
                             toolTip.text = "Import successful."
-                            tooltip.show()
+                            toolTip.show()
                         } else if (success == 1) {
-                            passwordText.text = ""
+                            passwordText.forceActiveFocus()
+                            passwordText.selectAll()
                             toolTip.text = "Wrong password."
                             toolTip.show()
                         } else if (success == 4) {

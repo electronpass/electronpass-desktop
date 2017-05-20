@@ -28,6 +28,11 @@ Dialog {
 
     closePolicy: Popup.NoAutoClose
 
+    onClosed: {
+        errorLabel.text = ""
+        onlinePassword.text = ""
+    }
+
     ColumnLayout {
         anchors.fill: parent
         Label {
@@ -55,6 +60,7 @@ Dialog {
                     var error = walletMerger.decrypt_online_wallet(onlinePassword.text);
                     onlinePassword.text = "";
                     if (error == 0) {
+                        errorLabel.text = "";
                         syncOnlinePasswordDialog.close();
 
                         syncDialog.sync_upload();
