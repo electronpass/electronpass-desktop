@@ -45,8 +45,13 @@ Dialog {
 
         Button {
             id: okButton
-            text: qsTr("Dismiss")
+            text: qsTr("OK")
             Layout.alignment: Qt.AlignHCenter
+            anchors.left: parent.left
+            anchors.right: parent.right
+            Layout.bottomMargin: -16
+            highlighted: true
+            flat: true
             onClicked: {
                 messageDialog.close();
             }

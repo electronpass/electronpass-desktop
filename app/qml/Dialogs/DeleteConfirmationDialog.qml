@@ -37,7 +37,4 @@ Dialog {
         itemsList.model = dataHolder.get_number_of_items();
         itemsList.setItemIndex(-1);
     }
-    onRejected: {
-        // Nothing ?
-    }
 }

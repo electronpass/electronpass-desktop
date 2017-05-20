@@ -361,7 +361,8 @@ ApplicationWindow {
         fullWidth: true
     }
 
-    function lockGUI(){
+    function lockGUI() {
+        messageDialog.close()
         settingsDialog.close()
         details.destroyDetails()
         itemsList.setItemIndex(-1)
@@ -372,7 +373,7 @@ ApplicationWindow {
         clipboard.clear()
     }
 
-    function unlockGUI(){
+    function unlockGUI() {
         lock.visible = false
         toolbar.visible = true
         searchInput.forceActiveFocus()
