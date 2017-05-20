@@ -22,7 +22,7 @@ import QtQuick.Controls.Material 2.1
 import "../Components"
 
 Dialog {
-
+    id: editItemDialog
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
@@ -38,7 +38,6 @@ Dialog {
         destroyEditDetails()
         dataHolder.cancel_edit()
         itemsList.model = dataHolder.get_number_of_items()
-        itemsList.setItemIndex(-1)
     }
     width: Math.min(parent.width * 0.9, 420)
     height: Math.min(parent.height * 0.9, 600)
@@ -107,6 +106,7 @@ Dialog {
             width: parent.width
             height: parent.height
             id: rootColumnLayout
+            Keys.onReturnPressed: editItemDialog.accept()
 
             RowLayout {
                 Layout.fillWidth: true
