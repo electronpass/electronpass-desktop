@@ -303,6 +303,9 @@ int DataHolder::restore_wallet(const QString& file_url, QString password) {
         wallet = new_wallet;
         if (crypto != 0) delete crypto;
         crypto = new electronpass::Crypto(password.toStdString());
+
+        update();
+        unlocked = true;
     }
 
     return load_error;

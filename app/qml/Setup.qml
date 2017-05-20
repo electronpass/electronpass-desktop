@@ -330,15 +330,84 @@ Rectangle {
         folder: shortcuts.home
         selectMultiple: false
         onAccepted: {
-            var success = setup.restore_data_from_file(Qt.resolvedUrl(fileDialog.fileUrl));
-            if (success) {
+            var url = Qt.resolvedUrl(fileDialog.fileUrl)
+            var error = dataHolder.restore_wallet(url, "")
+            if (error == 0) {
                 setup.finish()
                 setupView.visible = false
-                lockGUI()
-            } else {
-                console.log("[Error] Could not copy file.")
+                unlockGUI()
+            } else if (error == 1) {
+                passwordDialog.path = url
+                passwordDialog.open()
+            } else if (success == 2) {
+                messageDialog.setMessage("Wallet is corrupted.")
+                messageDialog.open()
+            } else if (success == 3) {
+                messageDialog.setMessage("File could not be read.")
+                messageDialog.open()
             }
         }
         onRejected: {}
+    }
+
+    Dialog {
+        id: passwordDialog
+        modal: true
+
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        closePolicy: Popup.NoAutoClose
+
+        property string path: ""
+
+        ColumnLayout {
+            anchors.fill: parent
+            Label {
+                Layout.alignment: Qt.AlignHCenter
+                text: qsTr("Please enter the password for backuped wallet.")
+            }
+            TextField {
+                id: passwordText
+                Layout.alignment: Qt.AlignHCenter
+                echoMode: TextInput.Password
+                placeholderText: qsTr("Password")
+            }
+            RowLayout {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                Button {
+                    anchors.right: parent.horizontalCenter
+                    anchors.rightMargin: 8
+                    text: qsTr("Restore")
+                    onClicked: {
+                        var success = dataHolder.restore_wallet(passwordDialog.path, passwordText.text)
+                        if (success == 0) {
+                            passwordDialog.close()
+                            setup.finish()
+                            setupView.visible = false
+                            unlockGUI()
+                        } else if (success == 1) {
+                            passwordText.text = ""
+                            messageDialog.setMessage("Wrong password.")
+                            messageDialog.open()
+                        } else if (success == 4) {
+                            passwordDialog.close()
+                            messageDialog.setMessage("Wallet could not be copied.")
+                            messageDialog.open()
+                        }
+                    }
+                }
+                Button {
+                    anchors.left: parent.horizontalCenter
+                    anchors.leftMargin: 8
+                    text: qsTr("Cancel")
+                    onClicked: {
+                        passwordDialog.close()
+                    }
+                }
+            }
+
+        }
     }
 }
