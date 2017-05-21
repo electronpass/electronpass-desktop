@@ -156,11 +156,11 @@ ApplicationWindow {
                             var search_results = dataHolder.search(text);
 
                             // first change model, then update index
-                            itemsList.model = dataHolder.get_number_of_items();
+                            refreshUI();
                             itemsList.setItemIndex(search_results);
                         } else {
                             dataHolder.stop_search();
-                            itemsList.model = dataHolder.get_number_of_items();
+                            refreshUI();
                             itemsList.setItemIndex(-1);
                         }
                     }
@@ -359,6 +359,14 @@ ApplicationWindow {
     Snackbar {
         id: snackbar
         fullWidth: true
+    }
+
+    refreshUI() {
+        var index = itemsList.currentIndex
+        itemsList.model = -1
+        itemsList.model = dataHolder.get_number_of_items()
+        if (index < dataHolder.get_number_of_items()) itemsList.currentIndex = index
+        else itemsList.currentIndex = -1
     }
 
     function lockGUI() {

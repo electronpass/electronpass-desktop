@@ -472,7 +472,9 @@ Dialog {
             } else if (exportType == 2) {
                 var success = dataHolder.restore_wallet(url, "");
                 if (success == 0) {
+                    // Actually weird, wallet encrypted with empty password
                     toolTip.text = "Import successful."
+                    refreshUI()
                 } else if (success == 1) {
                     passwordDialog.path = url
                     passwordDialog.open()
@@ -535,6 +537,7 @@ Dialog {
                             passwordDialog.close()
                             toolTip.text = "Import successful."
                             toolTip.show()
+                            refreshUI()
                         } else if (success == 1) {
                             passwordText.forceActiveFocus()
                             passwordText.selectAll()

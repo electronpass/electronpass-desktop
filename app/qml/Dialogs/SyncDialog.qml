@@ -33,11 +33,7 @@ Dialog {
         syncManager.download_wallet();
     }
     function sync_upload() {
-        var index = itemsList.currentIndex;
-        itemsList.model = 0;
-        itemsList.model = dataHolder.get_number_of_items();
-        itemsList.setItemIndex(index);
-
+        refreshUI();
         syncManager.upload_wallet();
     }
 

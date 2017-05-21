@@ -33,8 +33,6 @@ Dialog {
             // TODO: report error
             console.log("[Error] Could not save wallet.");
         }
-
-        itemsList.model = dataHolder.get_number_of_items();
-        itemsList.setItemIndex(-1);
+        refreshUI()
     }
 }
