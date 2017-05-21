@@ -151,6 +151,7 @@ Rectangle {
                             font.family: robotoMonoFont.name
                             placeholderText: "Password"
                             Layout.fillWidth: true
+                            selectByMouse: true
 
                             background: PassStrengthIndicator {
                                 height: password.height-16
@@ -182,6 +183,7 @@ Rectangle {
                             placeholderText: "Password again"
                             font.family: robotoMonoFont.name
                             Layout.fillWidth: true
+                            selectByMouse: true
 
                             background: ConfirmPassIndicator {
                                 height: password.height-16
@@ -398,6 +400,7 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
                 echoMode: TextInput.Password
                 placeholderText: qsTr("Password")
+                selectByMouse: true
                 Keys.onReturnPressed: {
                     restoreButton.clicked()
                 }

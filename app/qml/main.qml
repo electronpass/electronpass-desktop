@@ -368,6 +368,7 @@ ApplicationWindow {
         itemsList.setItemIndex(-1)
         itemsList.model = 0
         lock.visible = true
+        lock.wrongPassCounter = 0;
         toolbar.visible = false
         lock.setFocus()
         clipboard.clear()

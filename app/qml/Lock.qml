@@ -24,6 +24,9 @@ import "Components"
 Image {
     source: "qrc:/res/img/lock_background.jpg"
     fillMode: Image.PreserveAspectCrop
+    id: lockRoot
+
+    property int wrongPassCounter: 0
 
     width: window.width
     height: window.height
@@ -38,9 +41,11 @@ Image {
 
         ColumnLayout {
             anchors.centerIn: parent
+            id: container
 
             Image {
                 anchors.horizontalCenter: parent.horizontalCenter
+                Layout.topMargin: 64
                 mipmap: true
                 source: "qrc:/res/img/logo_transparent.png"
             }
@@ -54,7 +59,9 @@ Image {
                 placeholderText: qsTr(" Type password to unlock ") // 6 spaces on each side to make textfield wider (if it's stupid but it works it ain't stupid)
                 echoMode: TextInput.Password
                 horizontalAlignment: TextInput.AlignHCenter
+
                 Keys.onReturnPressed: {
+                    lockRoot.wrongPassCounter += 1;
                     passInput.unlocked = dataHolder.unlock(passInput.text)
                     switch (passInput.unlocked) {
                         case 0:
@@ -82,15 +89,6 @@ Image {
                         toolTip.show()
                         passInput.selectAll()
                     }
-                }
-            }
-
-            Button {
-                anchors.horizontalCenter: parent.horizontalCenter
-                flat: true
-                text: "Reset wallet"
-                onClicked: {
-                    resetDialog.open()
                 }
             }
 
@@ -126,21 +124,28 @@ Image {
            }
         }
 
+        Button {
+            anchors.top: container.bottom
+            anchors.horizontalCenter: container.horizontalCenter
+            anchors.topMargin: -32
+            visible: lockRoot.wrongPassCounter > 0
+            flat: true
+            text: "Reset wallet"
+            onClicked: {
+                resetDialog.open()
+            }
+        }
+
         Dialog {
             id: resetDialog
+            title: qsTr("Warning: your current wallet will be deleted!")
 
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
 
-            ColumnLayout {
-                anchors.fill: parent
-                Label {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: "Warning: your current wallet will be deleted!"
-                    font.weight: Font.Bold
-                    font.pointSize: 12
-                }
+            onOpened: password.forceActiveFocus();
 
+            ColumnLayout {
                 RowLayout {
                     Layout.maximumWidth: 330
                     Item {
@@ -162,8 +167,8 @@ Image {
                         focus: true
                         echoMode: TextInput.Password
                         font.family: robotoMonoFont.name
-                        placeholderText: "Password"
                         Layout.fillWidth: true
+                        selectByMouse: true
 
                         background: PassStrengthIndicator {
                             height: password.height-16
@@ -192,9 +197,9 @@ Image {
                         width: 128
                         font.pointSize: 8
                         echoMode: TextInput.Password
-                        placeholderText: "Password again"
                         font.family: robotoMonoFont.name
                         Layout.fillWidth: true
+                        selectByMouse: true
 
                         background: ConfirmPassIndicator {
                             height: password.height-16
@@ -205,31 +210,36 @@ Image {
                     }
                 }
 
-                RowLayout {
-                    Button {
-                        flat: true
-                        text: "I understand, delete my wallet"
-                        font.pointSize: 8
-                        enabled: password.text != "" && password.text == confirmPassword.text
-                        onClicked: {
-                            resetDialog.close()
-                            dataHolder.new_wallet(password.text)
-                            dataHolder.unlock(password.text)
-                            setup.set_sync_service("none")
-                            unlockGUI()
-                        }
-                    }
-
-                    Button {
-                        flat: true
-                        highlighted: true
-                        text: "Cancel"
-                        onClicked: {
-                            resetDialog.close()
-                        }
-                    }
-                }
             }
+
+            footer: DialogButtonBox {
+                        Button {
+                            text: qsTr("I understand, delete my wallet")
+                            flat: true
+                            enabled: password.text != "" && password.text == confirmPassword.text
+                            DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                            onClicked: {
+                                  resetDialog.close();
+                                  passInput.clear();
+                                  password.clear();
+                                  confirmPassword.clear();
+                                  dataHolder.new_wallet(password.text);
+                                  dataHolder.unlock(password.text);
+                                  setup.set_sync_service("none");
+                                  unlockGUI();
+                                }
+                        }
+                        Button {
+                            text: qsTr("Cancel")
+                            flat: true
+                            DialogButtonBox.buttonRole: DialogButtonBox.DestructiveRole
+                            onClicked: {
+                                password.clear();
+                                confirmPassword.clear();
+                                resetDialog.close();
+                            }
+                        }
+                    }
         }
 
         Dialog {
