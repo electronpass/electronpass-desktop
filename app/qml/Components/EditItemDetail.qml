@@ -108,7 +108,7 @@ RowLayout {
         Material.foreground: editItemDetail.contentColor
         onClicked: {
           editDetailsList.currentIndex = model.index;
-          passGenerator.toFill = editItemDetailContent;
+          passGenerator.toFill = editItemDetailContentHolder.children[0];
           passGenerator.numbersOnly = (editItemDetail.type == "pin");
           passGenerator.open();
         }
