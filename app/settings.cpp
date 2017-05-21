@@ -54,6 +54,12 @@ void SettingsManager::init(QSettings& settings_) {
     settings->sync();
 }
 
+void SettingsManager::reset() {
+    settings->clear();
+    settings->sync();
+    this->init(*settings);
+}
+
 QString SettingsManager::get_data_location() const {
     return settings->value("data_location").toString();
 }

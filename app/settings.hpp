@@ -42,6 +42,8 @@ public:
     // Checks if all settings are initialized and sets default values if not.
     void init(QSettings& settings_);
 
+    void reset();
+
     // Returns location where the file with passwords is stored.
     QString get_data_location() const;
     QString get_data_folder() const;

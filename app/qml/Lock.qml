@@ -130,7 +130,7 @@ Image {
             anchors.topMargin: -32
             visible: lockRoot.wrongPassCounter > 0
             flat: true
-            text: "Reset wallet"
+            text: "Reset ElectronPass"
             onClicked: {
                 resetDialog.open()
             }
@@ -138,115 +138,42 @@ Image {
 
         Dialog {
             id: resetDialog
-            title: qsTr("Warning: your current wallet will be deleted!")
+            title: qsTr("Warning: This will delete all saved data!")
 
             x: (parent.width - width) / 2
             y: (parent.height - height) / 2
+            width: 400
 
-            onOpened: password.forceActiveFocus();
-
-            ColumnLayout {
-                RowLayout {
-                    Layout.maximumWidth: 330
-                    Item {
-                      width: 156
-                      Label {
-                          id: passLabel
-                          anchors.right: parent.right
-                          anchors.left: parent.left
-                          anchors.verticalCenter: parent.verticalCenter
-                          text: qsTr("Master password: ")
-                          font.weight: Font.Light
-                          horizontalAlignment: Text.AlignRight
-                      }
-                    }
-                    TextField {
-                        id: password
-                        width: 128
-                        font.pointSize: 8
-                        focus: true
-                        echoMode: TextInput.Password
-                        font.family: robotoMonoFont.name
-                        Layout.fillWidth: true
-                        selectByMouse: true
-
-                        background: PassStrengthIndicator {
-                            height: password.height-16
-                            password: password.text
-                            type: "password"
-                            anchors.centerIn: parent
-                            width: parent.width
-                        }
-                    }
-                }
-                RowLayout {
-                    Layout.maximumWidth: 330
-                    Item {
-                      width: 156
-                      Label {
-                          anchors.right: parent.right
-                          anchors.left: parent.left
-                          anchors.verticalCenter: parent.verticalCenter
-                          text: qsTr("Confirm password: ")
-                          font.weight: Font.Light
-                          horizontalAlignment: Text.AlignRight
-                      }
-                    }
-                    TextField {
-                        id: confirmPassword
-                        width: 128
-                        font.pointSize: 8
-                        echoMode: TextInput.Password
-                        font.family: robotoMonoFont.name
-                        Layout.fillWidth: true
-                        selectByMouse: true
-
-                        background: ConfirmPassIndicator {
-                            height: password.height-16
-                            valid: (confirmPassword.text == password.text)
-                            anchors.centerIn: parent
-                            width: parent.width
-                        }
-                    }
-                }
-
+            Label {
+                width: parent.width
+                text: qsTr("This operation will delete your current wallet with all saved passwords, " +
+                            "data saved on online servers will stay untouched.")
+                wrapMode: "WordWrap"
             }
 
             footer: DialogButtonBox {
-                        Button {
-                            text: qsTr("I understand, delete my wallet")
-                            flat: true
-                            enabled: password.text != "" && password.text == confirmPassword.text
-                            DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-                            onClicked: {
-                                  resetDialog.close();
-                                  passInput.clear();
-                                  password.clear();
-                                  confirmPassword.clear();
-                                  dataHolder.new_wallet(password.text);
-                                  dataHolder.unlock(password.text);
-                                  setup.set_sync_service("none");
-                                  unlockGUI();
-                                }
-                        }
-                        Button {
-                            text: qsTr("Cancel")
-                            flat: true
-                            DialogButtonBox.buttonRole: DialogButtonBox.DestructiveRole
-                            onClicked: {
-                                password.clear();
-                                confirmPassword.clear();
-                                resetDialog.close();
-                            }
+                Button {
+                    text: qsTr("I understand, delete my wallet")
+                    flat: true
+                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
+                    onClicked: {
+                        resetDialog.close()
+                        var success = setup.reset()
+                        if (success) {
+                            setupView.visible = true
+                        } else {
+                            toolTip.text = "Reset failed."
+                            toolTip.show()
                         }
                     }
-        }
-
-        Dialog {
-            id: setPasswordDialog
-
-            x: (parent.width - width) / 2
-            y: (parent.height - height) / 2
+                }
+                Button {
+                    text: qsTr("Cancel")
+                    flat: true
+                    DialogButtonBox.buttonRole: DialogButtonBox.DestructiveRole
+                    onClicked: resetDialog.close();
+                }
+            }
         }
     }
 

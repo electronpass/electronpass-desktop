@@ -29,6 +29,14 @@ void Setup::finish() {
     globals::settings.set_first_usage(false);
 }
 
+bool Setup::reset() {
+    // write empty file to a data location.
+    bool success = file_stream::write_file("");
+    if (!success) return false;
+    globals::settings.reset();
+    return true;
+}
+
 bool Setup::set_password(const QString& password) {
     bool success = globals::data_holder.new_wallet(password);
     if (success) {

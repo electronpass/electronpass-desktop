@@ -33,6 +33,9 @@ class Setup : public QObject {
 public:
     Setup();
 
+    // Deletes wallet and resets settings
+    Q_INVOKABLE bool reset();
+
     // true if setup is needed (usually at first launch of this app).
     Q_INVOKABLE bool need_setup();
 
