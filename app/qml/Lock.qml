@@ -53,6 +53,7 @@ Image {
 
             TextField {
                 id: passInput
+                inputMethodHints: Qt.ImhSensitiveData
                 selectByMouse: true
                 property int unlocked: 4  // not unlocked
                 focus: true

@@ -114,6 +114,7 @@ Dialog {
                 id: detailsTitleContainer
                 TextField {
                     id: detailsTitleLabel
+                    inputMethodHints: Qt.ImhSensitiveData
                     selectByMouse: true
                     font.pixelSize: 20
                     Layout.fillWidth: true

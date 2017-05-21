@@ -145,6 +145,7 @@ ApplicationWindow {
                 }
                 TextField {
                     id: searchInput
+                    inputMethodHints: Qt.ImhSensitiveData
                     selectByMouse: true
                     font.pixelSize: 14
                     placeholderText: qsTr(" Search")

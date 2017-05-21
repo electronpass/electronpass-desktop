@@ -23,6 +23,7 @@ import QtQuick.Controls.Material 2.1
 TextField {
     id: editItemDetailContent
     selectByMouse: true
+    inputMethodHints: Qt.ImhSensitiveData
     Layout.fillWidth: true
     text: content
     font.pixelSize: 14
@@ -32,6 +33,13 @@ TextField {
     background.opacity: bcgOpacity
     placeholderText: "Content"
     validator: (editItemDetail.type == "pin") ? digitsOnlyRegex : titleLabel.validator
+
+    onActiveFocusChanged: {
+        if (activeFocus) {
+            editDetailsList.currentIndex = model.index
+            editItemDetailContent.forceActiveFocus()
+        }
+    }
 
     property real bcgOpacity: (activeFocus || editItemDetail.secure) ? 1 : 0
 

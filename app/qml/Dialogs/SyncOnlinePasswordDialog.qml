@@ -50,6 +50,7 @@ Dialog {
         }
         TextField {
             id: onlinePassword
+            inputMethodHints: Qt.ImhSensitiveData
             Layout.alignment: Qt.AlignHCenter
             font.pointSize: 10
             echoMode: TextInput.Password

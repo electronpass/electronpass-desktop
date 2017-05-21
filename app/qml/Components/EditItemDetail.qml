@@ -56,6 +56,7 @@ RowLayout {
         width: 108
         TextField {
             id: titleLabel
+            inputMethodHints: Qt.ImhSensitiveData
             text: editItemDetail.title
             selectByMouse: true
             font.pixelSize: 14
@@ -76,7 +77,12 @@ RowLayout {
                 }
             }
 
-            onActiveFocusChanged: if (activeFocus) editDetailsList.currentIndex = model.index
+            onActiveFocusChanged: {
+                if (activeFocus) {
+                    editDetailsList.currentIndex = model.index
+                    titleLabel.forceActiveFocus()
+                }
+            }
 
             onTextChanged: {
                 editItemDetail.title = text;
@@ -92,10 +98,7 @@ RowLayout {
     Item {
       id: editItemDetailContentHolder
       Layout.fillWidth: true
-      EditItemDetailContentTextField {
-        id: editItemDetailContent
-        onActiveFocusChanged: if (activeFocus) editDetailsList.currentIndex = model.index
-      }
+      EditItemDetailContentTextField {}
       anchors.top: parent.top
       anchors.topMargin: 4
     }

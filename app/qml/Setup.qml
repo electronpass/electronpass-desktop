@@ -144,6 +144,7 @@ Rectangle {
                         }
                         TextField {
                             id: password
+                            inputMethodHints: Qt.ImhSensitiveData
                             width: 128
                             font.pointSize: 8
                             focus: true
@@ -177,6 +178,7 @@ Rectangle {
                         }
                         TextField {
                             id: confirmPassword
+                            inputMethodHints: Qt.ImhSensitiveData
                             width: 128
                             font.pointSize: 8
                             echoMode: TextInput.Password
@@ -395,6 +397,7 @@ Rectangle {
             }
             TextField {
                 id: passwordText
+                inputMethodHints: Qt.ImhSensitiveData
                 Layout.alignment: Qt.AlignHCenter
                 echoMode: TextInput.Password
                 placeholderText: qsTr("Password")

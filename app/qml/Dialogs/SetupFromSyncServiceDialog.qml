@@ -111,6 +111,7 @@ Dialog {
 
             TextField {
                 id: passwordField
+                inputMethodHints: Qt.ImhSensitiveData
                 Layout.alignment: Qt.AlignHCenter
                 font.pointSize: 10
                 echoMode: TextInput.Password

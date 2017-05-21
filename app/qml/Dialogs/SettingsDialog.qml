@@ -160,6 +160,7 @@ Dialog {
                         }
                         TextField {
                             id: curr_password
+                            inputMethodHints: Qt.ImhSensitiveData
                             Layout.leftMargin: 8
                             font.pointSize: 10
                             echoMode: TextInput.Password
@@ -180,6 +181,7 @@ Dialog {
                         }
                         TextField {
                             id: new_password
+                            inputMethodHints: Qt.ImhSensitiveData
                             Layout.leftMargin: 8
                             font.pointSize: 10
                             echoMode: TextInput.Password
@@ -209,6 +211,7 @@ Dialog {
                         }
                         TextField {
                             id: confirm_password
+                            inputMethodHints: Qt.ImhSensitiveData
                             Layout.leftMargin: 8
                             font.pointSize: 10
                             echoMode: TextInput.Password
@@ -512,6 +515,7 @@ Dialog {
             }
             TextField {
                 id: passwordText
+                inputMethodHints: Qt.ImhSensitiveData
                 Layout.alignment: Qt.AlignHCenter
                 echoMode: TextInput.Password
                 placeholderText: qsTr("Password")
