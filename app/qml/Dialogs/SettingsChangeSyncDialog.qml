@@ -26,9 +26,13 @@ Dialog {
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
-    function changeMessage(message) {
-        changeSyncMessage.text = message;
+    function openWithMsg(title, message) {
+        settingsChangeSyncDialog.title = title;
+        messageLabel.text = message;
+        open();
     }
+
+    onOpened: messageLabel.forceActiveFocus()
 
     onAccepted: {
         setup.set_sync_service(settingsDialog.getSyncServiceFromIndex());
@@ -45,13 +49,15 @@ Dialog {
     }
 
     ColumnLayout {
+        Keys.onReturnPressed: messageDialog.accept()
         anchors.fill: parent
+        visible: messageLabel.text != ""
         Label {
-            id: changeSyncMessage
+            id: messageLabel
+            wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter
-            text: qsTr("This message has to be changes from settingsDialog.qml")
+            text: qsTr("Message")
         }
-
     }
 
     standardButtons: Dialog.Ok | Dialog.Cancel

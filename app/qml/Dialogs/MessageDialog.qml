@@ -22,41 +22,30 @@ import QtQuick.Controls 2.1
 Dialog {
     id: messageDialog
     modal: true
+    title: qsTr("Title")
+    standardButtons: Dialog.Ok
 
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
-    function setMessage(message) {
+    function openWithMsg(title, message) {
+        messageDialog.title = title;
         messageLabel.text = message;
+        open();
     }
 
-    onOpened: okButton.forceActiveFocus();
-    onClosed: {
-        // to avoid wrong message reporting if message is forgotten to set
-        messageLabel.text = qsTr("Message")
-    }
+    onOpened: messageLabel.forceActiveFocus()
+    onClosed: messageLabel.text = ""
 
     ColumnLayout {
+        Keys.onReturnPressed: messageDialog.accept()
         anchors.fill: parent
+        visible: messageLabel.text != ""
         Label {
             id: messageLabel
             Layout.alignment: Qt.AlignHCenter
             text: qsTr("Message")
-        }
-
-        Button {
-            id: okButton
-            text: qsTr("OK")
-            Layout.alignment: Qt.AlignHCenter
-            anchors.left: parent.left
-            anchors.right: parent.right
-            Layout.bottomMargin: -16
-            highlighted: true
-            flat: true
-            Keys.onReturnPressed: okButton.clicked();
-            onClicked: {
-                messageDialog.close();
-            }
+            wrapMode: Text.WordWrap
         }
     }
 }

@@ -357,11 +357,9 @@ Rectangle {
                 passwordDialog.path = url
                 passwordDialog.open()
             } else if (error == 2) {
-                messageDialog.setMessage("Wallet is corrupted.")
-                messageDialog.open()
+                messageDialog.openWithMsg("Wallet is corrupted", "Wallet file seems to be corrupted.")
             } else if (error == 3) {
-                messageDialog.setMessage("File could not be read.")
-                messageDialog.open()
+                messageDialog.openWithMsg("File could not be read", "Wallet file seems to be missing or it has wrong permissions set.")
             }
         }
         onRejected: {}
@@ -428,8 +426,7 @@ Rectangle {
                             passwordText.selectAll()
                         } else if (success == 4) {
                             passwordDialog.close()
-                            messageDialog.setMessage("Wallet could not be copied.")
-                            messageDialog.open()
+                            messageDialog.openWithMsg("Wallet could not be copied", "");
                         }
                     }
                 }

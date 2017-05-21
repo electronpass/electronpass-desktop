@@ -334,14 +334,10 @@ Dialog {
                         }
                         onActivated: {
                             if (settingsDialog.getSyncServiceFromIndex() == "none") {
-                                settingsChangeSyncDialog.changeMessage("Your wallet will not be synced to cloud services anymore.\n" +
-                                                                    "Are you sure that to unset your sync provider?\n" +
-                                                                    "Your data on current sync service will not be changed.")
+                                settingsChangeSyncDialog.openWithMsg("Your wallet will not be synced to cloud services anymore", "Are you sure that to unset your sync provider? Your data on current sync service will not be changed.")
                             } else {
-                                settingsChangeSyncDialog.changeMessage("Are you sure that you want to change your sync service\n" +
-                                            "provider? Your data on current sync service will not\nbe changed.")
+                                settingsChangeSyncDialog.openWithMsg("Are you sure that you want to change your sync service provider?", "Your data on current sync service will not be changed.")
                             }
-                            settingsChangeSyncDialog.open();
                         }
                     }
                 }
@@ -479,13 +475,11 @@ Dialog {
                     passwordDialog.path = url
                     passwordDialog.open()
                 } else if (success ==  2) {
-                    messageDialog.setMessage("Wallet is corrupted.")
-                    messageDialog.open()
+                    messageDialog.openWithMsg("Wallet is corrupted", "Wallet file seems to be corrupted.")
                     toolTip.text = "Import failed."
                     toolTip.show()
                 } else if (success == 3) {
-                    messageDialog.setMessage("File could not be read.")
-                    messageDialog.open()
+                    messageDialog.openWithMsg("File could not be read", "Wallet file seems to be missing or it has wrong permissions set.")
                     toolTip.text = "Import failed."
                     toolTip.show()
                 }
@@ -534,21 +528,20 @@ Dialog {
                     onClicked: {
                         var success = dataHolder.restore_wallet(passwordDialog.path, passwordText.text)
                         if (success == 0) {
-                            passwordDialog.close()
-                            toolTip.text = "Import successful."
-                            toolTip.show()
-                            refreshUI()
+                            passwordDialog.close();
+                            toolTip.text = "Import successful.";
+                            toolTip.show();
+                            refreshUI();
                         } else if (success == 1) {
-                            passwordText.forceActiveFocus()
-                            passwordText.selectAll()
-                            toolTip.text = "Wrong password."
-                            toolTip.show()
+                            passwordText.forceActiveFocus();
+                            passwordText.selectAll();
+                            toolTip.text = "Wrong password.";
+                            toolTip.show();
                         } else if (success == 4) {
                             passwordDialog.close()
-                            messageDialog.setMessage("Wallet could not be copied.")
-                            messageDialog.open()
-                            toolTip.text = "Import failed."
-                            toolTip.show()
+                            messageDialog.openWithMsg("Wallet could not be copied", "");
+                            toolTip.text = "Import failed.";
+                            toolTip.show();
                         }
                     }
                 }

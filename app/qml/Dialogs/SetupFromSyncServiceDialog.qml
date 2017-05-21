@@ -59,8 +59,7 @@ Dialog {
                 if (error == 2) msg = "Connection error, network server is unreachable";
                 else if (error == 3) msg = "Could not login to network server";
                 else if (error == 6) msg = "Could not save downloaded wallet";
-                messageDialog.setMessage(msg);
-                messageDialog.open();
+                messageDialog.openWithMsg(msg, "");
                 setupFromSyncServiceDialog.close();
             }
         }

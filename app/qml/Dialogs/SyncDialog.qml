@@ -50,9 +50,7 @@ Dialog {
                 if (walletMerger.need_decrypt_online_wallet()) {
                     syncOnlinePasswordDialog.open();
                 } else if (walletMerger.is_corrupted()) {
-                    messageDialog.setMessage("Online wallet appears to be corrupted. It will\n" +
-                                            "be overwritten with current offline wallet.")
-                    messageDialog.open();
+                    messageDialog.openWithMsg("Online wallet appears to be corrupted", "It will be overwridden with current offline wallet.");
                     sync_upload();
                 } else {
                     sync_upload();
@@ -68,7 +66,7 @@ Dialog {
                 else if (error == 3) msg = "Could not login to network server";
                 else if (error == 5) msg = "No sync service selected"
                 messageDialog.setMessage(msg);
-                messageDialog.open();
+                messageDialog.openWithMsg();
                 syncDialog.close();
             }
         }

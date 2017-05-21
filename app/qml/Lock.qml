@@ -20,6 +20,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import QtQuick.Controls.Material 2.1
 import "Components"
+import "Dialogs"
 
 Image {
     source: "qrc:/res/img/lock_background.jpg"
@@ -136,44 +137,8 @@ Image {
             }
         }
 
-        Dialog {
+        ResetWalletDialog {
             id: resetDialog
-            title: qsTr("Warning: This will delete all saved data!")
-
-            x: (parent.width - width) / 2
-            y: (parent.height - height) / 2
-            width: 400
-
-            Label {
-                width: parent.width
-                text: qsTr("This operation will delete your current wallet with all saved passwords, " +
-                            "data saved on online servers will stay untouched.")
-                wrapMode: "WordWrap"
-            }
-
-            footer: DialogButtonBox {
-                Button {
-                    text: qsTr("I understand, delete my wallet")
-                    flat: true
-                    DialogButtonBox.buttonRole: DialogButtonBox.AcceptRole
-                    onClicked: {
-                        resetDialog.close()
-                        var success = setup.reset()
-                        if (success) {
-                            setupView.visible = true
-                        } else {
-                            toolTip.text = "Reset failed."
-                            toolTip.show()
-                        }
-                    }
-                }
-                Button {
-                    text: qsTr("Cancel")
-                    flat: true
-                    DialogButtonBox.buttonRole: DialogButtonBox.DestructiveRole
-                    onClicked: resetDialog.close();
-                }
-            }
         }
     }
 
