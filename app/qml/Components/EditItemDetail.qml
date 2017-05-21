@@ -39,6 +39,19 @@ RowLayout {
     anchors.right: parent.right
     anchors.left: parent.left
 
+    Rectangle {
+        id: focusIndicator
+        color: Material.accent
+        height: titleLabel.height - 4
+        width: 2
+        radius: 1
+        opacity: (editDetailsList.currentIndex == model.index) ? 1 : 0
+
+        Behavior on opacity {
+            NumberAnimation { duration: 150 }
+        }
+    }
+
     Item {
         width: 108
         TextField {
@@ -63,6 +76,8 @@ RowLayout {
                 }
             }
 
+            onActiveFocusChanged: if (activeFocus) editDetailsList.currentIndex = model.index
+
             onTextChanged: {
                 editItemDetail.title = text;
                 editDetailsModel.setProperty(model.index, "titlevar", text);
@@ -79,6 +94,7 @@ RowLayout {
       Layout.fillWidth: true
       EditItemDetailContentTextField {
         id: editItemDetailContent
+        onActiveFocusChanged: if (activeFocus) editDetailsList.currentIndex = model.index
       }
       anchors.top: parent.top
       anchors.topMargin: 4
@@ -91,6 +107,7 @@ RowLayout {
         font.family: materialIconsFont.name
         Material.foreground: editItemDetail.contentColor
         onClicked: {
+          editDetailsList.currentIndex = model.index;
           passGenerator.toFill = editItemDetailContent;
           passGenerator.numbersOnly = (editItemDetail.type == "pin");
           passGenerator.open();
@@ -103,6 +120,7 @@ RowLayout {
         font.family: materialIconsFont.name
         Material.foreground: editItemDetail.contentColor
         onClicked: {
+          editDetailsList.currentIndex = model.index;
           editItemDetail.secure = !editItemDetail.secure;
           editDetailsModel.setProperty(model.index, "securevar", editItemDetail.secure);
           for(var i = editItemDetailContentHolder.children.length; i > 0 ; i--) {
@@ -118,6 +136,9 @@ RowLayout {
         text: qsTr("\uE872")
         font.family: materialIconsFont.name
         Material.foreground: editItemDetail.contentColor
-        onClicked: editDetailsModel.remove(model.index)
+        onClicked: {
+            editDetailsModel.remove(model.index);
+            editDetailsList.currentIndex = -1;
+        }
     }
 }
