@@ -361,7 +361,7 @@ ApplicationWindow {
         fullWidth: true
     }
 
-    refreshUI() {
+    function refreshUI() {
         var index = itemsList.currentIndex
         itemsList.model = -1
         itemsList.model = dataHolder.get_number_of_items()
