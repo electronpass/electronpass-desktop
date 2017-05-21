@@ -263,7 +263,7 @@ void Gdrive::download_wallet() {
     }
 
     if (network_manager->networkAccessible() != QNetworkAccessManager::NetworkAccessibility::Accessible) {
-        emit wallet_downloaded("", SyncManagerStatus::NO_NETWORK);
+        emit wallet_downloaded("", SyncManagerStatus::NETWORK_ERROR);
         return;
     }
 
@@ -296,14 +296,22 @@ void Gdrive::download_wallet() {
 
 void Gdrive::reply_finished() {
     int error = reply->error();
-    std::string data;
-    if (error == QNetworkReply::OperationCanceledError) data = "";
-    else data = std::string(reply->readAll().data());
-
-    if (error != QNetworkReply::NoError && error != QNetworkReply::OperationCanceledError) {
-        std::cout << "<gdrive.cpp> [Warning] QReply error code: " << reply->error() << std::endl;
+    if (error != 0 && error != 5) {
+        if (state == State::GET) emit wallet_downloaded("", SyncManagerStatus::NETWORK_ERROR);
+        if (state == State::SET) emit wallet_uploaded(SyncManagerStatus::NETWORK_ERROR);
+        state = State::NONE;
+        network_state = NetworkState::NONE;
+        reply->deleteLater();
+        return;
     }
 
+    std::string data;
+    // Aborted, network states is already none.
+    if (error == 5) {
+        reply->deleteLater();
+        return;
+    }
+    data = std::string(reply->readAll().data());
 
     reply->deleteLater();
 
@@ -374,7 +382,7 @@ void Gdrive::upload_wallet(const std::string &wallet) {
     }
 
     if (network_manager->networkAccessible() != QNetworkAccessManager::NetworkAccessibility::Accessible) {
-        emit wallet_uploaded(SyncManagerStatus::NO_NETWORK);
+        emit wallet_uploaded(SyncManagerStatus::NETWORK_ERROR);
         return;
     }
 

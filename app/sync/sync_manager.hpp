@@ -30,7 +30,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "dropbox.hpp"
 
 enum class SyncManagerStatus {
-    SUCCESS, ALREADY_SYNCING, NO_NETWORK, COULD_NOT_AUTHORIZE, ABORTED, NO_SYNC_PROVIDER, COULD_NOT_OPEN_FILE
+    SUCCESS, ALREADY_SYNCING, NETWORK_ERROR, COULD_NOT_AUTHORIZE, ABORTED, NO_SYNC_PROVIDER, COULD_NOT_OPEN_FILE
 };
 
 class SyncManager: public QObject {
@@ -83,7 +83,7 @@ signals:
     /* Error codes are static cast of SyncManagerStatus enum to int, therefore:
      * - 0: SUCCESS
      * - 1: ALREADY_SYNCING
-     * - 2: NO_NETWORK
+     * - 2: NETWORK_ERROR
      * - 3: COULD_NOT_AUTHORIZE
      * - 4: ABORTED
      * - 5: NO_SYNC_PROVIDER
