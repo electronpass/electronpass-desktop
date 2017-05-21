@@ -65,7 +65,7 @@ Popup {
         onClicked: {
           try{
             passwordGenerator.toFill.text = generatedPassword;
-          }catch (e){
+          } catch (e){
             console.log("[Warning] No item to fill by passwordGenerator!")
           }
           passwordGenerator.close();

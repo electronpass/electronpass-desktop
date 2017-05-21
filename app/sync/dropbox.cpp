@@ -141,7 +141,7 @@ void Dropbox::download_wallet() {
     }
 
     if (network_manager->networkAccessible() != QNetworkAccessManager::NetworkAccessibility::Accessible) {
-        emit wallet_downloaded("", SyncManagerStatus::NO_NETWORK);
+        emit wallet_downloaded("", SyncManagerStatus::NETWORK_ERROR);
         return;
     }
 
@@ -218,14 +218,22 @@ void Dropbox::upload_wallet(const std::string &wallet) {
 
 void Dropbox::reply_finished() {
     int error = reply->error();
-    bool log_error = error != 0;
+    if (error != 0 && error != 206 && error != 5) {
+        if (state == State::GET) emit wallet_downloaded("", SyncManagerStatus::NETWORK_ERROR);
+        if (state == State::SET) emit wallet_uploaded(SyncManagerStatus::NETWORK_ERROR);
+        state = State::NONE;
+        network_state = NetworkState::NONE;
+        reply->deleteLater();
+        return;
+    }
 
     std::string data;
-    if (error == QNetworkReply::OperationCanceledError) {
-        data = "";
-        log_error = false;
-    } else data = std::string(reply->readAll().data());
-
+    // Aborted, network state is already none.
+    if (error == 5) {
+        reply->deleteLater();
+        return;
+    }
+    data = std::string(reply->readAll().data());
 
     reply->deleteLater();
 
@@ -237,10 +245,8 @@ void Dropbox::reply_finished() {
             authorize_client(data);
             break;
         case NetworkState::DOWNLOAD_WALLET:
-            if (error == 206) {
-                log_error = false;
-                data = "";
-            }
+            // Wallet doesn't exist.
+            if (error == 206) data = "";
             download_wallet(data);
             break;
         case NetworkState::UPLOAD_WALLET:
@@ -248,10 +254,6 @@ void Dropbox::reply_finished() {
             break;
         default:
             break;
-    }
-
-    if (log_error) {
-        std::cout << "<dropbox.cpp> [Warning] QReply error code: " << error << std::endl;
     }
 }
 

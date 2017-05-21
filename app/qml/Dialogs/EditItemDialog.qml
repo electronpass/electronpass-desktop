@@ -171,10 +171,12 @@ Dialog {
             }
 
             ListView {
+                id: editDetailsList
                 anchors.left: parent.left
                 anchors.right: parent.right
                 Layout.fillHeight: true
                 model: editDetailsModel
+                currentIndex: -1
 
                 add: Transition {
                     NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.InOutCubic }
@@ -189,6 +191,32 @@ Dialog {
                   content: contentvar
                   secure: securevar
                   type: typevar
+                }
+            }
+
+            RowLayout {
+                Layout.fillWidth: true
+                Layout.bottomMargin: -28
+                Layout.topMargin: 8
+                Label {
+                    text: "Move item: "
+                    font.weight: Font.Light
+                }
+                ToolButton {
+                    font.pixelSize: 18
+                    text: qsTr("\uE316")
+                    font.family: materialIconsFont.name
+                    Layout.leftMargin: -16
+                    enabled: editDetailsList.currentIndex > 0
+                    onClicked: editDetailsModel.move(editDetailsList.currentIndex, editDetailsList.currentIndex - 1, 1)
+                }
+                ToolButton {
+                    font.pixelSize: 18
+                    text: qsTr("\uE313")
+                    font.family: materialIconsFont.name
+                    Layout.leftMargin: -22
+                    enabled: (editDetailsList.currentIndex >= 0 && editDetailsList.currentIndex < editDetailsModel.count - 1)
+                    onClicked: editDetailsModel.move(editDetailsList.currentIndex, editDetailsList.currentIndex + 1, 1)
                 }
             }
         }
