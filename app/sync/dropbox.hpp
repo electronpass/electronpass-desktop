@@ -15,8 +15,12 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELECTRONPASS_DROPBOX_HPP
-#define ELECTRONPASS_DROPBOX_HPP
+#ifndef  DROPBOX_HPP
+#define  DROPBOX_HPP
+
+#include <string>
+#include <iostream>
+#include <regex>
 
 #include <QObject>
 #include <QDesktopServices>
@@ -28,16 +32,12 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <electronpass/json/json.h>
 
-#include <string>
-#include <iostream>
-#include <regex>
-
 #include "auth_server.hpp"
 #include "globals.hpp"
 #include "settings.hpp"
-#include "sync_base.hpp"
+#include "sync/sync_base.hpp"
 #include "sync/keys.hpp"
-#include "sync_manager.hpp"
+#include "sync/sync_manager.hpp"
 
 class Dropbox: public QObject, public SyncBase {
     Q_OBJECT
@@ -84,4 +84,4 @@ signals:
 };
 
 
-#endif //ELECTRONPASS_DROPBOX_HPP
+#endif // DROPBOX_HPP

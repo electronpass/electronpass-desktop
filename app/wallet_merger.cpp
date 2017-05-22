@@ -35,8 +35,7 @@ int WalletMerger::merge(const std::string &online_string) {
           std::cout << "<wallet_merger.cpp> [Warning] Wallet json online is invalid." << std::endl;
         } else if (error == 1) {
           need_decrypt = true;
-          std::cout << "<wallet_merger.cpp> [Log] Online wallet is not encrypted with" +
-                       " same password." << std::endl;
+          std::cout << "<wallet_merger.cpp> [Log] Online wallet is not encrypted with same password." << std::endl;
         }
 
         online_json = online_string;

@@ -15,8 +15,8 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELECTRONPASS_SYNC_BASE_HPP
-#define ELECTRONPASS_SYNC_BASE_HPP
+#ifndef SYNC_BASE_HPP
+#define SYNC_BASE_HPP
 
 #include <QObject>
 #include "sync_manager.hpp"
@@ -35,4 +35,4 @@ signals:
     virtual void wallet_uploaded(SyncManagerStatus success) = 0;
 };
 
-#endif //ELECTRONPASS_SYNC_BASE_HPP
+#endif // SYNC_BASE_HPP

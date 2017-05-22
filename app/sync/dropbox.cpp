@@ -67,7 +67,8 @@ void Dropbox::auth_server_request(std::string request) {
     post_data.addQueryItem("redirect_uri", "http://localhost:5160/");
 
     QNetworkRequest network_request(QUrl("https://api.dropboxapi.com/oauth2/token"));
-    network_request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded");
+    network_request.setHeader(QNetworkRequest::ContentTypeHeader,
+                              "application/x-www-form-urlencoded");
     reply = network_manager->post(network_request, post_data.toString(QUrl::FullyEncoded).toUtf8());
     connect(reply, SIGNAL(finished()), this, SLOT(reply_finished()));
 }
@@ -120,7 +121,8 @@ void Dropbox::authorize_client() {
         return;
     }
 
-    connect(auth_server, SIGNAL(auth_success(std::string)), this, SLOT(auth_server_request(std::string)));
+    connect(auth_server, SIGNAL(auth_success(std::string)),
+            this, SLOT(auth_server_request(std::string)));
     QDesktopServices::openUrl(url);
 }
 

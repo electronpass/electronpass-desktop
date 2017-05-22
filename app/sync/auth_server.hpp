@@ -15,23 +15,25 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELECTRONPASS_AUTH_SERVER_HPP
-#define ELECTRONPASS_AUTH_SERVER_HPP
+#ifndef AUTH_SERVER_HPP
+#define AUTH_SERVER_HPP
 
+#include <iostream>
+#include <string>
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
-#include <iostream>
-#include <string>
 
 class AuthServer: public QObject {
     Q_OBJECT
+
 public:
     explicit AuthServer(QObject *parent = 0);
     bool init();
 
 public slots:
     void new_connection();
+
 signals:
     void auth_success(std::string request);
     void did_delete();
@@ -40,5 +42,4 @@ private:
     QTcpServer *server;
 };
 
-
-#endif //ELECTRONPASS_AUTH_SERVER_HPP
+#endif // AUTH_SERVER_HPP

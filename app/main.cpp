@@ -27,10 +27,10 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "data_holder.hpp"
 #include "settings.hpp"
 #include "clipboard.hpp"
-#include "sync_manager.hpp"
 #include "passwords.hpp"
 #include "setup.hpp"
 #include "wallet_merger.hpp"
+#include "sync/sync_manager.hpp"
 
 const char *ORGANIZATION_NAME = "ElectronPass";
 const char *APPLICATION_NAME = "ElectronPass";

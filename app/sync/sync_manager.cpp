@@ -89,18 +89,22 @@ SyncManager::Service SyncManager::get_service() {
 
 void SyncManager::download_wallet(bool merge /* = true */) {
     need_to_merge = merge;
-    if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring download_wallet() call." << std::endl;
-    else if (sync_object == nullptr) emit wallet_downloaded("", static_cast<int>(SyncManagerStatus::NO_SYNC_PROVIDER));
-    else {
+    if (!initialized) {
+        std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring download_wallet() call." << std::endl;
+    } else if (sync_object == nullptr) {
+        emit wallet_downloaded("", static_cast<int>(SyncManagerStatus::NO_SYNC_PROVIDER));
+    } else {
         setStatusMessage("Downloading wallet");
         sync_object->download_wallet();
     }
 }
 
 void SyncManager::upload_wallet() {
-    if (!initialized) std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring upload_wallet() call." << std::endl;
-    else if (sync_object == nullptr) emit wallet_uploaded(static_cast<int>(SyncManagerStatus::NO_SYNC_PROVIDER));
-    else {
+    if (!initialized) {
+        std::cout << "<sync_manager.cpp> [Warning] Sync manager not initialized. Ignoring upload_wallet() call." << std::endl;
+    } else if (sync_object == nullptr) {
+        emit wallet_uploaded(static_cast<int>(SyncManagerStatus::NO_SYNC_PROVIDER));
+    } else {
         setStatusMessage("Uploading wallet");
 
         bool success = false;

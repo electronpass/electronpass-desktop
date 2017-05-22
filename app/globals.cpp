@@ -17,10 +17,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "globals.hpp"
 
-using namespace globals;
-
-DataHolder data_holder;
-SettingsManager settings;
-SyncManager sync_manager;
-Clipboard clipboard;
-WalletMerger wallet_merger;
+DataHolder globals::data_holder;
+SettingsManager globals::settings;
+SyncManager globals::sync_manager;
+Clipboard globals::clipboard;
+WalletMerger globals::wallet_merger;

@@ -15,10 +15,14 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELECTRONPASS_GDRIVE_HPP
-#define ELECTRONPASS_GDRIVE_HPP
+#ifndef GDRIVE_HPP
+#define GDRIVE_HPP
 
 #define kRequestBoundary "electronpass_request_boundary"
+
+#include <string>
+#include <iostream>
+#include <regex>
 
 #include <QObject>
 #include <QDesktopServices>
@@ -31,16 +35,12 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include <electronpass/json/json.h>
 
-#include <string>
-#include <iostream>
-#include <regex>
-
 #include "auth_server.hpp"
 #include "globals.hpp"
 #include "settings.hpp"
-#include "sync_base.hpp"
+#include "sync/sync_base.hpp"
 #include "sync/keys.hpp"
-#include "sync_manager.hpp"
+#include "sync/sync_manager.hpp"
 
 enum class SyncManagerStatus;
 
@@ -79,6 +79,7 @@ class Gdrive: public QObject, public SyncBase {
 
     void resume_state();
     bool check_authentication_error(const Json::Value&);
+
 public:
     Gdrive(QObject *parent = 0);
 
@@ -96,5 +97,4 @@ signals:
     void wallet_uploaded(SyncManagerStatus status);
 };
 
-
-#endif //ELECTRONPASS_GDRIVE_HPP
+#endif // GDRIVE_HPP

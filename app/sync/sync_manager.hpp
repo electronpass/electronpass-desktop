@@ -15,8 +15,8 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ELECTRONPASS_SYNC_MANAGER_HPP
-#define ELECTRONPASS_SYNC_MANAGER_HPP
+#ifndef SYNC_MANAGER_HPP
+#define SYNC_MANAGER_HPP
 
 
 #include <string>
@@ -25,9 +25,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "globals.hpp"
 #include "wallet_merger.hpp"
 #include "file_stream.hpp"
-#include "sync_base.hpp"
-#include "gdrive.hpp"
-#include "dropbox.hpp"
+#include "sync/sync_base.hpp"
+#include "sync/gdrive.hpp"
+#include "sync/dropbox.hpp"
 
 enum class SyncManagerStatus {
     SUCCESS, ALREADY_SYNCING, NETWORK_ERROR, COULD_NOT_AUTHORIZE, ABORTED, NO_SYNC_PROVIDER, COULD_NOT_OPEN_FILE
@@ -92,6 +92,4 @@ signals:
     void statusMessageChanged();
 };
 
-
-
-#endif //ELECTRONPASS_SYNC_MANAGER_HPP
+#endif // SYNC_MANAGER_HPP
