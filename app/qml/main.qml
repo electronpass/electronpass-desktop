@@ -31,17 +31,21 @@ ApplicationWindow {
     id: window
 
     // load icon font
-    FontLoader { id: materialIconsFont; source: "qrc:/res/fonts/MaterialIcons-Regular.ttf"}
-    FontLoader { id: robotoMonoFont; source: "qrc:/res/fonts/RobotoMono-Regular.ttf"}
+    FontLoader { id: materialIconsFont; source: "qrc:/res/fonts/MaterialIcons-Regular.ttf" }
+    FontLoader { id: robotoMonoFont; source: "qrc:/res/fonts/RobotoMono-Regular.ttf" }
 
     Material.theme: (settings.theme == 1) ? Material.Dark : Material.Light
     Material.accent: Material.Cyan
-    Material.primary: (Material.theme == Material.Dark) ? Material.color(Material.Blue, Material.Shade900) : Material.color(Material.Blue, Material.Shade800)
-    Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade900) : Material.color(Material.Grey, Material.Shade100)
+    Material.primary: (Material.theme == Material.Dark) ?
+                            Material.color(Material.Blue, Material.Shade900) :
+                            Material.color(Material.Blue, Material.Shade800)
+    Material.background: (Material.theme == Material.Dark) ?
+                            Material.color(Material.Grey, Material.Shade900) :
+                            Material.color(Material.Grey, Material.Shade100)
 
     Component.onDestruction: {
-        dataHolder.lock();
-        lockGUI();
+        dataHolder.lock()
+        lockGUI()
     }
 
     Timer {
@@ -50,8 +54,8 @@ ApplicationWindow {
         onTriggered: {
             if (interval != 0) {
                 console.log("Locked after", interval / 1000, " seconds.")
-                dataHolder.lock();
-                lockGUI();
+                dataHolder.lock()
+                lockGUI()
             }
         }
     }
@@ -60,15 +64,14 @@ ApplicationWindow {
         sequence: "Ctrl+F"
         onActivated: {
             if(!lock.visible){
-                searchInput.forceActiveFocus();
-                searchInput.selectAll();
+                searchInput.forceActiveFocus()
+                searchInput.selectAll()
             }
         }
     }
     Shortcut {
         sequence: "Ctrl+W"
         onActivated: {
-            //TODO: save work and lock before exiting
             dataHolder.lock()
             lockGUI()
             Qt.quit()
@@ -77,30 +80,28 @@ ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+D"
         onActivated: {
-            if (!lock.visible && itemsList.currentIndex >= 0){
-                onClicked: {
-                    var copied = false;
-                    var item = itemsList.currentIndex;
-                    var size = dataHolder.get_number_of_item_fields(item);
-                    for (var i = 0; i < size; ++i) {
-                        var field = dataHolder.get_item_field(item, i);
-                        if (field["sensitive"] == "true") {
-                            copied = true;
-                            clipboard.set_text(field["value"]);
-                            break;
-                        }
+            if (!lock.visible && itemsList.currentIndex >= 0) {
+                var copied = false
+                var item = itemsList.currentIndex
+                var size = dataHolder.get_number_of_item_fields(item)
+                for (var i = 0; i < size; ++i) {
+                    var field = dataHolder.get_item_field(item, i)
+                    if (field["sensitive"] == "true") {
+                        copied = true
+                        clipboard.set_text(field["value"])
+                        break
                     }
-                    if (copied) snackbar.open("Password copied to clipboard.")
-                    else snackbar.open("Could not copy password.")
                 }
+                if (copied) snackbar.open("Password copied to clipboard.")
+                else snackbar.open("Could not copy password.")
             }
         }
     }
     Shortcut {
         sequence: "Ctrl+S"
         onActivated: if(!lock.visible) {
-            syncDialog.open();
-            syncDialog.sync();
+            syncDialog.open()
+            syncDialog.sync()
         }
     }
     Shortcut {
@@ -115,7 +116,7 @@ ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+E"
         onActivated: {
-            if(!lock.visible && details.opened) details.openEditDialog();
+            if(!lock.visible && details.opened) details.openEditDialog()
         }
     }
     function handleKeys(event) {
@@ -129,123 +130,121 @@ ApplicationWindow {
     }
 
     header: ToolBar {
-            id: toolbar
-            visible: false
-            Material.theme: Material.Dark
+        id: toolbar
+        visible: false
+        Material.theme: Material.Dark
 
-            RowLayout {
-                anchors.fill: parent
-                Label {
-                    text: "ElectronPass"
-                    elide: Label.ElideRight
-                    leftPadding: 16
-                    horizontalAlignment: Qt.AlignHLeft
-                    verticalAlignment: Qt.AlignVCenter
-                    Layout.fillWidth: true
-                }
-                TextField {
-                    id: searchInput
-                    inputMethodHints: Qt.ImhSensitiveData
-                    selectByMouse: true
-                    font.pixelSize: 14
-                    placeholderText: qsTr(" Search")
-                    Keys.onPressed: handleKeys(event)
-                    onTextChanged: {
-                        itemsList.model = 0;
-                        if (text != "") {
-                            // returns -1 if nothing found
-                            var search_results = dataHolder.search(text);
-
-                            // first change model, then update index
-                            refreshUI();
-                            itemsList.setItemIndex(search_results);
-                        } else {
-                            dataHolder.stop_search();
-                            refreshUI();
-                            itemsList.setItemIndex(-1);
-                        }
-                    }
-                }
-                ToolButton {
-                    id: newButton
-                    font.family: materialIconsFont.name
-                    font.pixelSize: 22
-                    text: qsTr("\uE145")
-                    onClicked: newItemMenu.open()
-
-                    Menu {
-                        id: newItemMenu
-                        y: parent.height
-                        x: - width + parent.width
-
-                        function addItem(template) {
-                            var newItemIndex = dataHolder.add_item(template);
-                            itemsList.model = dataHolder.get_number_of_items();
-                            itemsList.setItemIndex(newItemIndex);
-                            details.openEditDialog();
-                        }
-
-                        MenuItem {
-                            text: "Login"
-                            onClicked: newItemMenu.addItem("login")
-                        }
-                        MenuItem {
-                            text: "Credit card"
-                            onClicked: newItemMenu.addItem("credit_card")
-                        }
-                        MenuItem {
-                            text: "Custom"
-                            onClicked: newItemMenu.addItem("")
-                        }
-                    }
-                }
-                ToolButton {
-                    id: menuButton
-                    font.family: materialIconsFont.name
-                    font.pixelSize: 22
-                    text: qsTr("\uE5D4")
-                    onClicked: menu.open()
-
-                    //TODO: menu is probably too big, scale won't work and is a bad sollution anyway
-                    Menu {
-                        id: menu
-                        y: parent.height
-                        MenuItem {
-                            text: "Lock"
-                            onTriggered: {
-                                dataHolder.lock()
-                                lockGUI()
-                            }
-                        }
-                        MenuItem {
-                            text: "Sync now"
-                            onTriggered: {
-                                syncDialog.open();
-                                syncDialog.sync();
-                            }
-                        }
-                        MenuItem {
-                            text: "Settings"
-                            onTriggered: settingsDialog.open();
-                        }
+        RowLayout {
+            anchors.fill: parent
+            Label {
+                text: "ElectronPass"
+                elide: Label.ElideRight
+                leftPadding: 16
+                horizontalAlignment: Qt.AlignHLeft
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+            }
+            TextField {
+                id: searchInput
+                inputMethodHints: Qt.ImhSensitiveData
+                selectByMouse: true
+                font.pixelSize: 14
+                placeholderText: qsTr(" Search")
+                Keys.onPressed: handleKeys(event)
+                onTextChanged: {
+                    if (text != "") {
+                        // returns -1 if nothing found
+                        var search_results = dataHolder.search(text)
+                        // first change model, then update index
+                        refreshUI()
+                        itemsList.setItemIndex(search_results)
+                    } else {
+                        dataHolder.stop_search()
+                        refreshUI()
+                        itemsList.setItemIndex(-1)
                     }
                 }
             }
+            ToolButton {
+                id: newButton
+                font.family: materialIconsFont.name
+                font.pixelSize: 22
+                text: qsTr("\uE145")
+                onClicked: newItemMenu.open()
+
+                Menu {
+                    id: newItemMenu
+                    y: parent.height
+                    x: - width + parent.width
+
+                    function addItem(template) {
+                        var newItemIndex = dataHolder.add_item(template)
+                        itemsList.model = dataHolder.get_number_of_items()
+                        itemsList.setItemIndex(newItemIndex)
+                        details.openEditDialog()
+                    }
+
+                    MenuItem {
+                        text: "Login"
+                        onClicked: newItemMenu.addItem("login")
+                    }
+                    MenuItem {
+                        text: "Credit card"
+                        onClicked: newItemMenu.addItem("credit_card")
+                    }
+                    MenuItem {
+                        text: "Custom"
+                        onClicked: newItemMenu.addItem("")
+                    }
+                }
+            }
+            ToolButton {
+                id: menuButton
+                font.family: materialIconsFont.name
+                font.pixelSize: 22
+                text: qsTr("\uE5D4")
+                onClicked: menu.open()
+
+                //TODO: menu is probably too big, scale won't work and is a bad sollution anyway
+                Menu {
+                    id: menu
+                    y: parent.height
+                    MenuItem {
+                        text: "Lock"
+                        onTriggered: {
+                            dataHolder.lock()
+                            lockGUI()
+                        }
+                    }
+                    MenuItem {
+                        text: "Sync now"
+                        onTriggered: {
+                            syncDialog.open()
+                            syncDialog.sync()
+                        }
+                    }
+                    MenuItem {
+                        text: "Settings"
+                        onTriggered: settingsDialog.open()
+                    }
+                }
+            }
+        }
     }
 
-    // basic devider
+    // basic divider
     RowLayout {
         id: mainLayout
         anchors.fill: parent
         spacing: 0
 
         function onItemSelected(index) {
-            handleDetails(index);
+            handleDetails(index)
         }
 
         function handleDetails(index) {
-            if (index < 0) detailsPane.hideDetails();
-            else detailsPane.showDetails(index);
+            if (index < 0) detailsPane.hideDetails()
+            else detailsPane.showDetails(index)
         }
 
         ItemsList {
@@ -275,26 +274,26 @@ ApplicationWindow {
             }
 
             function showDetails(index){
-                noItemSelectedLabel.opened = false;
-                details.destroyDetails();
-                details.opened = true;
-                details.setTitle(dataHolder.get_item_name(index));
+                noItemSelectedLabel.opened = false
+                details.destroyDetails()
+                details.opened = true
+                details.setTitle(dataHolder.get_item_name(index))
                 for (var i = 0; i < dataHolder.get_number_of_item_fields(index); ++i) {
-                    var field = dataHolder.get_item_field(index, i);
+                    var field = dataHolder.get_item_field(index, i)
 
                     details.addDetail({ title: field["name"],
                                         content: field["value"],
                                         secure: field["sensitive"] != "false",
                                         type: field["type"]
-                                    });
+                                    })
                 }
             }
 
             function hideDetails(){
-                details.opened = false;
-                noItemSelectedLabel.opened = true;
+                details.opened = false
+                noItemSelectedLabel.opened = true
                 // details get destroyed when animation is finished (otherwise it looks wierd)
-                details.destroyDetailsWithDelay(detailsPane.opacityAnimationDuration);
+                details.destroyDetailsWithDelay(detailsPane.opacityAnimationDuration)
             }
 
             Label {
@@ -313,11 +312,9 @@ ApplicationWindow {
     Lock {
         id: lock
     }
-
     Setup {
         id: setupView
     }
-
 
     Settings {
         id: settings
@@ -377,7 +374,7 @@ ApplicationWindow {
         itemsList.setItemIndex(-1)
         itemsList.model = 0
         lock.visible = true
-        lock.wrongPassCounter = 0;
+        lock.wrongPassCounter = 0
         toolbar.visible = false
         lock.setFocus()
         clipboard.clear()

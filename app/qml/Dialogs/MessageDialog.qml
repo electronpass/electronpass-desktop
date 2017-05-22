@@ -29,9 +29,9 @@ Dialog {
     y: (parent.height - height) / 2
 
     function openWithMsg(title, message) {
-        messageDialog.title = title;
-        messageLabel.text = message;
-        open();
+        messageDialog.title = title
+        messageLabel.text = message
+        open()
     }
 
     onOpened: messageLabel.forceActiveFocus()

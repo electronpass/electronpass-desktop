@@ -34,17 +34,17 @@ Dialog {
     height: Math.min(parent.height * 0.9, 500)
 
     function setSyncServiceIndex() {
-        var service = setup.get_sync_service();
+        var service = setup.get_sync_service()
 
-        if (service == "gdrive") syncDropdownMenu.currentIndex = 1;
-        else if (service == "dropbox") syncDropdownMenu.currentIndex = 2;
-        else syncDropdownMenu.currentIndex = 0;
+        if (service == "gdrive") syncDropdownMenu.currentIndex = 1
+        else if (service == "dropbox") syncDropdownMenu.currentIndex = 2
+        else syncDropdownMenu.currentIndex = 0
     }
     function getSyncServiceFromIndex() {
-        if (syncDropdownMenu.currentIndex == 0) return "none";
-        if (syncDropdownMenu.currentIndex == 1) return "gdrive";
-        if (syncDropdownMenu.currentIndex == 2) return "dropbox";
-        return "none";
+        if (syncDropdownMenu.currentIndex == 0) return "none"
+        if (syncDropdownMenu.currentIndex == 1) return "gdrive"
+        if (syncDropdownMenu.currentIndex == 2) return "dropbox"
+        return "none"
     }
 
     header: TabBar {
@@ -75,11 +75,11 @@ Dialog {
                 anchors.left: parent.left
                 anchors.right: parent.right
                 Label {
-                    text: "Backup and Restore"
+                    text: qsTr("Backup and Restore")
                     font.weight: Font.Bold
                 }
                 Label {
-                    text: "After restore you need to lock and unlock your wallet manually"
+                    text: qsTr("After restore you need to lock and unlock your wallet manually")
                 }
                 RowLayout{
                     anchors.left: parent.left
@@ -91,8 +91,8 @@ Dialog {
                         flat: true
                         highlighted: true
                         onClicked: {
-                            setFileDialog(0);
-                            fileDialog.open();
+                            setFileDialog(0)
+                            fileDialog.open()
                         }
                     }
                     Button {
@@ -118,13 +118,13 @@ Dialog {
 
                     highlighted: true
                     onClicked: {
-                        setFileDialog(1);
-                        fileDialog.open();
+                        setFileDialog(1)
+                        fileDialog.open()
                     }
                 }
 
                 Label {
-                    text: "Interface"
+                    text: qsTr("Interface")
                     font.weight: Font.Bold
                     Layout.topMargin: 8
                 }
@@ -140,7 +140,7 @@ Dialog {
         Page {
             ColumnLayout {
                 Label {
-                    text: "Change master password"
+                    text: qsTr("Change master password")
                     font.weight: Font.Bold
                 }
                 ColumnLayout {
@@ -171,13 +171,13 @@ Dialog {
                     RowLayout {
                       Layout.topMargin: -8
                         Item {
-                          width: 170
-                          Label {
-                            text: qsTr("New master password:")
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.verticalCenter: parent.verticalCenter
-                          }
+                            width: 170
+                            Label {
+                                text: qsTr("New master password:")
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
                         }
                         TextField {
                             id: new_password
@@ -199,15 +199,15 @@ Dialog {
                     }
 
                     RowLayout {
-                      Layout.topMargin: -8
+                        Layout.topMargin: -8
                         Item {
-                          width: 170
-                          Label {
-                            text: qsTr("Confirm password:")
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.verticalCenter: parent.verticalCenter
-                          }
+                            width: 170
+                            Label {
+                                text: qsTr("Confirm password:")
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
                         }
                         TextField {
                             id: confirm_password
@@ -231,7 +231,8 @@ Dialog {
                         id: changePasswordButton
                         text: qsTr("Change password")
                         Layout.topMargin: -8
-                        enabled: !(curr_password.text == "" || new_password.text == "") && (confirm_password.text == new_password.text)
+                        enabled: !(curr_password.text == "" || new_password.text == "") &&
+                                 (confirm_password.text == new_password.text)
                         onClicked: {
                             if (dataHolder.change_password(curr_password.text, new_password.text)) {
                                 toolTip.text = "Password changed successfully."
@@ -240,8 +241,8 @@ Dialog {
                                 confirm_password.text = ""
                             } else {
                                 toolTip.text = "Incorrect master password."
-                                curr_password.forceActiveFocus();
-                                curr_password.selectAll();
+                                curr_password.forceActiveFocus()
+                                curr_password.selectAll()
                             }
                             toolTip.show()
                         }
@@ -250,7 +251,7 @@ Dialog {
                 }
 
                 Label {
-                    text: "Lock app after idle for:"
+                    text: "Lock app after delay (experimental):"
                     font.weight: Font.Bold
                 }
                 ComboBox {
@@ -263,51 +264,50 @@ Dialog {
                     Component.onCompleted: {
                         switch (lockDelay) {
                             case 30:
-                                currentIndex = 0;
-                                break;
+                                currentIndex = 0
+                                break
                             case 60:
-                                currentIndex = 1;
-                                break;
+                                currentIndex = 1
+                                break
                             case 120:
-                                currentIndex = 2;
-                                break;
+                                currentIndex = 2
+                                break
                             case 300:
-                                currentIndex = 3;
-                                break;
+                                currentIndex = 3
+                                break
                             case 600:
-                                currentIndex = 4;
-                                break;
+                                currentIndex = 4
+                                break
                             default:
-                                currentIndex = 5;
-                                break;
+                                currentIndex = 5
+                                break
                         }
                     }
                     onActivated: {
                         switch (currentIndex) {
                             case 0:
-                                lockDelay = 30;
-                                break;
+                                lockDelay = 30
+                                break
                             case 1:
-                                lockDelay = 60;
-                                break;
+                                lockDelay = 60
+                                break
                             case 2:
-                                lockDelay = 120;
-                                break;
+                                lockDelay = 120
+                                break
                             case 3:
-                                lockDelay = 300;
-                                break;
+                                lockDelay = 300
+                                break
                             case 4:
-                                lockDelay = 600;
-                                break;
+                                lockDelay = 600
+                                break
                             case 5:
                             default:
-                                lockDelay = -1;
-                                break;
+                                lockDelay = -1
+                                break
                         }
-                        settings.lockDelay = lockDelay;
+                        settings.lockDelay = lockDelay
                     }
                 }
-
             }
         }
 
@@ -333,13 +333,18 @@ Dialog {
                         model: ["No sync service", "Google Drive", "Dropbox"]
 
                         Component.onCompleted: {
-                            settingsDialog.setSyncServiceIndex();
+                            settingsDialog.setSyncServiceIndex()
                         }
                         onActivated: {
                             if (settingsDialog.getSyncServiceFromIndex() == "none") {
-                                settingsChangeSyncDialog.openWithMsg("Your wallet will not be synced to cloud services anymore", "Are you sure that to unset your sync provider? Your data on current sync service will not be changed.")
+                                settingsChangeSyncDialog.openWithMsg(
+                                        "Your wallet will not be synced to cloud services anymore",
+                                        "Are you sure that to unset your sync provider? Your data" +
+                                        " on current sync service will not be changed.")
                             } else {
-                                settingsChangeSyncDialog.openWithMsg("Are you sure that you want to change your sync service provider?", "Your data on current sync service will not be changed.")
+                                settingsChangeSyncDialog.openWithMsg(
+                                        "Are you sure that you want to change your sync service provider?",
+                                        "Your data on current sync service will not be changed.")
                             }
                         }
                     }
@@ -347,55 +352,54 @@ Dialog {
             }
         }
         Page {
-          ListModel {
+            ListModel {
             id: shortcutsModel
+                ListElement {
+                    text: qsTr("\u2191 and \u2193")
+                    desc: "Move through items"
+                }
+                ListElement {
+                    text: qsTr("Ctrl+L")
+                    desc: "Lock wallet"
+                }
+                ListElement {
+                    text: qsTr("Ctrl+E")
+                    desc: "Edit currently selected item"
+                }
+                ListElement {
+                    text: qsTr("Ctrl+S")
+                    desc: "Sync now"
+                }
+                ListElement {
+                    text:qsTr("Ctrl+F")
+                    desc: "Search"
+                }
+                ListElement {
+                    text: qsTr("Ctrl+D")
+                    desc: "Copy the first password from the selected item"
+                }
+                ListElement {
+                    text: qsTr("Ctrl+W")
+                    desc: "Close application"
+                }
+            }
+            ListView {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                spacing: 32
+                topMargin: 8
+                bottomMargin: 22
+                interactive: (contentHeight + 8 > height)
 
-            ListElement {
-              text: qsTr("\u2191 and \u2193")
-              desc: "Move through items"
-            }
-            ListElement {
-              text: qsTr("Ctrl+L")
-              desc: "Lock wallet"
-            }
-            ListElement {
-              text: qsTr("Ctrl+E")
-              desc: "Edit currently selected item"
-            }
-            ListElement {
-              text: qsTr("Ctrl+S")
-              desc: "Sync now"
-            }
-            ListElement {
-              text:qsTr("Ctrl+F")
-              desc: "Search"
-            }
-            ListElement {
-              text: qsTr("Ctrl+D")
-              desc: "Copy the first password from the selected item"
-            }
-            ListElement {
-              text: qsTr("Ctrl+W")
-              desc: "Close application"
-            }
-          }
-          ListView {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            spacing: 32
-            topMargin: 8
-            bottomMargin: 22
-            interactive: (contentHeight + 8 > height)
+                model: shortcutsModel
 
-            model: shortcutsModel
-
-            delegate: ShortcutItem {
-              shortcut: text
-              description: desc
+                delegate: ShortcutItem {
+                    shortcut: text
+                    description: desc
+                }
             }
-          }
         }
     }
 
@@ -408,8 +412,8 @@ Dialog {
         y: parent.height - 32
 
         function show() {
-            timer.restart();
-            visible = true;
+            timer.restart()
+            visible = true
         }
         Behavior on opacity {
             NumberAnimation { duration: 300 }
@@ -418,20 +422,20 @@ Dialog {
             id: timer
             interval: toolTip.timeout
             onTriggered: {
-                if (!running) { toolTip.visible = false; }
+                if (!running) { toolTip.visible = false }
             }
         }
     }
 
     function setFileDialog(exportType) {
-        fileDialog.selectMultiple = false;
-        fileDialog.selectExisting = false;
+        fileDialog.selectMultiple = false
+        fileDialog.selectExisting = false
         if (exportType == 0) {
-            fileDialog.exportType = 0;
-            fileDialog.title = "Please choose a backup location.";
+            fileDialog.exportType = 0
+            fileDialog.title = "Please choose a backup location."
         } else if (exportType == 1) {
-            fileDialog.exportType = 1;
-            fileDialog.title = "Please choose a csv export location.";
+            fileDialog.exportType = 1
+            fileDialog.title = "Please choose a csv export location."
         } else if (exportType == 2) {
             fileDialog.exportType = 2
             fileDialog.title = "Please choose a backup file."
@@ -451,9 +455,9 @@ Dialog {
         //  1 - export to csv
         //  2 - import from backup file
         onAccepted: {
-            var url = Qt.resolvedUrl(fileDialog.fileUrl);
+            var url = Qt.resolvedUrl(fileDialog.fileUrl)
             if (exportType == 0) {
-                var success = dataHolder.backup_wallet(url);
+                var success = dataHolder.backup_wallet(url)
                 if (success) {
                     toolTip.text = "Backup file created successfully."
                 } else {
@@ -461,7 +465,7 @@ Dialog {
                 }
                 toolTip.show()
             } else if (exportType == 1) {
-                var success = dataHolder.export_to_csv(url);
+                var success = dataHolder.export_to_csv(url)
                 if (success) {
                     toolTip.text = "Exported to csv successfully."
                 } else {
@@ -469,7 +473,7 @@ Dialog {
                 }
                 toolTip.show()
             } else if (exportType == 2) {
-                var success = dataHolder.restore_wallet(url, "");
+                var success = dataHolder.restore_wallet(url, "")
                 if (success == 0) {
                     // Actually weird, wallet encrypted with empty password
                     toolTip.text = "Import successful."
@@ -478,11 +482,14 @@ Dialog {
                     passwordDialog.path = url
                     passwordDialog.open()
                 } else if (success ==  2) {
-                    messageDialog.openWithMsg("Wallet is corrupted", "Wallet file seems to be corrupted.")
+                    messageDialog.openWithMsg("Wallet is corrupted",
+                                              "Wallet file seems to be corrupted.")
                     toolTip.text = "Import failed."
                     toolTip.show()
                 } else if (success == 3) {
-                    messageDialog.openWithMsg("File could not be read", "Wallet file seems to be missing or it has wrong permissions set.")
+                    messageDialog.openWithMsg("File could not be read",
+                                              "Wallet file seems to be missing or it has wrong " +
+                                              "permissions set.")
                     toolTip.text = "Import failed."
                     toolTip.show()
                 }
@@ -498,10 +505,8 @@ Dialog {
         onOpened: passwordText.forceActiveFocus()
         onClosed: passwordText.text = ""
 
-
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
-
 
         closePolicy: Popup.NoAutoClose
 
@@ -532,20 +537,20 @@ Dialog {
                     onClicked: {
                         var success = dataHolder.restore_wallet(passwordDialog.path, passwordText.text)
                         if (success == 0) {
-                            passwordDialog.close();
-                            toolTip.text = "Import successful.";
-                            toolTip.show();
-                            refreshUI();
+                            passwordDialog.close()
+                            toolTip.text = "Import successful."
+                            toolTip.show()
+                            refreshUI()
                         } else if (success == 1) {
-                            passwordText.forceActiveFocus();
-                            passwordText.selectAll();
-                            toolTip.text = "Wrong password.";
-                            toolTip.show();
+                            passwordText.forceActiveFocus()
+                            passwordText.selectAll()
+                            toolTip.text = "Wrong password."
+                            toolTip.show()
                         } else if (success == 4) {
                             passwordDialog.close()
-                            messageDialog.openWithMsg("Wallet could not be copied", "");
-                            toolTip.text = "Import failed.";
-                            toolTip.show();
+                            messageDialog.openWithMsg("Wallet could not be copied", "")
+                            toolTip.text = "Import failed."
+                            toolTip.show()
                         }
                     }
                 }
@@ -560,13 +565,10 @@ Dialog {
                     }
                 }
             }
-
         }
     }
-
 
     Component.onDestruction: {
         settings.theme = themeSwitch.checked
     }
-
 }

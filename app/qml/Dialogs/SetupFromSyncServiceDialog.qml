@@ -29,12 +29,12 @@ Dialog {
     closePolicy: Popup.NoAutoClose
 
     onOpened: {
-        syncManager.download_wallet(false);
+        syncManager.download_wallet(false)
     }
     onClosed: {
         // Reset visibility
-        downloadLayout.visible = true;
-        passwordLayout.visible = false;
+        downloadLayout.visible = true
+        passwordLayout.visible = false
     }
 
     Connections {
@@ -47,24 +47,23 @@ Dialog {
         }
         onWallet_downloaded: {
             if (setupFromSyncServiceDialog.visible && error == 0) {
-                downloadLayout.visible = false;
-                passwordLayout.visible = true;
-                passwordField.forceActiveFocus();
+                downloadLayout.visible = false
+                passwordLayout.visible = true
+                passwordField.forceActiveFocus()
             } else if (setupFromSyncServiceDialog.visible) {
-                if (error == 1 || error == 4 || error == 5) return;
+                if (error == 1 || error == 4 || error == 5) return
                 // error codes, that shouldn't happen here or don't have to be explicitly prompted
                 // aborted, no sync provider selected, syncing in progress
 
-                var msg;
-                if (error == 2) msg = "Connection error, network server is unreachable";
-                else if (error == 3) msg = "Could not login to network server";
-                else if (error == 6) msg = "Could not save downloaded wallet";
-                messageDialog.openWithMsg(msg, "");
-                setupFromSyncServiceDialog.close();
+                var msg
+                if (error == 2) msg = "Connection error, network server is unreachable"
+                else if (error == 3) msg = "Could not login to network server"
+                else if (error == 6) msg = "Could not save downloaded wallet"
+                messageDialog.openWithMsg(msg, "")
+                setupFromSyncServiceDialog.close()
             }
         }
     }
-
     ColumnLayout {
         ColumnLayout {
             id: downloadLayout
@@ -87,8 +86,8 @@ Dialog {
                 highlighted: true
                 flat: true
                 onClicked: {
-                    syncManager.abort();
-                    setupFromSyncServiceDialog.close();
+                    syncManager.abort()
+                    setupFromSyncServiceDialog.close()
                 }
             }
         }
@@ -126,38 +125,37 @@ Dialog {
                     text: qsTr("Unlock")
                     onClicked: {
                         if (passwordField.text != "") {
-                            var error = dataHolder.unlock(passwordField.text);
+                            var error = dataHolder.unlock(passwordField.text)
                             if (error == 0) {
                                 errorLabel.text = ""
-                                setupFromSyncServiceDialog.close();
-                                unlockGUI();
-                                passwordField.clear();
-                                setupView.visible = false;
-                                setup.finish();
+                                setupFromSyncServiceDialog.close()
+                                unlockGUI()
+                                passwordField.clear()
+                                setupView.visible = false
+                                setup.finish()
 
                             } else if (error == 1) {
                                 errorLabel.text = qsTr("Crypto initialization was not successful.")
                             } else if (error == 2) {
                                 errorLabel.text = qsTr("Couldn't open data file.")
                             } else if (error == 3) {
-                                errorLabel.text = qsTr("Wrong password");
-                                passwordField.forceActiveFocus();
-                                passwordField.selectAll();
+                                errorLabel.text = qsTr("Wrong password")
+                                passwordField.forceActiveFocus()
+                                passwordField.selectAll()
                             } else if (error == 4) {
                                 errorLabel.text = qsTr("Online file appears to be corrupted")
-                                passwordField.visible = false;
-                                unlockButton.visible = false;
+                                passwordField.visible = false
+                                unlockButton.visible = false
                             }
                         } else {
-                            errorLabel.text = qsTr("Enter a password");
+                            errorLabel.text = qsTr("Enter a password")
                         }
                     }
                 }
-
                 Button {
                     text: qsTr("Cancel")
                     onClicked: {
-                        setupFromSyncServiceDialog.close();
+                        setupFromSyncServiceDialog.close()
                     }
                 }
             }

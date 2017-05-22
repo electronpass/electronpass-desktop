@@ -30,11 +30,11 @@ Dialog {
     closePolicy: Popup.NoAutoClose
 
     function sync() {
-        syncManager.download_wallet();
+        syncManager.download_wallet()
     }
     function sync_upload() {
-        refreshUI();
-        syncManager.upload_wallet();
+        refreshUI()
+        syncManager.upload_wallet()
     }
 
     Connections {
@@ -48,31 +48,31 @@ Dialog {
         onWallet_downloaded: {
             if (syncDialog.visible && error == 0) {
                 if (walletMerger.need_decrypt_online_wallet()) {
-                    syncOnlinePasswordDialog.open();
+                    syncOnlinePasswordDialog.open()
                 } else if (walletMerger.is_corrupted()) {
-                    messageDialog.openWithMsg("Online wallet appears to be corrupted", "It will be overwridden with current offline wallet.");
-                    sync_upload();
+                    messageDialog.openWithMsg("Online wallet appears to be corrupted",
+                                              "It will be overwridden with current offline wallet.")
+                    sync_upload()
                 } else {
-                    sync_upload();
+                    sync_upload()
                 }
             } else if (syncDialog.visible) {
-                if (error == 4 || error == 6) return;
+                if (error == 4 || error == 6) return
                 // error codes, that shouldn't happen here or don't have to be explicitly prompted
                 // aborted, no sync provider selected
 
-                var msg;
-                if (error == 1) msg = "Syncing already in progress";
-                else if (error == 2) msg = "Connection error, network server is unreachable";
-                else if (error == 3) msg = "Could not login to network server";
+                var msg
+                if (error == 1) msg = "Syncing already in progress"
+                else if (error == 2) msg = "Connection error, network server is unreachable"
+                else if (error == 3) msg = "Could not login to network server"
                 else if (error == 5) msg = "No sync service selected"
-                messageDialog.setMessage(msg);
-                messageDialog.openWithMsg();
-                syncDialog.close();
+                messageDialog.openWithMsg("Sync error", msg)
+                syncDialog.close()
             }
         }
         onWallet_uploaded: {
             if (syncDialog.visible) {
-                syncDialog.close();
+                syncDialog.close()
             }
         }
     }
@@ -98,10 +98,9 @@ Dialog {
             highlighted: true
             flat: true
             onClicked: {
-                syncManager.abort();
-                syncDialog.close();
+                syncManager.abort()
+                syncDialog.close()
             }
         }
     }
-
 }

@@ -30,10 +30,10 @@ Dialog {
 
     onClosed: {
         errorLabel.text = ""
-        onlinePassword.text = ""
+        onlinePassword.clear()
     }
     onOpened: {
-        onlinePassword.forceActiveFocus();
+        onlinePassword.forceActiveFocus()
     }
 
     ColumnLayout {
@@ -63,19 +63,19 @@ Dialog {
                 id: confirmButton
                 text: qsTr("Decrypt")
                 onClicked: {
-                    var error = walletMerger.decrypt_online_wallet(onlinePassword.text);
-                    onlinePassword.text = "";
+                    var error = walletMerger.decrypt_online_wallet(onlinePassword.text)
+                    onlinePassword.text = ""
                     if (error == 0) {
-                        errorLabel.text = "";
-                        syncOnlinePasswordDialog.close();
+                        errorLabel.text = ""
+                        syncOnlinePasswordDialog.close()
 
-                        syncDialog.sync_upload();
+                        syncDialog.sync_upload()
                     } else if (error == 1) {
-                        errorLabel.text = "Wrong password";
+                        errorLabel.text = "Wrong password"
                     } else if (error == 2) {
                         // should not happen, becuase, sync dialog must redirect on corrupted file dialog.
-                        errorLabel.text = "Online wallet appears to be corrupted.";
-                        confirmButton.active = false;
+                        errorLabel.text = "Online wallet appears to be corrupted."
+                        confirmButton.active = false
                     }
                 }
             }
@@ -84,11 +84,10 @@ Dialog {
                 id: discardButton
                 text: qsTr("Discard")
                 onClicked: {
-                    syncOnlinePasswordDialog.close();
-                    syncDialog.sync_upload();
+                    syncOnlinePasswordDialog.close()
+                    syncDialog.sync_upload()
                 }
             }
         }
     }
-
 }

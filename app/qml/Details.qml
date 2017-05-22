@@ -29,7 +29,8 @@ Pane {
     height: Math.min(detailsList.contentHeight, window.height - 154) + detailsTitleLabel.height + 32
     anchors.horizontalCenter: parent.horizontalCenter
     Material.elevation: 1
-    Material.background: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : "white"
+    Material.background: (Material.theme == Material.Dark) ?
+                         Material.color(Material.Grey, Material.Shade800) : "white"
     opacity: opened ? 1 : 0
     property string title
     Behavior on opacity {
@@ -40,41 +41,39 @@ Pane {
     Timer {
         id: timer
         interval: 0
-
         onTriggered: {
-            if (!running) {
-                details.destroyDetails()
-            }
+            if (!running) details.destroyDetails()
         }
     }
 
     property bool opened: false
 
     function setTitle(title) {
-        detailsTitleLabel.text = title;
+        detailsTitleLabel.text = title
     }
 
     function addDetail(obj){
-        detailsModel.append({titlevar: obj.title, contentvar: obj.content, securevar: obj.secure, typevar: obj.type})
+        detailsModel.append({titlevar: obj.title, contentvar: obj.content,
+                            securevar: obj.secure, typevar: obj.type})
     }
 
     function destroyDetails(){
-        detailsTitleLabel.text = "";
-        detailsModel.clear();
+        detailsTitleLabel.text = ""
+        detailsModel.clear()
     }
 
     function destroyDetailsWithDelay(delay){
-        timer.interval = delay;
-        timer.restart();
+        timer.interval = delay
+        timer.restart()
     }
 
     function openEditDialog(){
-      editItemDialog.open();
-      editItemDialog.index = itemsList.currentIndex;
-      editItemDialog.setTitle(detailsTitleLabel.text);
-      for (var i = 0; i < detailsModel.count; i++){
-        editItemDialog.addEditDetail(detailsModel.get(i));
-      }
+        editItemDialog.open()
+        editItemDialog.index = itemsList.currentIndex
+        editItemDialog.setTitle(detailsTitleLabel.text)
+        for (var i = 0; i < detailsModel.count; i++) {
+            editItemDialog.addEditDetail(detailsModel.get(i))
+        }
     }
 
     ColumnLayout {
@@ -109,7 +108,7 @@ Pane {
 
         //model to hold details
         ListModel {
-          id: detailsModel
+            id: detailsModel
         }
 
         ListView {
@@ -124,18 +123,18 @@ Pane {
             model: detailsModel
 
             add: Transition {
-                NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.InOutCubic }
+                NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0;
+                                  duration: 200; easing.type: Easing.InOutCubic }
             }
-
             displaced: Transition {
                 NumberAnimation { properties: "y"; duration: 200; easing.type: Easing.InOutCubic }
             }
 
             delegate: ItemDetail {
-              title: titlevar
-              content: contentvar
-              secure: securevar
-              type: typevar
+                title: titlevar
+                content: contentvar
+                secure: securevar
+                type: typevar
             }
         }
     }

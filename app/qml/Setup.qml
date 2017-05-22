@@ -41,14 +41,14 @@ Rectangle {
     }
 
     function continueButtonEnabled(){
-      if (setupSwipeView.currentIndex == 0) {
-          return true;
-      } else if (setupSwipeView.currentIndex == 1) {
-          if (password.text != "" && confirmPassword.text == password.text) return true;
-          return false;
-      } else if (setupSwipeView.currentIndex == 2) {
-          return true;
-      }
+        if (setupSwipeView.currentIndex == 0) {
+            return true
+        } else if (setupSwipeView.currentIndex == 1) {
+            if (password.text != "" && confirmPassword.text == password.text) return true
+            return false
+        } else if (setupSwipeView.currentIndex == 2) {
+            return true
+        }
     }
 
     ColumnLayout {
@@ -74,213 +74,209 @@ Rectangle {
         }
 
         SwipeView {
-          id: setupSwipeView
-          anchors.top: setupLogoContainer.bottom
-          anchors.bottom: buttonsRow.top
-          anchors.left: parent.left
-          anchors.right: parent.right
-          anchors.margins: 42
-          clip: true
-          interactive: false
+            id: setupSwipeView
+            anchors.top: setupLogoContainer.bottom
+            anchors.bottom: buttonsRow.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.margins: 42
+            clip: true
+            interactive: false
 
-          Page {
-            background: Rectangle{ color: "transparent" }
+            Page {
+                background: Rectangle{ color: "transparent" }
 
-            ColumnLayout {
-                Label {
-                    text: qsTr("Hi awesome user! Welcome to the ElectronPass.")
-                }
                 ColumnLayout {
-                    Layout.topMargin: 16
-                    Layout.leftMargin: 16
-                    spacing: -16
-                    RadioButton {
-                        id: newUser
-                        checked: true
-                        text: qsTr("I am a new ElectronPass user.")
-                        Keys.onReturnPressed: continueButton.clicked()
+                    Label {
+                        text: qsTr("Hi awesome user! Welcome to the ElectronPass.")
                     }
-                    RadioButton {
-                        id: existingUser
-                        text: qsTr("I have already used ElectronPass on other device(s).")
-                        Keys.onReturnPressed: continueButton.clicked()
+                    ColumnLayout {
+                        Layout.topMargin: 16
+                        Layout.leftMargin: 16
+                        spacing: -16
+                        RadioButton {
+                            id: newUser
+                            checked: true
+                            text: qsTr("I am a new ElectronPass user.")
+                            Keys.onReturnPressed: continueButton.clicked()
+                        }
+                        RadioButton {
+                            id: existingUser
+                            text: qsTr("I have already used ElectronPass on other device(s).")
+                            Keys.onReturnPressed: continueButton.clicked()
+                        }
                     }
                 }
             }
-          }
 
-          Page {
-            background: Rectangle{ color: "transparent" }
-            visible: newUser.checked
-
-            ColumnLayout {
-                width: parent.width
-                height: parent.height
-
-                Label {
-                    text: qsTr("Please create your master password.")
-                }
+            Page {
+                background: Rectangle{ color: "transparent" }
+                visible: newUser.checked
 
                 ColumnLayout {
-                    Layout.topMargin: -16
-                    Layout.leftMargin: 32
+                    width: parent.width
+                    height: parent.height
 
-                    Keys.onReturnPressed: {
-                        if (continueButtonEnabled()) continueButton.clicked()
+                    Label {
+                        text: qsTr("Please create your master password.")
                     }
-                    RowLayout {
-                        Layout.maximumWidth: 330
-                        Item {
-                          width: 156
-                          Label {
-                              id: passLabel
-                              anchors.right: parent.right
-                              anchors.left: parent.left
-                              anchors.verticalCenter: parent.verticalCenter
-                              text: qsTr("Master password: ")
-                              font.weight: Font.Light
-                              horizontalAlignment: Text.AlignRight
-                          }
+
+                    ColumnLayout {
+                        Layout.topMargin: -16
+                        Layout.leftMargin: 32
+
+                        Keys.onReturnPressed: {
+                            if (continueButtonEnabled()) continueButton.clicked()
                         }
-                        TextField {
-                            id: password
-                            inputMethodHints: Qt.ImhSensitiveData
-                            width: 128
-                            font.pointSize: 8
-                            focus: true
-                            echoMode: TextInput.Password
-                            font.family: robotoMonoFont.name
-                            placeholderText: "Password"
-                            Layout.fillWidth: true
-                            selectByMouse: true
-
-                            background: PassStrengthIndicator {
-                                height: password.height-16
-                                password: password.text
-                                type: "password"
-                                anchors.centerIn: parent
-                                width: parent.width
-                            }
-                        }
-                    }
-                    RowLayout {
-                        Layout.maximumWidth: 330
-                        Item {
-                          width: 156
-                          Label {
-                              anchors.right: parent.right
-                              anchors.left: parent.left
-                              anchors.verticalCenter: parent.verticalCenter
-                              text: qsTr("Confirm password: ")
-                              font.weight: Font.Light
-                              horizontalAlignment: Text.AlignRight
-                          }
-                        }
-                        TextField {
-                            id: confirmPassword
-                            inputMethodHints: Qt.ImhSensitiveData
-                            width: 128
-                            font.pointSize: 8
-                            echoMode: TextInput.Password
-                            placeholderText: "Password again"
-                            font.family: robotoMonoFont.name
-                            Layout.fillWidth: true
-                            selectByMouse: true
-
-                            background: ConfirmPassIndicator {
-                                height: password.height-16
-                                valid: (confirmPassword.text == password.text)
-                                anchors.centerIn: parent
-                                width: parent.width
-                            }
-                        }
-                    }
-                }
-
-                Infobar {
-                    text: "Make sure you don't forget your password, there is no way to recover it."
-                    Layout.fillWidth: true
-                    Layout.alignment: Qt.AlignBottom
-                }
-              }
-           }
-        Page {
-            background: Rectangle{ color: "transparent" }
-
-            ColumnLayout {
-                anchors.fill: parent
-
-                Label {
-                    text: qsTr("Please select an option from where you want to restore your data.")
-                }
-
-                Rectangle {
-                    Layout.topMargin: 16
-                    Layout.alignment: Qt.AlignHCenter
-                    Layout.preferredHeight: 300
-                    Layout.preferredWidth: parent.width
-                    color: Material.color(Material.Grey, Material.Shade100)
-
-                    ListView {
-                        id: syncList
-                        anchors.fill: parent
-                        highlight: Rectangle { color: Material.color(Material.Blue, Material.Shade200) }
-                        focus: true
-                        highlightMoveDuration: 0
-                        currentIndex: 0
-                        Keys.onReturnPressed: continueButton.clicked()
-
-                        model: ListModel {
-                            ListElement {
-                                name: "Backup file"
-                            }
-                            ListElement {
-                                name: "Google Drive"
-                            }
-                            ListElement {
-                                name: "Dropbox"
-                            }
-                        }
-                        delegate: ItemDelegate {
-                            id: delegate
-
-                            Control {
-                                anchors.left: parent.left
-                                anchors.right: parent.right
-                                anchors.top: parent.top
-                                anchors.bottom: parent.bottom
-
+                        RowLayout {
+                            Layout.maximumWidth: 330
+                            Item {
+                                width: 156
                                 Label {
-                                    id: title
-                                    text: name
+                                    id: passLabel
+                                    anchors.right: parent.right
+                                    anchors.left: parent.left
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: qsTr("Master password: ")
+                                    font.weight: Font.Light
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                            }
+                            TextField {
+                                id: password
+                                inputMethodHints: Qt.ImhSensitiveData
+                                width: 128
+                                font.pointSize: 8
+                                focus: true
+                                echoMode: TextInput.Password
+                                font.family: robotoMonoFont.name
+                                placeholderText: "Password"
+                                Layout.fillWidth: true
+                                selectByMouse: true
+
+                                background: PassStrengthIndicator {
+                                    height: password.height-16
+                                    password: password.text
+                                    type: "password"
+                                    anchors.centerIn: parent
+                                    width: parent.width
+                                }
+                            }
+                        }
+                        RowLayout {
+                            Layout.maximumWidth: 330
+                            Item {
+                                width: 156
+                                Label {
+                                    anchors.right: parent.right
+                                    anchors.left: parent.left
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: qsTr("Confirm password: ")
+                                    font.weight: Font.Light
+                                    horizontalAlignment: Text.AlignRight
+                                }
+                            }
+                            TextField {
+                                id: confirmPassword
+                                inputMethodHints: Qt.ImhSensitiveData
+                                width: 128
+                                font.pointSize: 8
+                                echoMode: TextInput.Password
+                                placeholderText: "Password again"
+                                font.family: robotoMonoFont.name
+                                Layout.fillWidth: true
+                                selectByMouse: true
+
+                                background: ConfirmPassIndicator {
+                                    height: password.height-16
+                                    valid: (confirmPassword.text == password.text)
+                                    anchors.centerIn: parent
+                                    width: parent.width
+                                }
+                            }
+                        }
+                    }
+
+                    Infobar {
+                        text: qsTr("Make sure you don't forget your password, there is no way" +
+                                   "to recover it.")
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignBottom
+                    }
+                }
+            }
+            Page {
+                background: Rectangle{ color: "transparent" }
+
+                ColumnLayout {
+                    anchors.fill: parent
+
+                    Label {
+                        text: qsTr("Please select an option from where you want to" +
+                                   "restore your data.")
+                    }
+
+                    Rectangle {
+                        Layout.topMargin: 16
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.preferredHeight: 300
+                        Layout.preferredWidth: parent.width
+                        color: Material.color(Material.Grey, Material.Shade100)
+
+                        ListView {
+                            id: syncList
+                            anchors.fill: parent
+                            highlight: Rectangle {
+                                color: Material.color(Material.Blue, Material.Shade200)
+                            }
+                            focus: true
+                            highlightMoveDuration: 0
+                            currentIndex: 0
+                            Keys.onReturnPressed: continueButton.clicked()
+
+                            model: ListModel {
+                                ListElement {
+                                    name: "Backup file"
+                                }
+                                ListElement {
+                                    name: "Google Drive"
+                                }
+                                ListElement {
+                                    name: "Dropbox"
+                                }
+                            }
+                            delegate: ItemDelegate {
+                                id: delegate
+                                width: syncList.width
+
+                                Control {
                                     anchors.left: parent.left
                                     anchors.right: parent.right
                                     anchors.top: parent.top
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    leftPadding: 16
-                                    rightPadding: 16
-                                    topPadding: 16
-                                    font.weight: Font.Medium
-                                    color: "black"
+                                    anchors.bottom: parent.bottom
 
+                                    Label {
+                                        id: title
+                                        text: name
+                                        anchors.left: parent.left
+                                        anchors.right: parent.right
+                                        anchors.top: parent.top
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        leftPadding: 16
+                                        rightPadding: 16
+                                        topPadding: 16
+                                        font.weight: Font.Medium
+                                        color: "black"
+                                    }
                                 }
-
-                            }
-
-                            width: syncList.width
-                            onClicked: {
-                                syncList.currentIndex = model.index;
+                                onClicked: {
+                                    syncList.currentIndex = model.index
+                                }
                             }
                         }
                     }
                 }
-
-
-
-
-
-             }
-          }
+            }
         }
 
         // buttons row
@@ -298,8 +294,8 @@ Rectangle {
                 enabled: (setupSwipeView.currentIndex > 0)
                 onClicked: {
                     if (setupSwipeView.currentIndex == 1 || setupSwipeView.currentIndex == 2) {
-                        newUser.forceActiveFocus();
-                        setupSwipeView.currentIndex = 0;
+                        newUser.forceActiveFocus()
+                        setupSwipeView.currentIndex = 0
                     }
                 }
             }
@@ -313,11 +309,11 @@ Rectangle {
                 onClicked: {
                     if (setupSwipeView.currentIndex == 0){
                         if (newUser.checked) {
-                            password.forceActiveFocus();
-                            setupSwipeView.currentIndex = 1;
+                            password.forceActiveFocus()
+                            setupSwipeView.currentIndex = 1
                         } else {
-                            syncList.forceActiveFocus();
-                            setupSwipeView.currentIndex = 2;
+                            syncList.forceActiveFocus()
+                            setupSwipeView.currentIndex = 2
                         }
                     } else if (setupSwipeView.currentIndex == 1) {
 
@@ -331,10 +327,10 @@ Rectangle {
                         if (syncList.currentIndex == 0) {
                             fileDialog.open()
                         } else {
-                            if (syncList.currentIndex == 1) setup.set_sync_service("gdrive");
-                            if (syncList.currentIndex == 2) setup.set_sync_service("dropbox");
+                            if (syncList.currentIndex == 1) setup.set_sync_service("gdrive")
+                            if (syncList.currentIndex == 2) setup.set_sync_service("dropbox")
 
-                            setupFromSyncServiceDialog.open();
+                            setupFromSyncServiceDialog.open()
                         }
                     }
                 }
@@ -342,10 +338,9 @@ Rectangle {
         }
     }
 
-
     FileDialog {
         id: fileDialog
-        title: "Please choose a backup wallet file."
+        title: qsTr("Please choose a backup wallet file.")
         folder: shortcuts.home
         selectMultiple: false
         onAccepted: {
@@ -359,9 +354,11 @@ Rectangle {
                 passwordDialog.path = url
                 passwordDialog.open()
             } else if (error == 2) {
-                messageDialog.openWithMsg("Wallet is corrupted", "Wallet file seems to be corrupted.")
+                messageDialog.openWithMsg("Wallet is corrupted",
+                                          "Wallet file seems to be corrupted.")
             } else if (error == 3) {
-                messageDialog.openWithMsg("File could not be read", "Wallet file seems to be missing or it has wrong permissions set.")
+                messageDialog.openWithMsg("File could not be read", "Wallet file seems to be" +
+                                          "missing or it has wrong permissions set.")
             }
         }
         onRejected: {}
@@ -370,6 +367,7 @@ Rectangle {
     Dialog {
         id: passwordDialog
         modal: true
+        property string path: ""
 
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
@@ -379,10 +377,8 @@ Rectangle {
             errorLabel.text = ""
         }
         onOpened: {
-            passwordText.forceActiveFocus();
+            passwordText.forceActiveFocus()
         }
-
-        property string path: ""
 
         ColumnLayout {
             anchors.fill: parent
@@ -415,7 +411,8 @@ Rectangle {
                     anchors.rightMargin: 8
                     text: qsTr("Restore")
                     onClicked: {
-                        var success = dataHolder.restore_wallet(passwordDialog.path, passwordText.text)
+                        var success = dataHolder.restore_wallet(passwordDialog.path,
+                                                                passwordText.text)
                         if (success == 0) {
                             errorLabel.text = ""
                             passwordText.text = ""
@@ -429,7 +426,7 @@ Rectangle {
                             passwordText.selectAll()
                         } else if (success == 4) {
                             passwordDialog.close()
-                            messageDialog.openWithMsg("Wallet could not be copied", "");
+                            messageDialog.openWithMsg("Wallet could not be copied", "")
                         }
                     }
                 }
@@ -442,7 +439,6 @@ Rectangle {
                     }
                 }
             }
-
         }
     }
 }

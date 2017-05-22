@@ -63,14 +63,14 @@ Image {
                 horizontalAlignment: TextInput.AlignHCenter
 
                 Keys.onReturnPressed: {
-                    lockRoot.wrongPassCounter += 1;
+                    lockRoot.wrongPassCounter += 1
                     passInput.unlocked = dataHolder.unlock(passInput.text)
                     switch (passInput.unlocked) {
                         case 0:
-                            unlockGUI();
-                            passInput.clear();
-                            toolTip.visible = false;
-                            break;
+                            unlockGUI()
+                            passInput.clear()
+                            toolTip.visible = false
+                            break
                         case 1:
                             // Should not happen (only on random unsafe systems).
                             toolTip.text = "Crypto initialization was not successful."
@@ -103,8 +103,8 @@ Image {
                    visible: false
 
                    function show() {
-                       timer.restart();
-                       visible = true;
+                       timer.restart()
+                       visible = true
                    }
 
                    Behavior on opacity {
@@ -113,12 +113,10 @@ Image {
 
                    Timer {
                        id: timer
-
                        interval: toolTip.timeout
-
                        onTriggered: {
                            if (!running) {
-                               toolTip.visible = false;
+                               toolTip.visible = false
                            }
                        }
                    }
@@ -144,10 +142,10 @@ Image {
     }
 
     function setFocus() {
-        passInput.forceActiveFocus();
+        passInput.forceActiveFocus()
     }
     function removeFocus() {
-        passInput.focus = false;
+        passInput.focus = false
     }
 
 }

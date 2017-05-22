@@ -27,11 +27,13 @@ ListView {
     anchors.bottom: parent.bottom
     anchors.top: parent.top
     highlight: Rectangle {
-        color: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : Material.color(Material.Grey, Material.Shade300)
+        color: (Material.theme == Material.Dark) ?
+                    Material.color(Material.Grey, Material.Shade800) :
+                    Material.color(Material.Grey, Material.Shade300)
     }
     highlightMoveDuration: 0
     currentIndex: -1
-    onCurrentItemChanged: mainLayout.onItemSelected(listView.currentIndex);
+    onCurrentItemChanged: mainLayout.onItemSelected(listView.currentIndex)
 
     ScrollIndicator.vertical: ScrollIndicator {
         id: scrollIndicator
@@ -47,19 +49,19 @@ ListView {
 
     Component {
         id: listDelegate
-        ListItem{}
+        ListItem {}
     }
 
     function nextItem() {
-        listView.incrementCurrentIndex();
+        listView.incrementCurrentIndex()
     }
 
     function previousItem() {
-        listView.decrementCurrentIndex();
+        listView.decrementCurrentIndex()
     }
 
     function setItemIndex(index) {
-        listView.currentIndex = index;
-        mainLayout.handleDetails(index);
+        listView.currentIndex = index
+        mainLayout.handleDetails(index)
     }
 }

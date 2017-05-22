@@ -31,8 +31,8 @@ Dialog {
     property int index: -1
 
     onAccepted: {
-      saveEditDetails();
-      destroyEditDetails();
+        saveEditDetails()
+        destroyEditDetails()
     }
     onRejected: {
         destroyEditDetails()
@@ -46,55 +46,50 @@ Dialog {
     Timer {
         id: timer
         interval: 0
-
         onTriggered: {
-            if (!running) {
-                details.destroyEditDetails()
-            }
+            if (!running) details.destroyEditDetails()
         }
     }
 
     function setTitle(title) {
-        detailsTitleLabel.text = title;
+        detailsTitleLabel.text = title
     }
 
     function addEditDetail(obj){
-        editDetailsModel.append({titlevar: obj.titlevar, contentvar: obj.contentvar, securevar: obj.securevar, typevar: obj.typevar});
+        editDetailsModel.append({titlevar: obj.titlevar, contentvar: obj.contentvar,
+                                 securevar: obj.securevar, typevar: obj.typevar})
     }
 
     function destroyEditDetails(){
-        detailsTitleLabel.text = "";
-        editDetailsModel.clear();
+        detailsTitleLabel.text = ""
+        editDetailsModel.clear()
     }
 
     function destroyEditDetailsWithDelay(delay){
-        timer.interval = delay;
-        timer.restart();
+        timer.interval = delay
+        timer.restart()
     }
 
     function saveEditDetails(){
-        var field = new Array(editDetailsModel.count);
+        var field = new Array(editDetailsModel.count)
         for (var i = 0; i < editDetailsModel.count; ++i) {
             var line = {
                 name: editDetailsModel.get(i)["titlevar"],
                 value: editDetailsModel.get(i)["contentvar"],
                 sensitive: editDetailsModel.get(i)["securevar"],
                 type: editDetailsModel.get(i)["typevar"]
-            };
-            field[i] = line;
+            }
+            field[i] = line
         }
-        var new_index = dataHolder.change_item(index, detailsTitleLabel.text, field);
+        var new_index = dataHolder.change_item(index, detailsTitleLabel.text, field)
 
-        // Ugly solution. Propably there exist a better way to reload a model.
-        itemsList.model = -1;
-        itemsList.model = dataHolder.get_number_of_items();
-        itemsList.setItemIndex(new_index);
+        refreshUI()
+        itemsList.setItemIndex(new_index)
 
         if (dataHolder.get_saving_error() != 0) {
             // TODO: report error
-            console.log("[Error] Could not save wallet.");
+            console.log("[Error] Could not save wallet.")
         }
-
     }
 
     Pane {
@@ -140,27 +135,38 @@ Dialog {
                         x: - width + parent.width
                         MenuItem {
                             text: "Username"
-                            onTriggered: editDetailsModel.append({ titlevar: "Username", contentvar: "", typevar: "username" })
+                            onTriggered: editDetailsModel.append({ titlevar: "Username",
+                                                                   contentvar: "",
+                                                                   typevar: "username" })
                         }
                         MenuItem {
                             text: "Email"
-                            onTriggered: editDetailsModel.append({ titlevar: "Email", contentvar: "", typevar: "email" })
+                            onTriggered: editDetailsModel.append({ titlevar: "Email",
+                                                                   contentvar: "",
+                                                                   typevar: "email" })
                         }
                         MenuItem {
                             text: "Url"
-                            onTriggered: editDetailsModel.append({ titlevar: "Url", contentvar: "", typevar: "url" })
+                            onTriggered: editDetailsModel.append({ titlevar: "Url",
+                                                                   contentvar: "",
+                                                                   typevar: "url" })
                         }
                         MenuItem {
                             text: "Password"
-                            onTriggered: editDetailsModel.append({ titlevar: "Password", contentvar: "", securevar: true, typevar: "password" })
+                            onTriggered: editDetailsModel.append({ titlevar: "Password",
+                                                                   contentvar: "",
+                                                                   securevar: true,
+                                                                   typevar: "password" })
                         }
                         MenuItem {
                             text: "PIN"
-                            onTriggered: editDetailsModel.append({ titlevar: "PIN", contentvar: "", securevar: true, typevar: "pin" })
+                            onTriggered: editDetailsModel.append({ titlevar: "PIN", contentvar: "",
+                                                                   securevar: true, typevar: "pin" })
                         }
                         MenuItem {
                             text: "Other text"
-                            onTriggered: editDetailsModel.append({ titlevar: "", contentvar: "", typevar: "undefined" })
+                            onTriggered: editDetailsModel.append({ titlevar: "", contentvar: "",
+                                                                   typevar: "undefined" })
                         }
                     }
                 }
@@ -180,7 +186,8 @@ Dialog {
                 currentIndex: -1
 
                 add: Transition {
-                    NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0; duration: 200; easing.type: Easing.InOutCubic }
+                    NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0; duration: 200;
+                                      easing.type: Easing.InOutCubic }
                 }
 
                 displaced: Transition {
@@ -188,10 +195,10 @@ Dialog {
                 }
 
                 delegate: EditItemDetail {
-                  title: titlevar
-                  content: contentvar
-                  secure: securevar
-                  type: typevar
+                    title: titlevar
+                    content: contentvar
+                    secure: securevar
+                    type: typevar
                 }
             }
 
@@ -209,23 +216,26 @@ Dialog {
                     font.family: materialIconsFont.name
                     Layout.leftMargin: -16
                     enabled: editDetailsList.currentIndex > 0
-                    onClicked: editDetailsModel.move(editDetailsList.currentIndex, editDetailsList.currentIndex - 1, 1)
+                    onClicked: editDetailsModel.move(editDetailsList.currentIndex,
+                                                     editDetailsList.currentIndex - 1, 1)
                 }
                 ToolButton {
                     font.pixelSize: 18
                     text: qsTr("\uE313")
                     font.family: materialIconsFont.name
                     Layout.leftMargin: -22
-                    enabled: (editDetailsList.currentIndex >= 0 && editDetailsList.currentIndex < editDetailsModel.count - 1)
-                    onClicked: editDetailsModel.move(editDetailsList.currentIndex, editDetailsList.currentIndex + 1, 1)
+                    enabled: (editDetailsList.currentIndex >= 0 &&
+                              editDetailsList.currentIndex < editDetailsModel.count - 1)
+                    onClicked: editDetailsModel.move(editDetailsList.currentIndex,
+                                                     editDetailsList.currentIndex + 1, 1)
                 }
             }
         }
     }
 
     PassGenerator {
-      id: passGenerator
-      x: (parent.width - width) / 2
-      y: (parent.height - height) / 2
+        id: passGenerator
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
     }
 }

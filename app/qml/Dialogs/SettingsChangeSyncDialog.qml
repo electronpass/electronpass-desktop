@@ -27,25 +27,25 @@ Dialog {
     y: (parent.height - height) / 2
 
     function openWithMsg(title, message) {
-        settingsChangeSyncDialog.title = title;
-        messageLabel.text = message;
-        open();
+        settingsChangeSyncDialog.title = title
+        messageLabel.text = message
+        open()
     }
 
     onOpened: messageLabel.forceActiveFocus()
 
     onAccepted: {
-        setup.set_sync_service(settingsDialog.getSyncServiceFromIndex());
+        setup.set_sync_service(settingsDialog.getSyncServiceFromIndex())
 
         if (settingsDialog.getSyncServiceFromIndex() != "none") {
-            syncDialog.open();
-            syncDialog.sync();
+            syncDialog.open()
+            syncDialog.sync()
         }
     }
     onRejected: {
         console.log("Changing sync provider canceled.")
         // set sync service to current sync service
-        settingsDialog.setSyncServiceIndex();
+        settingsDialog.setSyncServiceIndex()
     }
 
     ColumnLayout {
@@ -61,5 +61,4 @@ Dialog {
     }
 
     standardButtons: Dialog.Ok | Dialog.Cancel
-
 }
