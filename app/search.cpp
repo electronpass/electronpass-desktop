@@ -35,7 +35,7 @@ void DataHolder::sort_items() {
     }
 }
 
-int DataHolder::search(const QString& s) {
+int DataHolder::search(const QString &s) {
     searching = true;
 
     int best_match = -1, best_match_index = std::numeric_limits<int>::max();

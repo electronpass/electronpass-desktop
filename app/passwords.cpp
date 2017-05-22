@@ -18,8 +18,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "passwords.hpp"
 
 int Passwords::passStrengthToInt(const QString &pass) {
-    electronpass::passwords::strength_category category = electronpass::passwords::password_strength_category(
-            pass.toStdString());
+    electronpass::passwords::strength_category category;
+    category = electronpass::passwords::password_strength_category(pass.toStdString());
+
     switch (category) {
         case electronpass::passwords::strength_category::TERRIBLE:
             return 1;
@@ -36,8 +37,8 @@ int Passwords::passStrengthToInt(const QString &pass) {
 }
 
 QString Passwords::categoryTooltipText(const QString &pass) {
-    return QString::fromUtf8(
-            electronpass::passwords::human_readable_password_strength_category(pass.toStdString()).c_str());
+    return QString::fromUtf8(electronpass::passwords::human_readable_password_strength_category(
+            pass.toStdString()).c_str());
 }
 
 QString Passwords::generateRandomPass(int len) {
@@ -45,5 +46,6 @@ QString Passwords::generateRandomPass(int len) {
 }
 
 QString Passwords::generateRandomPassWithRecipe(int len, int digits, int symbols, int uppercase) {
-    return QString::fromUtf8(electronpass::passwords::generate_random_pass(len, digits, symbols, uppercase).c_str());
+    return QString::fromUtf8(electronpass::passwords::generate_random_pass(len, digits, symbols,
+                                                                           uppercase).c_str());
 }

@@ -18,27 +18,25 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #ifndef DATA_HOLDER_HPP
 #define DATA_HOLDER_HPP
 
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <limits>
+
 #include <QObject>
 #include <QString>
 #include <QList>
 #include <QDir>
 #include <QUrl>
 #include <QDesktopServices>
-#include <string>
-#include <fstream>
-#include <vector>
-#include <iostream>
-#include <algorithm>
-#include <limits>
 
 #include <electronpass/crypto.hpp>
 #include <electronpass/serialization.hpp>
-#include <electronpass/passwords.hpp>
 #include <electronpass/wallet.hpp>
+
 #include "globals.hpp"
 #include "file_stream.hpp"
 #include "wallet_merger.hpp"
-
 
 class DataHolder: public QObject {
     Q_OBJECT
@@ -69,16 +67,16 @@ class DataHolder: public QObject {
     std::string new_item_id = "";
 
     // Functions to convert from QMap to Field object and reverse.
-    static QMap<QString, QVariant> convert_field(const electronpass::Wallet::Field& field);
-    static electronpass::Wallet::Field convert_field(const QMap<QString, QVariant>& field);
+    static QMap<QString, QVariant> convert_field(const electronpass::Wallet::Field &field);
+    static electronpass::Wallet::Field convert_field(const QMap<QString, QVariant> &field);
 
     // Fills new item with template value.
-    static void fill_item_template(electronpass::Wallet::Item& item, const std::string& item_template);
+    static void fill_item_template(electronpass::Wallet::Item &item, const std::string &item_template);
 
     // Returns uuid of item at index. Empty string if index is too large or if locked.
     std::string index_to_id(int index) const;
     // Returns index where item with given id should be located.
-    int id_to_index(const std::string& id) const;
+    int id_to_index(const std::string &id) const;
 
     // Items need to be sorted in alphabetical order. Instead of actually sorting them,
     // only a permutation vector is created.
@@ -91,9 +89,9 @@ class DataHolder: public QObject {
     // Encrypts wallet and saves it. Should be already called by other functions.
     // Also updates names in side bar and search strings.
     // Returns:
-    //      0 - OK
-    //      1 - Encryption failed.
-    //      2 - File write failed.
+    //      - 0: OK
+    //      - 1: Encryption failed.
+    //      - 2: File write failed.
     // Result is saved in saving_error variable.
     int save();
 
@@ -108,36 +106,35 @@ public:
     DataHolder() {}
 
     // Creates new wallet object and saves it.
-    Q_INVOKABLE bool new_wallet(const QString& password);
+    Q_INVOKABLE bool new_wallet(const QString &password);
 
     // Opens file and tries do decrypt it with password.
     // Also converts decrypted file (json string) to electronpass::Wallet object.
     // Returns:
-    //     0 - success.
-    //     1 - electronpass::Crypto initialization was not successful
-    //     2 - can't open file at globals::settings.get_data_location()
-    //     3 - decryption was not succuessful (wrong password)
-    //     4 - file contains invalid json (corrupted file)
-    Q_INVOKABLE int unlock(const QString& password);
+    //     - 0: success.
+    //     - 1: electronpass::Crypto initialization was not successful
+    //     - 2: can't open file at globals::settings.get_data_location()
+    //     - 3: decryption was not succuessful (wrong password)
+    //     - 4: file contains invalid json (corrupted file)
+    Q_INVOKABLE int unlock(const QString &password);
 
     // Deletes all decrypted data and electronpass::Crypto object used for decryption.
     Q_INVOKABLE void lock();
 
     // Saves wallet file to file_url location.
-    Q_INVOKABLE bool backup_wallet(const QString& file_url) const;
+    Q_INVOKABLE bool backup_wallet(const QString &file_url) const;
 
-    /* Restore wallet from backup
-       Returns:
-        - 0: success
-        - 1: could not decrypt data
-        - 2: invalid json
-        - 3: could not read file
-        - 4: cold not copy
-    */
-    Q_INVOKABLE int restore_wallet(const QString& file_url, QString password = "");
+    // Restore wallet from backup
+    // Returns:
+    //     - 0: success
+    //     - 1: could not decrypt data
+    //     - 2: invalid json
+    //     - 3: could not read file
+    //     - 4: cold not copy
+    Q_INVOKABLE int restore_wallet(const QString &file_url, QString password = "");
 
     // Exports wallet to csv to a given location.
-    Q_INVOKABLE bool export_to_csv(const QString& file_url) const;
+    Q_INVOKABLE bool export_to_csv(const QString &file_url) const;
 
     // Different functions for display of items in GUI
     Q_INVOKABLE int get_number_of_items() const;
@@ -148,7 +145,7 @@ public:
     Q_INVOKABLE QMap<QString, QVariant> get_item_field(int item_index, int field_index) const;
 
     // Returns index of first found item which contains string.
-    Q_INVOKABLE int search(const QString& s);
+    Q_INVOKABLE int search(const QString &s);
     Q_INVOKABLE void stop_search();
 
     // Deletes item at index. Function save must be called afterwards to apply changes.
@@ -158,11 +155,11 @@ public:
     // Replaces past item with new item and saves it.
     // Returns pair new index of element.
     // get_saving_error() should be called afterwards to check if saving was sucessful.
-    Q_INVOKABLE int change_item(int index, const QString& name, const QVariantList& fields);
+    Q_INVOKABLE int change_item(int index, const QString &name, const QVariantList &fields);
 
     // Creates new item with given template.
     // Returns index of new item. Does not save the wallet.
-    Q_INVOKABLE int add_item(const QString& item_template);
+    Q_INVOKABLE int add_item(const QString &item_template);
 
     // Deletes not saved items. Should be called after `add_item` if item is not saved.
     Q_INVOKABLE void cancel_edit();
@@ -171,13 +168,12 @@ public:
     Q_INVOKABLE int get_saving_error();
 
     // Opens url in tolerant mode (also works for google.com)
-    Q_INVOKABLE void open_url(const QString& url);
+    Q_INVOKABLE void open_url(const QString &url);
 
     // Saves wallet with new password.
     // Retuns true if password was successfully changed and false if not.
     // If not, error code can be retrieved by calling get_saving_error().
-    Q_INVOKABLE bool change_password(const QString& old_password, const QString& new_password);
-
+    Q_INVOKABLE bool change_password(const QString &old_password, const QString &new_password);
 };
 
 #endif // DATA_HOLDER_HPP

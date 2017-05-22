@@ -18,11 +18,11 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #ifndef CLIPBOARD_HPP
 #define CLIPBOARD_HPP
 
+#include <iostream>
+#include <string>
 #include <QString>
 #include <QClipboard>
 #include <QApplication>
-#include <iostream>
-#include <string>
 
 class Clipboard : public QObject {
     Q_OBJECT
@@ -34,7 +34,7 @@ public:
     // Init needs to be called after GuiApplication is created.
     void init();
 
-    Q_INVOKABLE void set_text(const QString& text);
+    Q_INVOKABLE void set_text(const QString &text);
 
     // Data in clipboard should be cleared when application is closed or locked.
     Q_INVOKABLE void clear();

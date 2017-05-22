@@ -15,9 +15,9 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "data_holder.hpp"
+#include "file_stream.hpp"
 
-std::string file_stream::read_file(bool& success, std::string path_) {
+std::string file_stream::read_file(bool &success, std::string path_) {
     std::string path = path_ == "" ? globals::settings.get_data_location().toStdString() : path_;
     std::string data;
 
@@ -34,12 +34,7 @@ std::string file_stream::read_file(bool& success, std::string path_) {
     return data;
 }
 
-// bool file_stream::write_file(const std::string& data) {
-//     std::string path = globals::settings.get_data_location().toStdString();
-//     return file_stream::write_file(data, path);
-// }
-
-bool file_stream::write_file(const std::string& data, std::string path /* = "" */) {
+bool file_stream::write_file(const std::string &data, std::string path /* = "" */) {
     if (path == "") {
         path = globals::settings.get_data_location().toStdString();
     }

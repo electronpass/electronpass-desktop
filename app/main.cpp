@@ -15,17 +15,22 @@ You should have received a copy of the GNU General Public License
 along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <iostream>
+
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QSettings>
 
-#include <iostream>
-
 #include "globals.hpp"
+#include "data_holder.hpp"
+#include "settings.hpp"
+#include "clipboard.hpp"
+#include "sync_manager.hpp"
 #include "passwords.hpp"
 #include "setup.hpp"
+#include "wallet_merger.hpp"
 
 const char *ORGANIZATION_NAME = "ElectronPass";
 const char *APPLICATION_NAME = "ElectronPass";

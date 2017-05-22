@@ -18,11 +18,13 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #ifndef SETUP_HPP
 #define SETUP_HPP
 
+#include <string>
+#include <iostream>
+
 #include <QObject>
 #include <QString>
 #include <QUrl>
-#include <string>
-#include <iostream>
+
 #include <electronpass/wallet.hpp>
 #include "globals.hpp"
 #include "file_stream.hpp"
@@ -30,6 +32,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 class Setup : public QObject {
     Q_OBJECT
     bool first_usage;
+
 public:
     Setup();
 
@@ -43,12 +46,12 @@ public:
     Q_INVOKABLE void finish();
 
     // Creates new empty wallet and saves it.
-    Q_INVOKABLE bool set_password(const QString& password);
+    Q_INVOKABLE bool set_password(const QString &password);
 
-    Q_INVOKABLE bool restore_data_from_file(const QString& file_url);
+    Q_INVOKABLE bool restore_data_from_file(const QString &file_url);
 
     Q_INVOKABLE QString get_sync_service() const;
-    Q_INVOKABLE void set_sync_service(const QString& service_name);
+    Q_INVOKABLE void set_sync_service(const QString &service_name);
 };
 
 #endif // SETUP_HPP

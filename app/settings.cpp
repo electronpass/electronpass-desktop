@@ -23,7 +23,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #define kDropboxAccessToken "dropbox_access_token"
 #define kSyncManagerService "sync_manager"
 
-void SettingsManager::init(QSettings& settings_) {
+void SettingsManager::init(QSettings &settings_) {
     settings = &settings_;
 
     if (!settings->contains("data_folder") || !settings->contains("data_location")) {
@@ -37,7 +37,6 @@ void SettingsManager::init(QSettings& settings_) {
         settings->setValue("data_folder", path);
 
         QString data_path = QDir(path + QDir::separator() + "electronpass.wallet").absolutePath();
-
         settings->setValue("data_location", data_path);
     }
 
@@ -45,8 +44,9 @@ void SettingsManager::init(QSettings& settings_) {
 
     if (!settings->contains(kGdriveAccessToken)) settings->setValue(kGdriveAccessToken, "");
     if (!settings->contains(kGdriveRefreshToken)) settings->setValue(kGdriveRefreshToken, "");
-    if (!settings->contains(kGdriveTokenExpiration)) settings->setValue(kGdriveTokenExpiration, QDateTime::currentDateTimeUtc());
-
+    if (!settings->contains(kGdriveTokenExpiration)) {
+        settings->setValue(kGdriveTokenExpiration, QDateTime::currentDateTimeUtc());
+    }
     if (!settings->contains(kDropboxAccessToken)) settings->setValue(kDropboxAccessToken, "");
 
     if (!settings->contains(kSyncManagerService)) settings->setValue(kSyncManagerService, "none");
@@ -66,14 +66,6 @@ QString SettingsManager::get_data_location() const {
 
 QString SettingsManager::get_data_folder() const {
     return settings->value("data_folder").toString();
-}
-
-bool SettingsManager::set_data_location(const QString& new_data_location) {
-    return settings->value("data_location").toString() == new_data_location;
-
-    // TODO:
-    // Move the file
-    // Change value in settings
 }
 
 bool SettingsManager::get_first_usage() const {
@@ -104,7 +96,7 @@ QDateTime SettingsManager::gdrive_get_token_expiration() const {
     return settings->value(kGdriveTokenExpiration).toDateTime();
 }
 
-void SettingsManager::gdrive_set_access_token(const std::string& token) {
+void SettingsManager::gdrive_set_access_token(const std::string &token) {
     bool success;
     settings->setValue(kGdriveAccessToken, token_crypto.encrypt(token, success).c_str());
 }
@@ -114,7 +106,7 @@ void SettingsManager::gdrive_set_refresh_token(const std::string &token) {
     settings->setValue(kGdriveRefreshToken, token_crypto.encrypt(token, success).c_str());
 }
 
-void SettingsManager::gdrive_set_token_expiration(const QDateTime& expire_date) {
+void SettingsManager::gdrive_set_token_expiration(const QDateTime &expire_date) {
     settings->setValue(kGdriveTokenExpiration, expire_date);
 }
 

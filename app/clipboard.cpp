@@ -21,7 +21,7 @@ void Clipboard::init() {
     clipboard = QApplication::clipboard();
 }
 
-void Clipboard::set_text(const QString& text) {
+void Clipboard::set_text(const QString &text) {
     clipboard->setText(text, QClipboard::Clipboard);
     // 2 other methods exist, not sure if we need them.
     // clipboard->setText(text, QClipboard::Selection);

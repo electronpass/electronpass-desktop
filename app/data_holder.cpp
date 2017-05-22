@@ -41,7 +41,7 @@ std::string DataHolder::index_to_id(int index) const {
     return item_ids[index];
 }
 
-int DataHolder::id_to_index(const std::string& id) const {
+int DataHolder::id_to_index(const std::string &id) const {
     int index = std::find(item_ids.begin(), item_ids.end(), id) - item_ids.begin();
     if (index >= static_cast<int>(item_ids.size())) return -1;
     return permute_back(index);
@@ -56,7 +56,7 @@ void DataHolder::update() {
 
     new_item_id = "";
 
-    for (const std::string& id : item_ids) {
+    for (const std::string &id : item_ids) {
         const electronpass::Wallet::Item item = wallet[id];
 
         item_names.push_back(QString::fromStdString(item.name));
@@ -79,7 +79,7 @@ void DataHolder::update() {
     sort_items();
 }
 
-int DataHolder::unlock(const QString& password) {
+int DataHolder::unlock(const QString &password) {
     std::string password_string = password.toStdString();
 
     crypto = new electronpass::Crypto(password_string);
@@ -157,12 +157,12 @@ int DataHolder::delete_item(int index) {
     return error != 0;
 }
 
-int DataHolder::change_item(int index, const QString& name_, const QVariantList& fields) {
+int DataHolder::change_item(int index, const QString &name_, const QVariantList &fields) {
     std::string name = name_.toStdString();
     std::string id = index_to_id(index);
 
     std::vector<electronpass::Wallet::Field> wallet_fields;
-    for (const QVariant& v : fields) {
+    for (const QVariant &v : fields) {
         QMap<QString, QVariant> field = v.toMap();
         wallet_fields.push_back(convert_field(field));
     }
@@ -173,7 +173,7 @@ int DataHolder::change_item(int index, const QString& name_, const QVariantList&
     return id_to_index(id);
 }
 
-int DataHolder::add_item(const QString& item_template_) {
+int DataHolder::add_item(const QString &item_template_) {
     electronpass::Wallet::Item item;
     std::string item_template = item_template_.toStdString();
 
@@ -229,7 +229,7 @@ int DataHolder::get_saving_error() {
     return saving_error;
 }
 
-bool DataHolder::change_password(const QString& old_password, const QString& new_password) {
+bool DataHolder::change_password(const QString &old_password, const QString &new_password) {
     std::string old_password_string = old_password.toStdString();
     std::string new_password_string = new_password.toStdString();
 
@@ -257,7 +257,7 @@ bool DataHolder::change_password(const QString& old_password, const QString& new
     return error == 0;
 }
 
-bool DataHolder::new_wallet(const QString& password) {
+bool DataHolder::new_wallet(const QString &password) {
     std::string password_string = password.toStdString();
 
     crypto = new electronpass::Crypto(password_string);
@@ -270,11 +270,11 @@ bool DataHolder::new_wallet(const QString& password) {
 }
 
 
-void DataHolder::open_url(const QString& url) {
+void DataHolder::open_url(const QString &url) {
     QDesktopServices::openUrl(QUrl::fromUserInput(url));
 }
 
-bool DataHolder::backup_wallet(const QString& file_url) const {
+bool DataHolder::backup_wallet(const QString &file_url) const {
     QUrl url(file_url);
 
     std::string backup_path = url.toLocalFile().toStdString();
@@ -284,7 +284,7 @@ bool DataHolder::backup_wallet(const QString& file_url) const {
     return success;
 }
 
-int DataHolder::restore_wallet(const QString& file_url, QString password) {
+int DataHolder::restore_wallet(const QString &file_url, QString password) {
     QUrl url(file_url);
     std::string path = url.toLocalFile().toStdString();
 
@@ -311,7 +311,7 @@ int DataHolder::restore_wallet(const QString& file_url, QString password) {
     return load_error;
 }
 
-bool DataHolder::export_to_csv(const QString& file_url) const {
+bool DataHolder::export_to_csv(const QString &file_url) const {
     QUrl url(file_url);
 
     std::string export_path = url.toLocalFile().toStdString();

@@ -18,25 +18,22 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #ifndef FILE_STREAM_HPP
 #define FILE_STREAM_HPP
 
-#include <QString>
 #include <string>
-#include <iostream>
+#include <fstream>
 #include "globals.hpp"
 
 namespace file_stream {
-
     // Reads first line of encrypted file.
     // Location of encrypted file is stored in settings.
-    std::string read_file(bool& success, std::string path_ = "");
+    std::string read_file(bool &success, std::string path_ = "");
 
     // Writes single-line string to file.
     // If path is not given, file is read from data location stored in settings.
-    bool write_file(const std::string& data, std::string path = "");
+    bool write_file(const std::string &data, std::string path = "");
 
     // Copies content from file at old_location to new location.
     // If new_location is not given, then file is copied to location saved in settings as `data_location`.
     bool copy_file(std::string old_location, std::string new_location = "");
-
 }
 
-#endif //FILE_STREAM_HPP
+#endif // FILE_STREAM_HPP

@@ -1,7 +1,26 @@
-#include <globals.hpp>
+/*
+This file is part of ElectronPass.
 
-DataHolder globals::data_holder;
-SettingsManager globals::settings;
-SyncManager globals::sync_manager;
-Clipboard globals::clipboard;
-WalletMerger globals::wallet_merger;
+ElectronPass is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+ElectronPass is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "globals.hpp"
+
+using namespace globals;
+
+DataHolder data_holder;
+SettingsManager settings;
+SyncManager sync_manager;
+Clipboard clipboard;
+WalletMerger wallet_merger;

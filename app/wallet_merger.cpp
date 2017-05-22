@@ -17,15 +17,17 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "wallet_merger.hpp"
 
-int WalletMerger::merge(const std::string& online_string) {
+int WalletMerger::merge(const std::string &online_string) {
     std::cout << "<wallet_merger.cpp> [Log] Merging wallets." << std::endl;
 
     need_decrypt = false;
     corrupted = false;
 
     int error = -1;
-    electronpass::Wallet online_wallet = electronpass::serialization::load(online_string,
-                                                        *globals::data_holder.crypto, error);
+    electronpass::Wallet online_wallet = electronpass::serialization::load(
+            online_string,
+            *globals::data_holder.crypto,
+            error);
 
     if (error != 0) {
         if (error == 2) {
@@ -33,26 +35,29 @@ int WalletMerger::merge(const std::string& online_string) {
           std::cout << "<wallet_merger.cpp> [Warning] Wallet json online is invalid." << std::endl;
         } else if (error == 1) {
           need_decrypt = true;
-          std::cout << "<wallet_merger.cpp> [Log] Online wallet is not encrypted with same password." << std::endl;
+          std::cout << "<wallet_merger.cpp> [Log] Online wallet is not encrypted with" +
+                       " same password." << std::endl;
         }
 
         online_json = online_string;
         return error;
     }
 
-    globals::data_holder.wallet = electronpass::Wallet::merge(globals::data_holder.wallet, online_wallet);
+    globals::data_holder.wallet = electronpass::Wallet::merge(globals::data_holder.wallet,
+                                                              online_wallet);
     error = globals::data_holder.save();
     if (error != 0) return 3;
     return 0;
 }
 
-int WalletMerger::decrypt_online_wallet(const QString& password) {
+int WalletMerger::decrypt_online_wallet(const QString &password) {
     std::string password_str = password.toStdString();
 
     electronpass::Crypto crypto(password_str);
 
     int error = -1;
-    electronpass::Wallet online_wallet = electronpass::serialization::load(online_json, crypto, error);
+    electronpass::Wallet online_wallet = electronpass::serialization::load(online_json, crypto,
+                                                                           error);
     if (error != 0) return error;
 
     // If online wallet is newer, then encrypt with it's password.
@@ -60,7 +65,8 @@ int WalletMerger::decrypt_online_wallet(const QString& password) {
         globals::data_holder.crypto = new electronpass::Crypto(password_str);
     }
 
-    globals::data_holder.wallet = electronpass::Wallet::merge(globals::data_holder.wallet, online_wallet);
+    globals::data_holder.wallet = electronpass::Wallet::merge(globals::data_holder.wallet,
+                                                              online_wallet);
 
     error = globals::data_holder.save();
     if (error != 0) return 3;

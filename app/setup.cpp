@@ -37,7 +37,7 @@ bool Setup::reset() {
     return true;
 }
 
-bool Setup::set_password(const QString& password) {
+bool Setup::set_password(const QString &password) {
     bool success = globals::data_holder.new_wallet(password);
     if (success) {
         assert(globals::data_holder.unlock(password) == 0);
@@ -45,7 +45,7 @@ bool Setup::set_password(const QString& password) {
     return success;
 }
 
-bool Setup::restore_data_from_file(const QString& file_url) {
+bool Setup::restore_data_from_file(const QString &file_url) {
     QUrl url(file_url);
     std::string path = url.toLocalFile().toStdString();
 
@@ -58,7 +58,7 @@ QString Setup::get_sync_service() const {
     return QString::fromStdString(service);
 }
 
-void Setup::set_sync_service(const QString& service_name) {
+void Setup::set_sync_service(const QString &service_name) {
     std::string service = service_name.toStdString();
     globals::settings.sync_manager_set_service(service);
 

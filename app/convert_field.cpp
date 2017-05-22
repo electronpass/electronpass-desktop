@@ -26,7 +26,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #define kFieldTypeOther "other"
 #define kFieldTypeUndefined "undefined";
 
-QMap<QString, QVariant> DataHolder::convert_field(const electronpass::Wallet::Field& field) {
+QMap<QString, QVariant> DataHolder::convert_field(const electronpass::Wallet::Field &field) {
     QMap<QString, QVariant> new_field;
 
     new_field["name"] = QString::fromStdString(field.name);
@@ -65,12 +65,12 @@ QMap<QString, QVariant> DataHolder::convert_field(const electronpass::Wallet::Fi
     return new_field;
 }
 
-electronpass::Wallet::Field DataHolder::convert_field(const QMap<QString, QVariant>& field_list) {
+electronpass::Wallet::Field DataHolder::convert_field(const QMap<QString, QVariant> &field_list) {
     electronpass::Wallet::Field field;
 
     field.name = field_list["name"].toString().toStdString();
     field.value = field_list["value"].toString().toStdString();
-    field.sensitive = field_list["sensitive"].toString().toStdString() != "false" ? true : false;
+    field.sensitive = field_list["sensitive"].toString().toStdString() != "false";
 
     std::string type = field_list["type"].toString().toStdString();
 

@@ -17,9 +17,8 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "data_holder.hpp"
 
-using namespace electronpass;
-
-void DataHolder::fill_item_template(electronpass::Wallet::Item& item, const std::string& item_template) {
+void DataHolder::fill_item_template(electronpass::Wallet::Item &item,
+                                    const std::string &item_template) {
     if (item_template == "login") {
         item.name = "Website login";
 

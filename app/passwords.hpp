@@ -18,26 +18,27 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #ifndef PASSWORDS_HPP
 #define PASSWORDS_HPP
 
+#include <string>
+#include <cassert>
+
 #include <QSettings>
 #include <QStandardPaths>
 #include <QString>
-#include <string>
-#include <cassert>
+
 #include <electronpass/passwords.hpp>
 
 class Passwords : public QObject {
-Q_OBJECT
+    Q_OBJECT
 
 public:
-
     Q_INVOKABLE int passStrengthToInt(const QString &pass);
 
     Q_INVOKABLE QString categoryTooltipText(const QString &pass);
 
     Q_INVOKABLE QString generateRandomPass(int len);
 
-    Q_INVOKABLE QString generateRandomPassWithRecipe(int len, int digits, int symbols, int uppercase);
-
+    Q_INVOKABLE QString generateRandomPassWithRecipe(int len, int digits, int symbols,
+                                                     int uppercase);
 };
 
 #endif // PASSWORDS_HPP

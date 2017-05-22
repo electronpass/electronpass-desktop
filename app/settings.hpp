@@ -18,14 +18,15 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #ifndef SETTINGS_HPP
 #define SETTINGS_HPP
 
+#include <string>
+#include <cassert>
+#include <iostream>
+
 #include <QSettings>
 #include <QStandardPaths>
 #include <QString>
 #include <QDateTime>
 #include <QDir>
-#include <string>
-#include <cassert>
-#include <iostream>
 
 #include <electronpass/crypto.hpp>
 #include "sync/keys.hpp"
@@ -40,19 +41,13 @@ public:
     SettingsManager(): token_crypto(kTokenPassword) {}
 
     // Checks if all settings are initialized and sets default values if not.
-    void init(QSettings& settings_);
+    void init(QSettings &settings_);
 
     void reset();
 
     // Returns location where the file with passwords is stored.
     QString get_data_location() const;
     QString get_data_folder() const;
-
-    // TODO: Sets the location where the file with passowds will be stored.
-    // TODO: File with passwords must be actually moved, which may cause some problems on different platforms.
-    // When changing data_location in settings, both variables (data_location & data_folder)
-    // should be changed (for obvious reasons).
-    bool set_data_location(const QString& new_data_location);
 
     bool get_first_usage() const;
     void set_first_usage(bool value);
@@ -62,9 +57,9 @@ public:
     std::string gdrive_get_refresh_token() const;
     QDateTime gdrive_get_token_expiration() const;
 
-    void gdrive_set_access_token(const std::string& token);
-    void gdrive_set_refresh_token(const std::string& token);
-    void gdrive_set_token_expiration(const QDateTime& expire_date);
+    void gdrive_set_access_token(const std::string &token);
+    void gdrive_set_refresh_token(const std::string &token);
+    void gdrive_set_token_expiration(const QDateTime &expire_date);
 
     // Dropbox oauth2 settings
     std::string dropbox_get_access_token() const;
@@ -72,11 +67,7 @@ public:
 
     // Sync manager settings
     std::string sync_manager_get_service() const;
-    void sync_manager_set_service(const std::string& service);
-
-    //access token
-    // refresh token
-    // token expiration
+    void sync_manager_set_service(const std::string &service);
 };
 
 #endif // SETTINGS_HPP

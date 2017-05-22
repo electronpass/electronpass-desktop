@@ -30,14 +30,12 @@ class WalletMerger;
 
 // Namespace in which are few global objects like settings and so on.
 namespace globals {
-
     // Will be initialized later.
     extern DataHolder data_holder;
     extern SettingsManager settings;
     extern SyncManager sync_manager;
     extern Clipboard clipboard;
     extern WalletMerger wallet_merger;
-
 }
 
 #endif // GLOBALS_HPP
