@@ -107,7 +107,7 @@ ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+L"
         onActivated: {
-            if(!lock.visible) {
+            if(!lock.visible && !setupView.visible) {
                 dataHolder.lock()
                 lockGUI()
             }
@@ -156,7 +156,7 @@ ApplicationWindow {
                         // returns -1 if nothing found
                         var search_results = dataHolder.search(text)
                         // first change model, then update index
-                        refreshUI()
+                        itemsList.model = dataHolder.get_number_of_items()
                         itemsList.setItemIndex(search_results)
                     } else {
                         dataHolder.stop_search()
@@ -237,10 +237,6 @@ ApplicationWindow {
         id: mainLayout
         anchors.fill: parent
         spacing: 0
-
-        function onItemSelected(index) {
-            handleDetails(index)
-        }
 
         function handleDetails(index) {
             if (index < 0) detailsPane.hideDetails()
@@ -363,8 +359,8 @@ ApplicationWindow {
         var index = itemsList.currentIndex
         itemsList.model = -1
         itemsList.model = dataHolder.get_number_of_items()
-        if (index < dataHolder.get_number_of_items()) itemsList.currentIndex = index
-        else itemsList.currentIndex = -1
+        if (index < dataHolder.get_number_of_items()) itemsList.setItemIndex(index)
+        else itemsList.setItemIndex(-1)
     }
 
     function lockGUI() {

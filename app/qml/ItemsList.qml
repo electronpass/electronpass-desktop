@@ -32,8 +32,8 @@ ListView {
                     Material.color(Material.Grey, Material.Shade300)
     }
     highlightMoveDuration: 0
-    currentIndex: -1
-    onCurrentItemChanged: mainLayout.onItemSelected(listView.currentIndex)
+
+    onCurrentItemChanged: mainLayout.handleDetails(listView.currentIndex)
 
     ScrollIndicator.vertical: ScrollIndicator {
         id: scrollIndicator
@@ -62,6 +62,5 @@ ListView {
 
     function setItemIndex(index) {
         listView.currentIndex = index
-        mainLayout.handleDetails(index)
     }
 }
