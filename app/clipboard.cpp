@@ -17,19 +17,20 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 
 #include "clipboard.hpp"
 
+#define kClipboardMode QClipboard::Clipboard
+
 void Clipboard::init() {
     clipboard = QApplication::clipboard();
 }
 
 void Clipboard::set_text(const QString &text) {
-    clipboard->setText(text, QClipboard::Clipboard);
-    // 2 other methods exist, not sure if we need them.
-    // clipboard->setText(text, QClipboard::Selection);
-    // clipboard->setText(text, QClipboard::FindBuffer);
+    clipboard->setText(text, kClipboardMode);
+    last_copied = text.toStdString();
 }
 
 void Clipboard::clear() {
-    if (clipboard->ownsClipboard()) {
+    if (clipboard->text(kClipboardMode).toStdString() == last_copied) {
         clipboard->clear();
+        last_copied = "";
     }
 }

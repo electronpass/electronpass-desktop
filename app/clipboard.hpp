@@ -28,6 +28,8 @@ class Clipboard : public QObject {
     Q_OBJECT
     QClipboard *clipboard;
 
+    std::string last_copied = "";
+
 public:
     Clipboard() {};
 
