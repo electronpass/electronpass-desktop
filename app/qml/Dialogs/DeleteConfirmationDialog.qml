@@ -27,11 +27,17 @@ Dialog {
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
+    property int index_to_delete: 0
+
+    onOpened: {
+        index_to_delete = itemsList.currentIndex
+    }
+
     onAccepted: {
-        var success = dataHolder.delete_item(itemsList.currentIndex);
+        var success = dataHolder.delete_item(index_to_delete)
         if (success != 0) {
             // TODO: report error
-            console.log("[Error] Could not save wallet.");
+            console.log("[Error] Could not save wallet.")
         }
         refreshUI()
     }
