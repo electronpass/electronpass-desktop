@@ -18,10 +18,13 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 import QtQuick 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
+import "../Components"
 
 Dialog {
     id: syncOnlinePasswordDialog
     modal: true
+    title: "Sync error"
+    width: 300
 
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
@@ -37,16 +40,19 @@ Dialog {
     }
 
     ColumnLayout {
-        anchors.fill: parent
+        width: parent.width
         Label {
-            Layout.alignment: Qt.AlignHCenter
-            text: qsTr("Wallet saved online appears to be encrypted\n" +
-                        "with different password. Enter that password\nto merge wallets.")
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qsTr("Wallet saved online appears to be encrypted with different password." +
+                       " Enter that password to merge wallets.")
         }
-        Label {
+        Infobar {
             id: errorLabel
-            text: qsTr("")
-            color: "red"
+            text: ""
+            Layout.fillWidth: true
+            visible: false
+            onTextChanged: visible = text != ""
         }
         TextField {
             id: onlinePassword
@@ -58,35 +64,38 @@ Dialog {
             font.family: robotoMonoFont.name
             Keys.onReturnPressed: confirmButton.clicked()
         }
-        RowLayout {
-            Button {
-                id: confirmButton
-                text: qsTr("Decrypt")
-                onClicked: {
-                    var error = walletMerger.decrypt_online_wallet(onlinePassword.text)
-                    onlinePassword.text = ""
-                    if (error == 0) {
-                        errorLabel.text = ""
-                        syncOnlinePasswordDialog.close()
+    }
 
-                        syncDialog.sync_upload()
-                    } else if (error == 1) {
-                        errorLabel.text = "Wrong password"
-                    } else if (error == 2) {
-                        // should not happen, becuase, sync dialog must redirect on corrupted file dialog.
-                        errorLabel.text = "Online wallet appears to be corrupted."
-                        confirmButton.active = false
-                    }
+    footer: DialogButtonBox {
+        Button {
+            id: confirmButton
+            text: qsTr("Decrypt")
+            flat: true
+            onClicked: {
+                var error = walletMerger.decrypt_online_wallet(onlinePassword.text)
+                onlinePassword.text = ""
+                if (error == 0) {
+                    errorLabel.text = ""
+                    syncOnlinePasswordDialog.close()
+
+                    syncDialog.sync_upload()
+                } else if (error == 1) {
+                    errorLabel.text = "Wrong password"
+                } else if (error == 2) {
+                    // should not happen, becuase, sync dialog must redirect on corrupted file dialog.
+                    errorLabel.text = "Online wallet appears to be corrupted."
+                    confirmButton.active = false
                 }
             }
-            Button {
-                // TODO: alert if user wants to discard online wallet, which will be overwritten.
-                id: discardButton
-                text: qsTr("Discard")
-                onClicked: {
-                    syncOnlinePasswordDialog.close()
-                    syncDialog.sync_upload()
-                }
+        }
+        Button {
+            // TODO: alert if user wants to discard online wallet, which will be overwritten.
+            id: discardButton
+            flat: true
+            text: qsTr("Discard")
+            onClicked: {
+                syncOnlinePasswordDialog.close()
+                syncDialog.sync_upload()
             }
         }
     }

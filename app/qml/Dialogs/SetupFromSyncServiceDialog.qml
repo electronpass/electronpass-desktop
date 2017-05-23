@@ -18,6 +18,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 import QtQuick 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.1
+import "../Components"
 
 Dialog {
     id: setupFromSyncServiceDialog
@@ -28,28 +29,18 @@ Dialog {
 
     closePolicy: Popup.NoAutoClose
 
-    onOpened: {
-        syncManager.download_wallet(false)
-    }
-    onClosed: {
-        // Reset visibility
-        downloadLayout.visible = true
-        passwordLayout.visible = false
-    }
+    onOpened: syncManager.download_wallet(false)
 
     Connections {
         target: syncManager
 
         onStatusMessageChanged: {
-            if (setupFromSyncServiceDialog.visible) {
-                statusLabel.text = syncManager.statusMessage
-            }
+            if (setupFromSyncServiceDialog.visible) statusLabel.text = syncManager.statusMessage
         }
         onWallet_downloaded: {
             if (setupFromSyncServiceDialog.visible && error == 0) {
-                downloadLayout.visible = false
-                passwordLayout.visible = true
-                passwordField.forceActiveFocus()
+                setupFromSyncServiceDialog.close()
+                passwordFromSyncServiceDialog.open()
             } else if (setupFromSyncServiceDialog.visible) {
                 if (error == 1 || error == 4 || error == 5) return
                 // error codes, that shouldn't happen here or don't have to be explicitly prompted
@@ -65,49 +56,62 @@ Dialog {
         }
     }
     ColumnLayout {
-        ColumnLayout {
-            id: downloadLayout
-            anchors.fill: parent
-            BusyIndicator {
-                Layout.alignment: Qt.AlignHCenter
-                running: true
-            }
-            Label {
-                id: statusLabel
-                Layout.alignment: Qt.AlignHCenter
-                text: syncManager.statusMessage
-            }
-            Button {
-                text: qsTr("Cancel")
-                Layout.alignment: Qt.AlignHCenter
-                anchors.left: parent.left
-                anchors.right: parent.right
-                Layout.bottomMargin: -16
-                highlighted: true
-                flat: true
-                onClicked: {
-                    syncManager.abort()
-                    setupFromSyncServiceDialog.close()
-                }
+        id: downloadLayout
+        anchors.fill: parent
+        BusyIndicator {
+            Layout.alignment: Qt.AlignHCenter
+            running: true
+        }
+        Label {
+            id: statusLabel
+            Layout.alignment: Qt.AlignHCenter
+            text: syncManager.statusMessage
+        }
+        Button {
+            text: qsTr("Cancel")
+            Layout.alignment: Qt.AlignHCenter
+            anchors.left: parent.left
+            anchors.right: parent.right
+            Layout.bottomMargin: -16
+            highlighted: true
+            flat: true
+            onClicked: {
+                syncManager.abort()
+                setupFromSyncServiceDialog.close()
             }
         }
+    }
+
+    Dialog {
+        id: passwordFromSyncServiceDialog
+        modal: true
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        closePolicy: Popup.NoAutoClose
+
+        onOpened: passwordField.forceActiveFocus()
+        onClosed: {
+            errorLabel.text = ""
+            passwordField.clear()
+        }
+
+        title: qsTr("Unlock your wallet")
 
         ColumnLayout {
-            id: passwordLayout
-            anchors.fill: parent
-            visible: false
-
+            width: parent.width
             Label {
-                Layout.alignment: Qt.AlignHCenter
-                text: qsTr("Please enter password to unlock your wallet.")
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: "Please enter password to unlock your wallet."
             }
-            Label {
+            Infobar {
                 id: errorLabel
-                Layout.alignment: Qt.AlignHCenter
                 text: ""
-                color: "red"
+                Layout.fillWidth: true
+                visible: false
+                onTextChanged: visible = text != ""
             }
-
             TextField {
                 id: passwordField
                 inputMethodHints: Qt.ImhSensitiveData
@@ -119,44 +123,45 @@ Dialog {
                 font.family: robotoMonoFont.name
                 Keys.onReturnPressed: unlockButton.clicked()
             }
-            RowLayout {
-                Button {
-                    id: unlockButton
-                    text: qsTr("Unlock")
-                    onClicked: {
-                        if (passwordField.text != "") {
-                            var error = dataHolder.unlock(passwordField.text)
-                            if (error == 0) {
-                                errorLabel.text = ""
-                                setupFromSyncServiceDialog.close()
-                                unlockGUI()
-                                passwordField.clear()
-                                setupView.visible = false
-                                setup.finish()
+        }
 
-                            } else if (error == 1) {
-                                errorLabel.text = qsTr("Crypto initialization was not successful.")
-                            } else if (error == 2) {
-                                errorLabel.text = qsTr("Couldn't open data file.")
-                            } else if (error == 3) {
-                                errorLabel.text = qsTr("Wrong password")
-                                passwordField.forceActiveFocus()
-                                passwordField.selectAll()
-                            } else if (error == 4) {
-                                errorLabel.text = qsTr("Online file appears to be corrupted")
-                                passwordField.visible = false
-                                unlockButton.visible = false
-                            }
-                        } else {
-                            errorLabel.text = qsTr("Enter a password")
+        footer: DialogButtonBox {
+            Button {
+                id: unlockButton
+                text: qsTr("Unlock")
+                flat: true
+                onClicked: {
+                    if (passwordField.text != "") {
+                        var error = dataHolder.unlock(passwordField.text)
+                        if (error == 0) {
+                            passwordFromSyncServiceDialog.close()
+                            unlockGUI()
+                            setupView.visible = false
+                            setup.finish()
+
+                        } else if (error == 1) {
+                            errorLabel.text = qsTr("Crypto initialization was not successful.")
+                        } else if (error == 2) {
+                            errorLabel.text = qsTr("Couldn't open data file.")
+                        } else if (error == 3) {
+                            errorLabel.text = qsTr("Wrong password")
+                            passwordField.forceActiveFocus()
+                            passwordField.selectAll()
+                        } else if (error == 4) {
+                            errorLabel.text = qsTr("Online file appears to be corrupted")
+                            passwordField.visible = false
+                            unlockButton.visible = false
                         }
+                    } else {
+                        errorLabel.text = qsTr("Enter a password")
                     }
                 }
-                Button {
-                    text: qsTr("Cancel")
-                    onClicked: {
-                        setupFromSyncServiceDialog.close()
-                    }
+            }
+            Button {
+                text: qsTr("Cancel")
+                flat: true
+                onClicked: {
+                    passwordFromSyncServiceDialog.close()
                 }
             }
         }
