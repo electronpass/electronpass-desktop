@@ -32,7 +32,7 @@ Dialog {
     closePolicy: Popup.NoAutoClose
 
     onClosed: {
-        errorLabel.text = ""
+        errorBar.text = ""
         onlinePassword.clear()
     }
     onOpened: {
@@ -48,7 +48,7 @@ Dialog {
                        " Enter that password to merge wallets.")
         }
         Infobar {
-            id: errorLabel
+            id: errorBar
             text: ""
             Layout.fillWidth: true
             visible: false
@@ -75,15 +75,15 @@ Dialog {
                 var error = walletMerger.decrypt_online_wallet(onlinePassword.text)
                 onlinePassword.text = ""
                 if (error == 0) {
-                    errorLabel.text = ""
+                    errorBar.text = ""
                     syncOnlinePasswordDialog.close()
 
                     syncDialog.sync_upload()
                 } else if (error == 1) {
-                    errorLabel.text = "Wrong password"
+                    errorBar.text = "Wrong password"
                 } else if (error == 2) {
                     // should not happen, becuase, sync dialog must redirect on corrupted file dialog.
-                    errorLabel.text = "Online wallet appears to be corrupted."
+                    errorBar.text = "Online wallet appears to be corrupted."
                     confirmButton.active = false
                 }
             }

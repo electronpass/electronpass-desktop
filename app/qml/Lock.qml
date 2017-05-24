@@ -32,6 +32,8 @@ Image {
     width: window.width
     height: window.height
 
+    onVisibleChanged: passInput.clear()
+
     Material.theme: Material.Dark
 
     Rectangle {

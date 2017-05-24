@@ -92,7 +92,7 @@ Dialog {
 
         onOpened: passwordField.forceActiveFocus()
         onClosed: {
-            errorLabel.text = ""
+            errorBar.text = ""
             passwordField.clear()
         }
 
@@ -106,7 +106,7 @@ Dialog {
                 text: "Please enter password to unlock your wallet."
             }
             Infobar {
-                id: errorLabel
+                id: errorBar
                 text: ""
                 Layout.fillWidth: true
                 visible: false
@@ -140,20 +140,20 @@ Dialog {
                             setup.finish()
 
                         } else if (error == 1) {
-                            errorLabel.text = qsTr("Crypto initialization was not successful.")
+                            errorBar.text = qsTr("Crypto initialization was not successful.")
                         } else if (error == 2) {
-                            errorLabel.text = qsTr("Couldn't open data file.")
+                            errorBar.text = qsTr("Couldn't open data file.")
                         } else if (error == 3) {
-                            errorLabel.text = qsTr("Wrong password")
+                            errorBar.text = qsTr("Wrong password")
                             passwordField.forceActiveFocus()
                             passwordField.selectAll()
                         } else if (error == 4) {
-                            errorLabel.text = qsTr("Online file appears to be corrupted")
+                            errorBar.text = qsTr("Online file appears to be corrupted")
                             passwordField.visible = false
                             unlockButton.visible = false
                         }
                     } else {
-                        errorLabel.text = qsTr("Enter a password")
+                        errorBar.text = qsTr("Enter a password")
                     }
                 }
             }

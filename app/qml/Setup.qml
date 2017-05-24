@@ -31,6 +31,7 @@ Rectangle {
 
     // visible only if setup is needed
     visible: setup.need_setup()
+    onVisibleChanged: setupSwipeView.currentIndex = 0
 
     Component.onCompleted: {
         if (setup.need_setup()) {
@@ -374,7 +375,7 @@ Rectangle {
 
         onClosed: {
             passwordText.text = ""
-            errorLabel.text = ""
+            errorBar.text = ""
         }
         onOpened: {
             passwordText.forceActiveFocus()
@@ -386,10 +387,12 @@ Rectangle {
                 Layout.alignment: Qt.AlignHCenter
                 text: qsTr("Please enter the password for backuped wallet.")
             }
-            Label {
-                id: errorLabel
+            Infobar {
+                id: errorBar
                 text: ""
-                color: "red"
+                Layout.fillWidth: true
+                visible: false
+                onTextChanged: visible = text != ""
             }
             TextField {
                 id: passwordText
@@ -402,42 +405,38 @@ Rectangle {
                     restoreButton.clicked()
                 }
             }
-            RowLayout {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                Button {
-                    id: restoreButton
-                    anchors.right: parent.horizontalCenter
-                    anchors.rightMargin: 8
-                    text: qsTr("Restore")
-                    onClicked: {
-                        var success = dataHolder.restore_wallet(passwordDialog.path,
-                                                                passwordText.text)
-                        if (success == 0) {
-                            errorLabel.text = ""
-                            passwordText.text = ""
-                            passwordDialog.close()
-                            setup.finish()
-                            setupView.visible = false
-                            unlockGUI()
-                        } else if (success == 1) {
-                            errorLabel.text = qsTr("Wrong password.")
-                            passwordText.forceActiveFocus()
-                            passwordText.selectAll()
-                        } else if (success == 4) {
-                            passwordDialog.close()
-                            messageDialog.openWithMsg("Wallet could not be copied", "")
-                        }
-                    }
-                }
-                Button {
-                    anchors.left: parent.horizontalCenter
-                    anchors.leftMargin: 8
-                    text: qsTr("Cancel")
-                    onClicked: {
+        }
+        footer: DialogButtonBox {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            Button {
+                id: restoreButton
+                flat: true
+                text: qsTr("Restore")
+                onClicked: {
+                    var success = dataHolder.restore_wallet(passwordDialog.path,
+                                                            passwordText.text)
+                    if (success == 0) {
+                        errorBar.text = ""
+                        passwordText.text = ""
                         passwordDialog.close()
+                        setup.finish()
+                        setupView.visible = false
+                        unlockGUI()
+                    } else if (success == 1) {
+                        errorBar.text = qsTr("Wrong password.")
+                        passwordText.forceActiveFocus()
+                        passwordText.selectAll()
+                    } else if (success == 4) {
+                        passwordDialog.close()
+                        messageDialog.openWithMsg("Wallet could not be copied", "")
                     }
                 }
+            }
+            Button {
+                flat: true
+                text: qsTr("Cancel")
+                onClicked: passwordDialog.close()
             }
         }
     }
