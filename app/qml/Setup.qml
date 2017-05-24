@@ -270,9 +270,13 @@ Rectangle {
                                         font.weight: Font.Medium
                                         color: "black"
                                     }
-                                }
-                                onClicked: {
-                                    syncList.currentIndex = model.index
+
+                                    MouseArea {
+                                        anchors.fill: parent
+                                        onClicked: syncList.currentIndex = model.index
+                                        onDoubleClicked: continueButton.clicked()
+                                    }
+
                                 }
                             }
                         }
