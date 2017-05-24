@@ -24,6 +24,9 @@ Dialog {
     id: setupFromSyncServiceDialog
     modal: true
 
+    width: Math.min(parent.width * 0.5, 300)
+    height: Math.min(parent.height * 0.4, 200)
+
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
@@ -85,6 +88,10 @@ Dialog {
     Dialog {
         id: passwordFromSyncServiceDialog
         modal: true
+
+        width: Math.min(setupRoot.width * 0.65, 500)
+        height: Math.min(setupRoot.height * 0.4, 300)
+
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
 
@@ -109,7 +116,7 @@ Dialog {
                 id: errorBar
                 text: ""
                 Layout.fillWidth: true
-                visible: false
+                opacity: 0
                 onTextChanged: visible = text != ""
             }
             TextField {
@@ -141,19 +148,24 @@ Dialog {
 
                         } else if (error == 1) {
                             errorBar.text = qsTr("Crypto initialization was not successful.")
+                            errorBar.opacity = 1
                         } else if (error == 2) {
                             errorBar.text = qsTr("Couldn't open data file.")
+                            errorBar.opacity = 1
                         } else if (error == 3) {
                             errorBar.text = qsTr("Wrong password")
+                            errorBar.opacity = 1
                             passwordField.forceActiveFocus()
                             passwordField.selectAll()
                         } else if (error == 4) {
                             errorBar.text = qsTr("Online file appears to be corrupted")
+                            errorBar.opacity = 1
                             passwordField.visible = false
                             unlockButton.visible = false
                         }
                     } else {
                         errorBar.text = qsTr("Enter a password")
+                        errorBar.opacity = 1
                     }
                 }
             }

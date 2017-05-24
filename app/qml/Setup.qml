@@ -23,6 +23,7 @@ import QtQuick.Dialogs 1.0
 import "Components"
 
 Rectangle {
+    id: setupRoot
     width: window.width
     height: window.height
 

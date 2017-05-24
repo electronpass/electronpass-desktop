@@ -26,6 +26,10 @@ Pane {
     property string text
     property string icon: "\uE001"
 
+    Behavior on opacity {
+        NumberAnimation { duration: 150 }
+    }
+
     background: Rectangle {
         color: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade800) : Material.color(Material.Grey, Material.Shade300)
         radius: 2
@@ -40,12 +44,12 @@ Pane {
           Layout.margins: -6
           Layout.rightMargin: 6
           Layout.leftMargin: 0
-          color: Material.color(Material.Grey, Material.Shade300)
+          color: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade300) : Material.color(Material.Grey, Material.Shade800)
       }
       Label {
           text: snackbar.text
           Layout.fillWidth: true
-          color: Material.color(Material.Grey, Material.Shade400)
+          color: (Material.theme == Material.Dark) ? Material.color(Material.Grey, Material.Shade400) : Material.color(Material.Grey, Material.Shade900)
           wrapMode: Text.WordWrap
       }
     }
