@@ -1,74 +1,57 @@
-language: ruby
+language: cpp
 sudo: required
 dist: trusty
 
-matrix:
-  include:
-    - compiler: gcc
-      rvm: 1.9.3
-      env: COMPILER=g++-5 CXX=g++-5
-    - compiler: clang
-      rvm: 1.9.3
-      env: COMPILER=clang++-3.8
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.8
-      - sourceline: 'ppa:beineri/opt-qt58-trusty'
-      - sourceline: 'deb http://cz.archive.ubuntu.com/ubuntu xenial main universe'
-      # For libelectronpass
-      - sourceline: 'ppa:chris-lea/libsodium'
-      - sourceline: 'deb http://ppa.launchpad.net/chris-lea/libsodium/ubuntu trusty main'
-      - sourceline: 'deb-src http://ppa.launchpad.net/chris-lea/libsodium/ubuntu trusty main'
-      - sourceline: 'deb http://llvm.org/apt/trusty/ llvm-toolchain-trusty-3.8 main'
-        key_url: 'http://llvm.org/apt/llvm-snapshot.gpg.key'
-
-    packages:
-      - clang-3.8
-      - g++-5
-      - extra-cmake-modules
-      - qt58base
-      - qt58graphicaleffects
-      - qt58quickcontrols2
-      - qt58quickcontrols
-      - qt58svg
-      - qt58declarative
-      - libsodium-dev
-
+compiler:
+  - gcc
+  - clang
 before_install:
-  - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
-  - source $QT_ENV_SCRIPT
+  - sudo add-apt-repository -y ppa:beineri/opt-qt58-trusty
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo add-apt-repository -y ppa:chris-lea/libsodium
+  - sudo add-apt-repository -y 'deb http://archive.ubuntu.com/ubuntu xenial main universe'
+  - sudo apt-get update -qq
+
   - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
   - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.8" CC="clang-3.8"; fi
 
-script:
-  # Install a recent CMake
+install:
+  - sudo apt-get install -y -qq clang-3.8 g++-5 extra-cmake-modules qt58base qt58graphicaleffects qt58quickcontrols2 qt58quickcontrols qt58svg qt58declarative ruby ruby-dev  rubygems libsodium-dev
+  - gem install fpm --conservative
+
+  # install newer cmake
   - CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
   - mkdir cmake
   - wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
   - export PATH=${TRAVIS_BUILD_DIR}/cmake/bin:${PATH}
   - cmake --version
 
-  # clone and install libelectronpass
+  # install libelectronpass
   - git clone https://github.com/electronpass/libelectronpass.git
   - cd libelectronpass
-  - cmake .
+  - mkdir build
+  - cd build
+  - cmake ..
   - sudo make install
   - sudo ldconfig /usr/local/lib
-  - cd ..
+  - cd ../..
+
+before_script:
+  - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
+  - source $QT_ENV_SCRIPT
 
   # clone and decrypt API keys
   # refer to https://github.com/electronpass/credentials for more information
   - git clone https://github.com/electronpass/credentials.git
   - python3 credentials/configure.py credentials/keys.json.asc ${keys_encryption_password} credentials/desktop.tpl app/sync/keys.txt
-
-  # build binaries and generate appimage
-  - mkdir -p ./appdir
+script:
+  - mkdir appdir
   - mkdir build
   - cd build
   - cmake -DCMAKE_INSTALL_PREFIX:PATH=../appdir/usr/. ..
   - make -j4
+after_success:
+  #create and upload appimage
   - sudo make INSTALL_ROOT=../appdir install ; sudo chown -R $USER ../appdir ; find ../appdir/
   - cd ../
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
@@ -79,9 +62,10 @@ script:
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - chmod a+x ElectronPass-x86_64.AppImage
 
-  # configure fpm
-  - sudo apt-get -y install ruby1.9.3 build-essential rpm # fpm deps - do not install as packages because they mess with fuse config and linuxdeployqt won't run
-  - sudo gem install --no-ri --no-rdoc fpm
+  # install rpm later. needed for creating rpm package, when installed appimage not working and therefore 
+  - sudo apt-get -y -qq install rpm
+
+  # create deb and rpm package with fpm
   - LOWERAPP=electronpass
   - VERSION=0.0.1
   - DIR=appdir
