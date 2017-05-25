@@ -27,6 +27,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/Components/ItemDetail.qml</file>
         <file>qml/Components/EditItemDetail.qml</file>
         <file>qml/Components/ListItem.qml</file>
+        <file>qml/Components/SyncIndicator.qml</file>
         <file>qml/Components/PassStrengthIndicator.qml</file>
         <file>qml/Components/ShortcutBlock.qml</file>
         <file>qml/Components/ShortcutItem.qml</file>

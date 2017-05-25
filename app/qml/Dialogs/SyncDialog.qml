@@ -30,6 +30,7 @@ Dialog {
     closePolicy: Popup.NoAutoClose
 
     function sync() {
+        syncIndicator.syncAnimate()
         syncManager.download_wallet()
     }
     function sync_upload() {

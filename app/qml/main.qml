@@ -136,10 +136,14 @@ ApplicationWindow {
 
         RowLayout {
             anchors.fill: parent
+
+            SyncIndicator {
+                id: syncIndicator
+            }
             Label {
                 text: "ElectronPass"
+                leftPadding: 24
                 elide: Label.ElideRight
-                leftPadding: 16
                 horizontalAlignment: Qt.AlignHLeft
                 verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
@@ -384,5 +388,6 @@ ApplicationWindow {
         itemsList.model = dataHolder.get_number_of_items()
         itemsList.setItemIndex(-1)
         lockTimer.start()
+        syncIndicator.sync()
     }
 }
