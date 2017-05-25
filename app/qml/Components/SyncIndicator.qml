@@ -77,7 +77,6 @@ Pane {
             syncDetailsDialog.setText(syncManager.statusMessage)
         }
         onWallet_downloaded: {
-            syncAnimationTimer.stop()
             if (error == 0) {
                 if (walletMerger.need_decrypt_online_wallet()) {
                     syncOnlinePasswordDialog.open()
@@ -90,10 +89,12 @@ Pane {
                 }
             } else {
                 statusIcon.text = errorIcon
+                syncAnimationTimer.stop()
                 syncDetailsDialog.setText(getErrorText(error))
             }
         }
         onWallet_uploaded: {
+            syncAnimationTimer.stop()
             if (error == 0) {
                 statusIcon.text = doneIcon
                 syncDetailsDialog.setText("All edits synced to server")
@@ -138,9 +139,9 @@ Pane {
         SequentialAnimation {
             id: animation
             PropertyAnimation { target: statusIcon; property: "opacity"; to: 0.1;
-                                duration: 400; easing.type: Easing.OutQuad }
+                                duration: 500; easing.type: Easing.InOutQuad }
             PropertyAnimation { target: statusIcon; property: "opacity"; to: 1;
-                                duration: 400; easing.type: Easing.InQuad }
+                                duration: 500; easing.type: Easing.InOutQuad }
         }
     }
 
