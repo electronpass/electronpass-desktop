@@ -101,7 +101,7 @@ ApplicationWindow {
         sequence: "Ctrl+S"
         onActivated: if(!lock.visible) {
             syncDialog.open()
-            syncDialog.sync()
+            syncIndicator.sync()
         }
     }
     Shortcut {
@@ -224,7 +224,7 @@ ApplicationWindow {
                         text: "Sync now"
                         onTriggered: {
                             syncDialog.open()
-                            syncDialog.sync()
+                            syncIndicator.sync()
                         }
                     }
                     MenuItem {

@@ -40,5 +40,6 @@ Dialog {
             console.log("[Error] Could not save wallet.")
         }
         refreshUI()
+        syncIndicator.sync()
     }
 }

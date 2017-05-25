@@ -78,7 +78,7 @@ Dialog {
                     errorBar.text = ""
                     syncOnlinePasswordDialog.close()
 
-                    syncDialog.sync_upload()
+                    syncIndicator.syncUpload()
                 } else if (error == 1) {
                     errorBar.text = "Wrong password"
                 } else if (error == 2) {
@@ -95,7 +95,7 @@ Dialog {
             text: qsTr("Discard")
             onClicked: {
                 syncOnlinePasswordDialog.close()
-                syncDialog.sync_upload()
+                syncIndicator.syncUpload()
             }
         }
     }

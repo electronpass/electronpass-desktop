@@ -33,6 +33,7 @@ Dialog {
     onAccepted: {
         saveEditDetails()
         destroyEditDetails()
+        syncIndicator.sync()
     }
     onRejected: {
         destroyEditDetails()

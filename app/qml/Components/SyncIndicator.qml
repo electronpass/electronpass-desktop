@@ -40,6 +40,35 @@ Pane {
         statusIcon.text = syncIcon
         syncAnimationTimer.start()
     }
+    function syncUpload() {
+        refreshUI()
+        syncManager.upload_wallet()
+    }
+    function getErrorText(error) {
+        var msg
+        switch (error) {
+            case 1:
+                msg = "Syncing already in progress"
+                break
+            case 2:
+                msg = "Connection error, network server is unreachable"
+                break
+            case 3:
+                msg = "Could not login to network server"
+                break
+            case 4:
+                msg = "Sync aborted"
+                break
+            case 5:
+                msg = "No sync service selected"
+                break
+            case 6:
+            default:
+                msg = "Unknown error"
+                break
+        }
+        return msg
+    }
 
     Connections {
         target: syncManager
@@ -57,39 +86,21 @@ Pane {
                         messageDialog.openWithMsg("Online wallet appears to be corrupted",
                                               "It will be overwridden with current offline wallet.")
                     }
-                    refreshUI()
-                    syncManager.upload_wallet()
+                    syncUpload()
                 }
             } else {
                 statusIcon.text = errorIcon
-                var msg
-                switch (error) {
-                    case 1:
-                        msg = "Syncing already in progress"
-                        break
-                    case 2:
-                        msg = "Connection error, network server is unreachable"
-                        break
-                    case 3:
-                        msg = "Could not login to network server"
-                        break
-                    case 4:
-                        msg = "Sync aborted"
-                        break
-                    case 5:
-                        msg = "No sync service selected"
-                        break
-                    case 6:
-                    default:
-                        msg = "Unknown error"
-                        break
-                }
-                syncDetailsDialog.setText(msg)
+                syncDetailsDialog.setText(getErrorText(error))
             }
         }
         onWallet_uploaded: {
-            statusIcon.text = doneIcon
-            syncDetailsDialog.setText("Last Synced xx:xx time ago")
+            if (error == 0) {
+                statusIcon.text = doneIcon
+                syncDetailsDialog.setText("All edits synced to server")
+            } else {
+                statusIcon.text = errorIcon
+                syncDetailsDialog.setText(getErrorText(error))
+            }
         }
     }
 
@@ -108,7 +119,7 @@ Pane {
 
     Timer {
         id: syncAnimationTimer
-        interval: 1500
+        interval: 1200
         repeat: true
         triggeredOnStart: true
         onTriggered: statusIcon.blink()
@@ -127,9 +138,9 @@ Pane {
         SequentialAnimation {
             id: animation
             PropertyAnimation { target: statusIcon; property: "opacity"; to: 0.1;
-                                duration: 500; easing.type: Easing.OutQuad }
+                                duration: 400; easing.type: Easing.OutQuad }
             PropertyAnimation { target: statusIcon; property: "opacity"; to: 1;
-                                duration: 500; easing.type: Easing.InQuad }
+                                duration: 400; easing.type: Easing.InQuad }
         }
     }
 

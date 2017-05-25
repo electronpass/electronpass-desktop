@@ -29,55 +29,38 @@ Dialog {
 
     closePolicy: Popup.NoAutoClose
 
-    function sync() {
-        syncIndicator.syncAnimate()
-        syncManager.download_wallet()
-    }
-    function sync_upload() {
-        refreshUI()
-        syncManager.upload_wallet()
+    function messageError(error) {
+        if (error == 0 || error == 1 || error == 4 || error == 6) return false
+        // No message for success, already syncing, abort, could not open file
+        // don't need to close dialog
+
+        var msg = "Unknown error"
+        if (error == 2) msg = "Connection error, network server is unreachable"
+        else if (error == 3) msg = "Could not login to network server"
+        else if (error == 5) msg = "No sync service selected"
+        messageDialog.openWithMsg("Sync error", msg)
+        return true  // error message was displayed, close dialog
     }
 
     Connections {
         target: syncManager
 
         onStatusMessageChanged: {
-            if (syncDialog.visible) {
-                statusLabel.text = syncManager.statusMessage
-            }
+            if (syncDialog.visible) statusLabel.text = syncManager.statusMessage
         }
         onWallet_downloaded: {
-            if (syncDialog.visible && error == 0) {
-                if (walletMerger.need_decrypt_online_wallet()) {
-                    syncOnlinePasswordDialog.open()
-                } else if (walletMerger.is_corrupted()) {
-                    messageDialog.openWithMsg("Online wallet appears to be corrupted",
-                                              "It will be overwridden with current offline wallet.")
-                    sync_upload()
-                } else {
-                    sync_upload()
-                }
-            } else if (syncDialog.visible) {
-                if (error == 4 || error == 6) return
-                // error codes, that shouldn't happen here or don't have to be explicitly prompted
-                // aborted, no sync provider selected
-
-                var msg
-                if (error == 1) msg = "Syncing already in progress"
-                else if (error == 2) msg = "Connection error, network server is unreachable"
-                else if (error == 3) msg = "Could not login to network server"
-                else if (error == 5) msg = "No sync service selected"
-                messageDialog.openWithMsg("Sync error", msg)
-                syncDialog.close()
+            if (syncDialog.visible) {
+                var need_to_close = messageError(error)
+                if (need_to_close) syncDialog.close()
             }
         }
         onWallet_uploaded: {
             if (syncDialog.visible) {
+                messageError(error)
                 syncDialog.close()
             }
         }
     }
-
 
     ColumnLayout {
         anchors.fill: parent

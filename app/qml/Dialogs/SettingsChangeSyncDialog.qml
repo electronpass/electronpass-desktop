@@ -40,7 +40,7 @@ Dialog {
         if (settingsDialog.getSyncServiceFromIndex() != "none") {
             syncDialog.open()
         }
-        syncDialog.sync()
+        syncIndicator.sync()
     }
     onRejected: {
         console.log("Changing sync provider canceled.")
