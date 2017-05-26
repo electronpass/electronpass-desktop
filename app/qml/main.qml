@@ -53,7 +53,7 @@ ApplicationWindow {
         interval: settings.lockDelay != -1 ? settings.lockDelay * 1000 : 0
         onTriggered: {
             if (interval != 0) {
-                console.log("Locked after", interval / 1000, " seconds.")
+                console.log("[Log] Locked after", interval / 1000, " seconds.")
                 dataHolder.lock()
                 lockGUI()
             }
@@ -372,6 +372,7 @@ ApplicationWindow {
         settingsDialog.close()
         details.destroyDetails()
         itemsList.setItemIndex(-1)
+        syncIndicator.cancelSync()
         itemsList.model = 0
         lock.visible = true
         lock.wrongPassCounter = 0

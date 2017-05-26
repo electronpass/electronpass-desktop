@@ -89,8 +89,8 @@ Dialog {
         id: passwordFromSyncServiceDialog
         modal: true
 
-        width: Math.min(setupRoot.width * 0.65, 500)
-        height: Math.min(setupRoot.height * 0.4, 300)
+        width: Math.min(setupView.width * 0.65, 500)
+        height: Math.min(setupView.height * 0.4, 300)
 
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2

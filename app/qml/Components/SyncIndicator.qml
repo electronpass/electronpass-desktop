@@ -44,6 +44,10 @@ Pane {
         refreshUI()
         syncManager.upload_wallet()
     }
+    function cancelSync() {
+        syncManager.abort()
+    }
+
     function getErrorText(error) {
         var msg
         switch (error) {
