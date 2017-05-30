@@ -48,6 +48,14 @@ ApplicationWindow {
         lockGUI()
     }
 
+    onFocusObjectChanged: {
+        // TODO: if file dialog is opened, then lock timer should not be started
+        // TODO: whant should happen if alert dialogs are opened? (e.g. syncOnlinePasswordDialog)
+        var do_not_lock = setupView.visible || lock.visible
+        if (object == null && !do_not_lock) lockTimer.start()
+        else lockTimer.stop()
+    }
+
     Timer {
         id: lockTimer
         interval: settings.lockDelay != -1 ? settings.lockDelay * 1000 : 0
@@ -388,7 +396,6 @@ ApplicationWindow {
         searchInput.selectAll()
         itemsList.model = dataHolder.get_number_of_items()
         itemsList.setItemIndex(-1)
-        lockTimer.start()
         syncIndicator.sync()
     }
 }

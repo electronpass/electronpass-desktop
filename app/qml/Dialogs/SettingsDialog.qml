@@ -251,61 +251,28 @@ Dialog {
                 }
 
                 Label {
-                    text: "Lock app after delay (experimental):"
+                    text: "Lock app after out of focus for:"
                     font.weight: Font.Bold
                 }
-                ComboBox {
-                    id: autoLockSettings
-                    property int lockDelay: settings.lockDelay
-                    width: 200
-                    Layout.leftMargin: 15
-                    model: ["30 seconds", "1 minute", "2 minutes", "5 minutes", "10 minutes", "never"]
-
-                    Component.onCompleted: {
-                        switch (lockDelay) {
-                            case 30:
-                                currentIndex = 0
-                                break
-                            case 60:
-                                currentIndex = 1
-                                break
-                            case 120:
-                                currentIndex = 2
-                                break
-                            case 300:
-                                currentIndex = 3
-                                break
-                            case 600:
-                                currentIndex = 4
-                                break
-                            default:
-                                currentIndex = 5
-                                break
-                        }
+                RowLayout {
+                    SpinBox {
+                        id: lockDelaySpinBox
+                        value: settings.lockDelay
+                        editable: true
+                        to: 100000
+                        enabled: settings.lockDelay != -1
                     }
-                    onActivated: {
-                        switch (currentIndex) {
-                            case 0:
-                                lockDelay = 30
-                                break
-                            case 1:
-                                lockDelay = 60
-                                break
-                            case 2:
-                                lockDelay = 120
-                                break
-                            case 3:
-                                lockDelay = 300
-                                break
-                            case 4:
-                                lockDelay = 600
-                                break
-                            case 5:
-                            default:
-                                lockDelay = -1
-                                break
+                    Label {
+                        text: "seconds"
+                    }
+                    CheckBox {
+                        id: lockDelayCheckbox
+                        leftPadding: 64
+                        checked: settings.lockDelay == -1
+                        text: qsTr("Never")
+                        onClicked: {
+                            settings.lockDelay = checked ? -1 : 30
                         }
-                        settings.lockDelay = lockDelay
                     }
                 }
             }
@@ -566,6 +533,10 @@ Dialog {
                 }
             }
         }
+    }
+    onClosed: {
+        if (lockDelayCheckbox.checked) settings.lockDelay = -1
+        else settings.lockDelay = lockDelaySpinBox.value
     }
 
     Component.onDestruction: {
