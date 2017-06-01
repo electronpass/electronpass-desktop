@@ -417,6 +417,9 @@ Dialog {
         selectMultiple: false
         selectExisting: false
         property int exportType: 0
+        onVisibleChanged: {
+            if (visible) ignoreNextFocusChanged()  // Do not lock when this dialog is opened
+        }
         // Backup types:
         //  0 - create a backup file
         //  1 - export to csv

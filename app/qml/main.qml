@@ -44,16 +44,23 @@ ApplicationWindow {
                             Material.color(Material.Grey, Material.Shade100)
 
     Component.onDestruction: {
-        dataHolder.lock()
         lockGUI()
+        dataHolder.lock()
     }
 
+    property bool focusChangedIgnore: false
+    function ignoreNextFocusChanged() {
+        focusChangedIgnore = true
+    }
     onFocusObjectChanged: {
-        // TODO: if file dialog is opened, then lock timer should not be started
-        // TODO: whant should happen if alert dialogs are opened? (e.g. syncOnlinePasswordDialog)
-        var do_not_lock = setupView.visible || lock.visible
-        if (object == null && !do_not_lock) lockTimer.start()
-        else lockTimer.stop()
+        var do_not_lock = setupView.visible || lock.visible || focusChangedIgnore
+        focusChangedIgnore = false
+
+        if (object == null && !do_not_lock) {
+            lockTimer.start()
+        } else {
+            lockTimer.stop()
+        }
     }
 
     Timer {
@@ -62,8 +69,8 @@ ApplicationWindow {
         onTriggered: {
             if (interval != 0) {
                 console.log("[Log] Locked after", interval / 1000, " seconds.")
-                dataHolder.lock()
                 lockGUI()
+                dataHolder.lock()
             }
         }
     }
@@ -80,8 +87,8 @@ ApplicationWindow {
     Shortcut {
         sequence: "Ctrl+W"
         onActivated: {
-            dataHolder.lock()
             lockGUI()
+            dataHolder.lock()
             Qt.quit()
         }
     }
@@ -116,8 +123,8 @@ ApplicationWindow {
         sequence: "Ctrl+L"
         onActivated: {
             if(!lock.visible && !setupView.visible) {
-                dataHolder.lock()
                 lockGUI()
+                dataHolder.lock()
             }
         }
     }
@@ -224,8 +231,8 @@ ApplicationWindow {
                     MenuItem {
                         text: "Lock"
                         onTriggered: {
-                            dataHolder.lock()
                             lockGUI()
+                            dataHolder.lock()
                         }
                     }
                     MenuItem {
@@ -377,7 +384,16 @@ ApplicationWindow {
 
     function lockGUI() {
         messageDialog.close()
+        if (deleteConfirmationDialog.visible) deleteConfirmationDialog.close()
+        if (settingsChangeSyncDialog.visible) settingsChangeSyncDialog.reject()
+        if (editItemDialog.visible) {
+            // TODO: close #30
+            editItemDialog.accept()
+        }
+        syncDialog.close()
+        syncOnlinePasswordDialog.close()  // when closed upload is not triggered
         settingsDialog.close()
+
         details.destroyDetails()
         itemsList.setItemIndex(-1)
         syncIndicator.cancelSync()
