@@ -34,6 +34,7 @@ int Passwords::passStrengthToInt(const QString &pass) {
             return 5;
     }
     assert(false && "No such enum state!");
+    return 0;
 }
 
 QString Passwords::categoryTooltipText(const QString &pass) {
