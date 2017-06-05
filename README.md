@@ -1,5 +1,5 @@
 # ElectronPass
-[![Build Status](https://travis-ci.org/electronpass/electronpass-desktop.svg?branch=master)](https://travis-ci.org/electronpass/electronpass-desktop)
+[![Build Status](https://travis-ci.org/electronpass/electronpass-desktop.svg?branch=release)](https://travis-ci.org/electronpass/electronpass-desktop)
 
 Desktop client written in qml.
 
@@ -57,4 +57,4 @@ Lock backgrounds are obtained from free wallpaper site  [WallpaperStop](http://w
 Electronpass icons and other project specific assets are stored in [electronpass/graphics](https://github.com/electronpass/graphics).
 
 ## License
-Code in this project is licensed under [GNU GPLv3 license](https://github.com/electronpass/electronpass-desktop/blob/master/LICENSE). Some third party files are subjective to their respective license.
+Code in this project is licensed under [GNU GPLv3 license](https://github.com/electronpass/electronpass-desktop/blob/release/LICENSE). Some third party files are subjective to their respective license.
