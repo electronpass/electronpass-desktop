@@ -47,5 +47,6 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
         <file>qml/Dialogs/SyncOnlinePasswordDialog.qml</file>
         <file>qml/Dialogs/SetupFromSyncServiceDialog.qml</file>
         <file>qml/Dialogs/ResetWalletDialog.qml</file>
+        <file>qml/Dialogs/AboutDialog.qml</file>
     </qresource>
 </RCC>

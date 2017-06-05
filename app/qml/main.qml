@@ -229,22 +229,26 @@ ApplicationWindow {
                     id: menu
                     y: parent.height
                     MenuItem {
-                        text: "Lock"
+                        text: qsTr("Lock")
                         onTriggered: {
                             lockGUI()
                             dataHolder.lock()
                         }
                     }
                     MenuItem {
-                        text: "Sync now"
+                        text: qsTr("Sync now")
                         onTriggered: {
                             syncDialog.open()
                             syncIndicator.sync()
                         }
                     }
                     MenuItem {
-                        text: "Settings"
+                        text: qsTr("Settings")
                         onTriggered: settingsDialog.open()
+                    }
+                    MenuItem {
+                        text: qsTr("About")
+                        onTriggered: aboutDialog.open()
                     }
                 }
             }
@@ -367,6 +371,9 @@ ApplicationWindow {
     }
     SetupFromSyncServiceDialog {
         id: setupFromSyncServiceDialog
+    }
+    AboutDialog {
+        id: aboutDialog
     }
 
     Snackbar {

@@ -18,6 +18,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 <RCC>
     <qresource prefix="/res/img">
         <file alias="logo_transparent.png">logo_transparent_dark_64.png</file>
+        <file alias="logo.png">logo_64.png</file>
         <file alias="lock_background.jpg">lock_background_dark.jpg</file>
     </qresource>
 </RCC>
