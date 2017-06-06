@@ -1,6 +1,6 @@
 # Building on Windows
 
-This instructions will help you build electronpass-desktop on Windows. If you have any issues, fell free to submit an issue, but it is not likely we will be able to help, since we don't use Windows regularly.
+This instructions will help you build electronpass-desktop on Windows. If you have any issues, feel free to submit an issue, but it is not likely we will be able to help, since we don't use Windows regularly.
 
 NOTE: This is currently a work in progress.
 
@@ -45,12 +45,16 @@ We don't actually have to install libsodium, just download the right binaries an
 - Qt Creator > Open > `<libelectronpass_dir>/CMakeLists.txt`
 - edit CMakeLists.txt as follows:
   - comment out lines:
+        ```
         # find_package(sodium REQUIRED)
         # include_directories(include jsoncpp)
+        ```
   - add the following lines:
+        ```
         include_directories(include jsoncpp)
         include_directories(<path_to_libsodium>\\libsodium-win32\\include)
         link_directories(<path_to_libsodium>\\libsodium-win32\\lib)
+        ```
       This will help CMake find sodium, as Findsodium.cmake doesn't work just as it should even when providing sodium_DIR variable. (And I have no intention to fix it.)
   - right click on your project under Edit tab > Run CMake
   - Qt Creator > Projects > Build & Run > Desktop Qt 5.8 MinGW 32-bit > Build > Add Build Step > Build > check crypto_example (and no other target. Also don't try to do everything in one build step, because Qt Creator GUI is dumb.)
