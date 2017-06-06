@@ -48,6 +48,8 @@ Optionally install ElectronPass:
 
     sudo make install
 
+#### Building on Windows
+Instructions for building on windows are available [here](https://github.com/electronpass/electronpass-desktop/blob/release/building_on_windows.md).
 
 ## Graphical assets
 Icons in this project are displayed as a [Material Icons Font](). To preview and find their unicode representations use [CharacterMap](http://bluejamesbond.github.io/CharacterMap/) tool and load ttf file from app/res/fonts/.
