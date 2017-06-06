@@ -47,8 +47,8 @@ We don't actually have to install libsodium, just download the right binaries an
   - comment out lines:
 
         # find_package(sodium REQUIRED)
-        # include_directories(include jsoncpp)
-        
+        # include_directories(include jsoncpp ${sodium_INCLUDE_DIR})
+
   - add the following lines:
 
         include_directories(include jsoncpp)
