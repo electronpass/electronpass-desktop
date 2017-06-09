@@ -26,7 +26,7 @@ Pane {
     padding: 0
     leftPadding: 8
     bottomPadding: 8
-    height: Math.min(detailsList.contentHeight, window.height - 154) + detailsTitleLabel.height + 32
+    height: detailsList.height + 16
     anchors.horizontalCenter: parent.horizontalCenter
     Material.elevation: 1
     Material.background: (Material.theme == Material.Dark) ?
@@ -47,9 +47,10 @@ Pane {
     }
 
     property bool opened: false
+    property string currentTitle: ""
 
     function setTitle(title) {
-        detailsTitleLabel.text = title
+        currentTitle = title
     }
 
     function addDetail(obj){
@@ -58,7 +59,7 @@ Pane {
     }
 
     function destroyDetails(){
-        detailsTitleLabel.text = ""
+        currentTitle = ""
         detailsModel.clear()
     }
 
@@ -70,24 +71,26 @@ Pane {
     function openEditDialog(){
         editItemDialog.open()
         editItemDialog.index = itemsList.currentIndex
-        editItemDialog.setTitle(detailsTitleLabel.text)
+        editItemDialog.setTitle(currentTitle)
         for (var i = 0; i < detailsModel.count; i++) {
             editItemDialog.addEditDetail(detailsModel.get(i))
         }
     }
 
-    ColumnLayout {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        id: rootColumnLayout
-        height: parent.height - 32
-        width: parent.width
+    ListModel {
+        id: detailsModel
+    }
 
-        RowLayout {
-            Layout.fillWidth: true
+    ListView {
+        header: RowLayout {
+            width: parent.width
             Layout.bottomMargin: 16
+            // Ugly solution
+            Rectangle { anchors.fill: parent }
+            z: 2
+
             Label {
-                id: detailsTitleLabel
+                text: currentTitle
                 font.pixelSize: 20
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
@@ -105,37 +108,29 @@ Pane {
                 onClicked: deleteConfirmationDialog.open()
             }
         }
+        anchors.left: parent.left
+        anchors.right: parent.right
+        headerPositioning: ListView.OverlayHeader
+        height: Math.min(contentHeight, window.height - toolbar.height - 64)
+        spacing: -12
+        clip: true  // Clip is not optimal solution.
 
-        //model to hold details
-        ListModel {
-            id: detailsModel
+        id: detailsList
+        model: detailsModel
+
+        add: Transition {
+            NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0;
+                              duration: 200; easing.type: Easing.InOutCubic }
+        }
+        displaced: Transition {
+            NumberAnimation { properties: "y"; duration: 200; easing.type: Easing.InOutCubic }
         }
 
-        ListView {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            Layout.fillHeight: true
-            Layout.topMargin: -22
-            Layout.maximumHeight: window.height-32
-            interactive: (contentHeight - 32 > height)
-            spacing: -12
-            id: detailsList
-            model: detailsModel
-
-            add: Transition {
-                NumberAnimation { properties: "opacity"; from: 0.0; to: 1.0;
-                                  duration: 200; easing.type: Easing.InOutCubic }
-            }
-            displaced: Transition {
-                NumberAnimation { properties: "y"; duration: 200; easing.type: Easing.InOutCubic }
-            }
-
-            delegate: ItemDetail {
-                title: titlevar
-                content: contentvar
-                secure: securevar
-                type: typevar
-            }
+        delegate: ItemDetail {
+            title: titlevar
+            content: contentvar
+            secure: securevar
+            type: typevar
         }
     }
 }
