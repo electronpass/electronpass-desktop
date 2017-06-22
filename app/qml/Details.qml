@@ -85,8 +85,12 @@ Pane {
         header: RowLayout {
             width: parent.width
             Layout.bottomMargin: 16
-            // Ugly solution
-            Rectangle { anchors.fill: parent }
+            // Extremely ugly solution
+            Rectangle {
+                color: (Material.theme == Material.Dark) ?
+                            Material.color(Material.Grey, Material.Shade800) : "white"
+                anchors.fill: parent
+            }
             z: 2
 
             Label {

@@ -78,9 +78,6 @@ Dialog {
                     text: qsTr("Backup and Restore")
                     font.weight: Font.Bold
                 }
-                Label {
-                    text: qsTr("After restore you need to lock and unlock your wallet manually")
-                }
                 RowLayout{
                     anchors.left: parent.left
                     anchors.right: parent.right
@@ -108,18 +105,32 @@ Dialog {
                     }
                 }
 
-                Button {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    Layout.leftMargin: 8
-                    Layout.topMargin: -8
-                    text: qsTr("Export to csv")
-                    font.pointSize: 8
-                    flat: true
 
-                    highlighted: true
-                    onClicked: {
-                        setFileDialog(1)
-                        fileDialog.open()
+                RowLayout{
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    Button {
+                        anchors.right: parent.horizontalCenter
+                        text: qsTr("Export to csv")
+                        font.pointSize: 10
+                        highlighted: true
+                        flat: true
+                        onClicked: {
+                            setFileDialog(1)
+                            fileDialog.open()
+                        }
+                    }
+                    Button {
+                        anchors.left: parent.horizontalCenter
+                        text: qsTr("Import from csv")
+                        font.pointSize: 10
+                        flat: true
+                        highlighted: true
+                        enabled: false
+                        onClicked: {
+                            // TODO: close #32
+                            // after import from csv is implemented in libelectronpass
+                        }
                     }
                 }
 
@@ -231,6 +242,9 @@ Dialog {
                         id: changePasswordButton
                         text: qsTr("Change password")
                         Layout.topMargin: -8
+                        font.pointSize: 10
+                        flat: true
+                        highlighted: true
                         enabled: !(curr_password.text == "" || new_password.text == "") &&
                                  (confirm_password.text == new_password.text)
                         onClicked: {
@@ -295,9 +309,9 @@ Dialog {
                     ComboBox {
                         id: syncDropdownMenu
 
-                        width: 200
                         Layout.leftMargin: 15
-                        model: ["No sync service", "Google Drive", "Dropbox"]
+                        model: ["No sync service", "Google Drive   ", "Dropbox        "]
+                        // Have no idea for better solution     ^^^             ^^^
 
                         Component.onCompleted: {
                             settingsDialog.setSyncServiceIndex()

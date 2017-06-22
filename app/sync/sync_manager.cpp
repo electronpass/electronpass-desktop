@@ -118,7 +118,9 @@ void SyncManager::upload_wallet() {
 }
 
 void SyncManager::abort() {
-    sync_object->abort();
+    if (sync_object != nullptr) {  // If selected service is not none
+        sync_object->abort();
+    }
 }
 
 void SyncManager::service_did_download_wallet(const std::string &wallet, SyncManagerStatus success) {
