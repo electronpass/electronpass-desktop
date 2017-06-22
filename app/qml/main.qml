@@ -400,6 +400,7 @@ ApplicationWindow {
         syncDialog.close()
         syncOnlinePasswordDialog.close()  // when closed upload is not triggered
         settingsDialog.close()
+        aboutDialog.close()
 
         details.destroyDetails()
         itemsList.setItemIndex(-1)

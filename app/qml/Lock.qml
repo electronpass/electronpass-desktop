@@ -42,6 +42,34 @@ Image {
         color: "black"
         opacity: 0.85
 
+        RowLayout {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            ToolButton {
+                anchors.right: parent.right
+                font.family: materialIconsFont.name
+                font.pixelSize: 22
+                opacity: 0.75
+                text: qsTr("\uE5D4")
+                onClicked: lockMenu.open()
+
+                Menu {
+                    id: lockMenu
+                    y: parent.height
+                    x: - width + parent.width
+
+                    MenuItem {
+                        text: qsTr("Reset ElectronPass")
+                        onClicked: resetDialog.open()
+                    }
+                    MenuItem {
+                        text: qsTr("About")
+                        onClicked: aboutDialog.open()
+                    }
+                }
+            }
+        }
+
         ColumnLayout {
             anchors.centerIn: parent
             id: container
@@ -124,18 +152,6 @@ Image {
                    }
                }
            }
-        }
-
-        Button {
-            anchors.top: container.bottom
-            anchors.horizontalCenter: container.horizontalCenter
-            anchors.topMargin: -32
-            visible: lockRoot.wrongPassCounter > 0
-            flat: true
-            text: "Reset ElectronPass"
-            onClicked: {
-                resetDialog.open()
-            }
         }
 
         ResetWalletDialog {
