@@ -16,7 +16,7 @@ before_install:
   - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.8" CC="clang-3.8"; fi
 
 install:
-  - sudo apt-get install -y -qq clang-3.8 g++-5 extra-cmake-modules qt58base qt58graphicaleffects qt58quickcontrols2 qt58quickcontrols qt58svg qt58declarative ruby ruby-dev  rubygems libsodium-dev
+  - sudo apt-get install -y -qq clang-3.8 g++-5 extra-cmake-modules qt58base qt58graphicaleffects qt58quickcontrols2 qt58quickcontrols qt58svg qt58declarative ruby ruby-dev  rubygems libsodium-dev libqt4-opengl-dev
   - gem install fpm --conservative
 
   # install newer cmake
@@ -62,7 +62,7 @@ after_success:
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - chmod a+x ElectronPass-x86_64.AppImage
 
-  # install rpm later. needed for creating rpm package, when installed appimage not working and therefore 
+  # install rpm later. needed for creating rpm package, when installed appimage not working and therefore
   - sudo apt-get -y -qq install rpm
 
   # create deb and rpm package with fpm
