@@ -334,6 +334,7 @@ void Gdrive::reply_finished() {
             break;
         case NetworkState::CREATE_WALLET:
             create_wallet(data);
+            break;
         case NetworkState::DOWNLOAD_WALLET:
             download_wallet(data);
             break;

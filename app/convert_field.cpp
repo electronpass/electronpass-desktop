@@ -55,6 +55,7 @@ QMap<QString, QVariant> DataHolder::convert_field(const electronpass::Wallet::Fi
             break;
         case electronpass::Wallet::FieldType::OTHER:
             type = kFieldTypeOther;
+            break;
         case electronpass::Wallet::FieldType::UNDEFINED:
         default:
             type = kFieldTypeUndefined;
