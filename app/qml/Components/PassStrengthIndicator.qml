@@ -24,22 +24,22 @@ RowLayout {
     id: strengthIndicator
     property string password: parent.content
     property string type: (parent.type) ? parent.type : "undefined"
-    property int strength: passwordManager.passStrengthToInt(password) //strength in int from 1 to 5
+    property int strength: passwordManager.passStrengthToInt(password)  //strength in int from 1 to 5
 
     function getColor() {
       var num = strengthIndicator.strength
       if (strengthIndicator.type == "pin") num = Math.min(5, strengthIndicator.password.length + 1)
 
-      if (num == 1) return Material.color(Material.Red, Material.Shade500);
-      if (num == 2) return Material.color(Material.DeepOrange, Material.Shade500);
+      if (num == 1) return Material.color(Material.Red, Material.Shade500)
+      if (num == 2) return Material.color(Material.DeepOrange, Material.Shade500)
       if (num == 3) {
-          if (Material.theme == Material.Dark) return Material.color(Material.Yellow, Material.Shade500);
-          return Material.color(Material.Amber, Material.Shade500);
+          if (Material.theme == Material.Dark) return Material.color(Material.Yellow, Material.Shade500)
+          return Material.color(Material.Amber, Material.Shade500)
       }
-      if (num == 4) return Material.color(Material.LightGreen, Material.Shade500);
-      if (num == 5) return Material.color(Material.Green, Material.Shade500);
+      if (num == 4) return Material.color(Material.LightGreen, Material.Shade500)
+      if (num == 5) return Material.color(Material.Green, Material.Shade500)
 
-      return Material.color(Material.Grey, Material.Shade500);
+      return Material.color(Material.Grey, Material.Shade500)
     }
 
     Item {

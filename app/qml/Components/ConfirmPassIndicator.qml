@@ -25,9 +25,9 @@ RowLayout {
     property bool valid: false
 
     function getColor(){
-        if (parent.text == "") return Material.color(Material.Grey, Material.Shade500);
-        else if (valid) return Material.color(Material.Green, Material.Shade500);
-        else return Material.color(Material.Red, Material.Shade500);
+        if (parent.text == "") return Material.color(Material.Grey, Material.Shade500)
+        else if (valid) return Material.color(Material.Green, Material.Shade500)
+        else return Material.color(Material.Red, Material.Shade500)
     }
 
     Item {

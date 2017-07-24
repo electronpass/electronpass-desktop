@@ -176,11 +176,33 @@ Dialog {
                             font.pointSize: 10
                             echoMode: TextInput.Password
                             font.family: robotoMonoFont.name
+
+                            implicitWidth: 120
+
+                            background: Item {
+                                height: curr_password.height - 12
+                                Layout.fillWidth: true
+                                anchors.top: parent.top
+
+                                Rectangle {
+                                    color: "black"
+                                    opacity: 0.1
+                                }
+
+                                Rectangle {
+                                    height: 2
+                                    radius: 1
+                                    width: parent.width
+                                    anchors.bottom: parent.bottom
+                                    color: Material.color(Material.Grey, Material.Shade500)
+                                    opacity: 0.5
+                                }
+                            }
                         }
                     }
 
                     RowLayout {
-                      Layout.topMargin: -8
+                        Layout.topMargin: -8
                         Item {
                             width: 170
                             Label {
@@ -310,8 +332,8 @@ Dialog {
                         id: syncDropdownMenu
 
                         Layout.leftMargin: 15
-                        model: ["No sync service", "Google Drive   ", "Dropbox        "]
-                        // Have no idea for better solution     ^^^             ^^^
+                        model: ["No sync service", "Google Drive", "Dropbox"]
+                        implicitWidth: 180
 
                         Component.onCompleted: {
                             settingsDialog.setSyncServiceIndex()
