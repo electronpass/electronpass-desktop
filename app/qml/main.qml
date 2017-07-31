@@ -173,10 +173,12 @@ ApplicationWindow {
                 onTextChanged: {
                     if (text != "") {
                         // returns -1 if nothing found
-                        var search_results = dataHolder.search(text)
+                        var searchResults = dataHolder.search(text)
                         // first change model, then update index
                         itemsList.model = dataHolder.get_number_of_items()
-                        itemsList.setItemIndex(search_results)
+
+                        itemsList.setItemIndex(searchResults)
+                        mainLayout.handleDetails(searchResults)
                     } else {
                         dataHolder.stop_search()
                         refreshUI()

@@ -25,7 +25,7 @@ Dialog {
 
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
-    width: 400
+    width: 450
 
     Label {
         width: parent.width

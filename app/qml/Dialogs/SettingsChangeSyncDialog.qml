@@ -26,6 +26,8 @@ Dialog {
     x: (parent.width - width) / 2
     y: (parent.height - height) / 2
 
+    width: parent.width - 32
+
     function openWithMsg(title, message) {
         settingsChangeSyncDialog.title = title
         messageLabel.text = message
@@ -53,6 +55,7 @@ Dialog {
         anchors.fill: parent
         visible: messageLabel.text != ""
         Label {
+            Layout.fillWidth: parent
             id: messageLabel
             wrapMode: Text.WordWrap
             Layout.alignment: Qt.AlignHCenter
