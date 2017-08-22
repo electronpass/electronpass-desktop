@@ -76,3 +76,14 @@ after_success:
   - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
   - curl --upload-file ./*.deb https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.deb
   - curl --upload-file ./*.rpm https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.rpm
+
+  - mkdir upload
+  - mv ElectronPass*.AppImage *.deb *.rpm upload
+  # upload to github releases (many thanks to https://github.com/probonopd)
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - bash ./upload.sh upload/*
+
+branches:
+  except:
+    - # Do not build tags that we create when we upload to GitHub Releases
+    - /^(?i:continuous)$/
