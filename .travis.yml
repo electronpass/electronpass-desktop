@@ -58,7 +58,7 @@ after_success:
   - chmod a+x linuxdeployqt*.AppImage
   - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
   - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -qmldir=.
-  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=.
+  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=. --appimage-extract
   - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
   - chmod a+x ElectronPass-x86_64.AppImage
 
@@ -71,11 +71,6 @@ after_success:
   - DIR=appdir
   - fpm -s dir -t deb -n $LOWERAPP -v $VERSION -C $DIR
   - fpm -s dir -t rpm -n $LOWERAPP -v $VERSION -C $DIR
-
-  # upload image to transfer.sh
-  - curl --upload-file ./ElectronPass*.AppImage https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.AppImage
-  - curl --upload-file ./*.deb https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.deb
-  - curl --upload-file ./*.rpm https://transfer.sh/electronpass-git.$(git rev-parse --short HEAD)-x86_64.rpm
 
   - mkdir upload
   - mv ElectronPass*.AppImage *.deb *.rpm upload
