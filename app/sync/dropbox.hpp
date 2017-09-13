@@ -30,7 +30,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QNetworkReply>
 #include <QUrlQuery>
 
-#include <electronpass/json/json.h>
+#include "json/json.h"
 
 #include "auth_server.hpp"
 #include "globals.hpp"

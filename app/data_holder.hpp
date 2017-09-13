@@ -30,9 +30,9 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QUrl>
 #include <QDesktopServices>
 
-#include <electronpass/crypto.hpp>
-#include <electronpass/serialization.hpp>
-#include <electronpass/wallet.hpp>
+#include "electronpass/crypto.hpp"
+#include "electronpass/serialization.hpp"
+#include "electronpass/wallet.hpp"
 
 #include "globals.hpp"
 #include "file_stream.hpp"

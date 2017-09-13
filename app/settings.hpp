@@ -28,7 +28,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QDateTime>
 #include <QDir>
 
-#include <electronpass/crypto.hpp>
+#include "electronpass/crypto.hpp"
 #include "sync/keys.hpp"
 
 class SettingsManager {

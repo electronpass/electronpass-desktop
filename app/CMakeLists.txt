@@ -1,5 +1,12 @@
 # file(GLOB_RECURSE SOURCES *.cpp *.hpp electronpass.qrc "qml/*.qml")
 set(SOURCES
+    ${PROJECT_SOURCE_DIR}/libelectronpass/src/base64.cpp
+    ${PROJECT_SOURCE_DIR}/libelectronpass/src/crypto.cpp
+    ${PROJECT_SOURCE_DIR}/libelectronpass/src/passwords.cpp
+    ${PROJECT_SOURCE_DIR}/libelectronpass/src/serialization.cpp
+    ${PROJECT_SOURCE_DIR}/libelectronpass/src/wallet.cpp
+    ${PROJECT_SOURCE_DIR}/libelectronpass/src/jsoncpp.cpp
+
     main.cpp
     settings.cpp
     passwords.cpp
@@ -42,13 +49,12 @@ endforeach()
 configure_file(sync/keys.hpp.in sync/keys.hpp)
 
 target_link_libraries(electronpass
+    sodium
     Qt5::Core
     Qt5::Qml
     Qt5::Quick
     Qt5::Widgets
     Qt5::QuickControls2
-    ${ELECTRONPASS_LIB}
-    ${CURL_LIB}
     )
 
 install(TARGETS electronpass

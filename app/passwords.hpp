@@ -25,7 +25,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include <QStandardPaths>
 #include <QString>
 
-#include <electronpass/passwords.hpp>
+#include "electronpass/passwords.hpp"
 
 class Passwords : public QObject {
     Q_OBJECT
