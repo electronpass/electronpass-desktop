@@ -26,19 +26,12 @@ install:
   - export PATH=${TRAVIS_BUILD_DIR}/cmake/bin:${PATH}
   - cmake --version
 
-  # install libelectronpass
-  - git clone https://github.com/electronpass/libelectronpass.git
-  - cd libelectronpass
-  - mkdir build
-  - cd build
-  - cmake ..
-  - sudo make install
-  - sudo ldconfig /usr/local/lib
-  - cd ../..
-
 before_script:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
   - source $QT_ENV_SCRIPT
+
+  # get libelectronpass-submodule
+  git submodule update --init --recursive
 
   # clone and decrypt API keys
   # refer to https://github.com/electronpass/credentials for more information
