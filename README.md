@@ -5,7 +5,7 @@ Desktop client written in qml.
 
 ## Dependencies
 
-- [libelectronpass](https://github.com/electronpass/libelectronpass) - core library
+- [libelectronpass-cpp](https://github.com/electronpass/libelectronpass) - submodule for working with wallet file. See cloning
 - Qt >= 5.8.0 with at least the following modules is required:
     - [qtbase](http://code.qt.io/cgit/qt/qtbase.git)
     - [qtdeclarative](http://code.qt.io/cgit/qt/qtdeclarative.git)
@@ -23,7 +23,32 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet
 1. Download and install Qt from their [downloads page](https://www.qt.io/download/).
 2. Add to your ```PATH``` ```bin``` folder of your installation. For instance if you have Qt installed in ```/opt/Qt``` you should add to your ```PATH``` the following: ```/opt/Qt/5.8/clang_64/bin``` where ```clang_64``` might be something else.
 
+## Cloning
+This repository uses libelectronpass-cpp as a submodule. You can clone it with
+
+```
+git clone --recursive
+```
+
+If you already have the project cloned you can get libelectronpass-cpp submodule with
+
+```
+git pull
+git submodule update --init --recursive
+```
+
+Every now and again the libelectronpass-cpp will chage so you need to update the submodule by running
+
+```
+git submodule update --remote --recursive
+```
+
+If you have more questions about git submodules we recommend [this link](http://lmgtfy.com/?q=git+submodules).
+
 ## Downloading binaries
+
+### Note
+**Binaries are probably not working. We are trying to work on that when we have spare time.**
 
 #### Releases
 
