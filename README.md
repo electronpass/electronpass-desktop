@@ -25,8 +25,6 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet
 1. Download and install Qt from their [downloads page](https://www.qt.io/download/).
 2. Add to your ```PATH``` ```bin``` folder of your installation. For instance if you have Qt installed in ```/opt/Qt``` you should add to your ```PATH``` the following: ```/opt/Qt/5.8/clang_64/bin``` where ```clang_64``` might be something else.
 
-If you have more questions about git submodules we recommend [this link](http://lmgtfy.com/?q=git+submodules).
-
 ## Downloading binaries
 
 ### Note
