@@ -83,7 +83,6 @@ int DataHolder::unlock(const QString &password) {
     std::string password_string = password.toStdString();
 
     crypto = new electronpass::Crypto(password_string);
-    if (!crypto->check()) return 1;
 
     bool success = false;
     std::string text = file_stream::read_file(success);
@@ -125,11 +124,6 @@ void DataHolder::lock() {
 }
 
 int DataHolder::save() {
-    if (!crypto->check()) {
-        saving_error = 1;
-        return 1;
-    }
-
     int error = 0;
     std::string text = electronpass::serialization::save(wallet, *crypto, error);
 
@@ -241,7 +235,6 @@ bool DataHolder::change_password(const QString &old_password, const QString &new
     // We use authenticated encryption. That means that if decryption was successful, the password
     // is correct.
     electronpass::Crypto c(old_password_string);
-    if (!c.check()) return false;
 
     int error = -1;
     electronpass::serialization::load(text, c, error);
@@ -251,7 +244,6 @@ bool DataHolder::change_password(const QString &old_password, const QString &new
     // to encrypt some further changes with same password.
     delete crypto;
     crypto = new electronpass::Crypto(new_password_string);
-    if (!crypto->check()) return false;
 
     error = save();
     return error == 0;
@@ -261,7 +253,6 @@ bool DataHolder::new_wallet(const QString &password) {
     std::string password_string = password.toStdString();
 
     crypto = new electronpass::Crypto(password_string);
-    if (!crypto->check()) return false;
 
     wallet = electronpass::Wallet();
 

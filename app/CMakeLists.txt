@@ -1,41 +1,34 @@
 # file(GLOB_RECURSE SOURCES *.cpp *.hpp electronpass.qrc "qml/*.qml")
 set(SOURCES
-    ${PROJECT_SOURCE_DIR}/libelectronpass/src/base64.cpp
-    ${PROJECT_SOURCE_DIR}/libelectronpass/src/crypto.cpp
-    ${PROJECT_SOURCE_DIR}/libelectronpass/src/passwords.cpp
-    ${PROJECT_SOURCE_DIR}/libelectronpass/src/serialization.cpp
-    ${PROJECT_SOURCE_DIR}/libelectronpass/src/wallet.cpp
-    ${PROJECT_SOURCE_DIR}/libelectronpass/src/jsoncpp.cpp
+        main.cpp
+        settings.cpp
+        passwords.cpp
+        globals.cpp
+        clipboard.cpp
+        setup.cpp
+        wallet_merger.cpp
+        data_holder.cpp
+        search.cpp
+        convert_field.cpp
+        file_stream.cpp
+        item_template.cpp
 
-    main.cpp
-    settings.cpp
-    passwords.cpp
-    globals.cpp
-    clipboard.cpp
-    setup.cpp
-    wallet_merger.cpp
-    data_holder.cpp
-    search.cpp
-    convert_field.cpp
-    file_stream.cpp
-    item_template.cpp
+        sync/gdrive.cpp
+        sync/auth_server.cpp
+        sync/sync_manager.cpp
+        sync/dropbox.cpp
 
-    sync/gdrive.cpp
-    sync/auth_server.cpp
-    sync/sync_manager.cpp
-    sync/dropbox.cpp
-
-    electronpass.qrc
-    res/fonts/fonts.qrc
-    res/img/img.qrc
-    )
+        electronpass.qrc
+        res/fonts/fonts.qrc
+        res/img/img.qrc
+        )
 
 add_executable(electronpass ${SOURCES})
 
 # read api keys from file and set them to variables
 file(STRINGS sync/keys.txt KEYS_FILE)
 
-foreach(name_and_value ${KEYS_FILE})
+foreach (name_and_value ${KEYS_FILE})
     # Strip leading spaces
     string(REGEX REPLACE "^[ ]+" "" name_and_value ${name_and_value})
     # Find variable name
@@ -44,18 +37,19 @@ foreach(name_and_value ${KEYS_FILE})
     string(REPLACE "${name}=" "" value ${name_and_value})
     # Set the variable
     set(${name} "${value}")
-endforeach()
+endforeach ()
 
 configure_file(sync/keys.hpp.in sync/keys.hpp)
 
 target_link_libraries(electronpass
-    sodium
-    Qt5::Core
-    Qt5::Qml
-    Qt5::Quick
-    Qt5::Widgets
-    Qt5::QuickControls2
-    )
+        ${CMAKE_SOURCE_DIR}/dependencies/libelectronpass.a
+        ${CMAKE_SOURCE_DIR}/dependencies/libcryptopp.a
+        Qt5::Core
+        Qt5::Qml
+        Qt5::Quick
+        Qt5::Widgets
+        Qt5::QuickControls2
+        )
 
 install(TARGETS electronpass
         DESTINATION ${BIN_INSTALL_DIR})

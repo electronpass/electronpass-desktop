@@ -6,6 +6,8 @@ cmake-build-debug/*
 docs/html/*
 docs/latex/*
 app/sync/keys.txt
+dependencies/*
+.DS_Store
 
 # Gets created by cmake
 app/sync/keys.hpp

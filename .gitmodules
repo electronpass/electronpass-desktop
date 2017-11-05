@@ -1,4 +1,0 @@
-[submodule "libelectronpass"]
-	path = libelectronpass
-	url = https://github.com/electronpass/libelectronpass.git
-    branch = develop

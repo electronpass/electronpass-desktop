@@ -30,9 +30,6 @@ before_script:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
   - source $QT_ENV_SCRIPT
 
-  # get libelectronpass-submodule
-  - git submodule update --init --recursive
-
   # clone and decrypt API keys
   # refer to https://github.com/electronpass/credentials for more information
   - git clone https://github.com/electronpass/credentials.git
@@ -40,6 +37,8 @@ before_script:
 script:
   - mkdir appdir
   - mkdir build
+  - chmod +x install-dependencies.sh
+  - ./install-dependencies.sh
   - cd build
   - cmake -DCMAKE_INSTALL_PREFIX:PATH=../appdir/usr/. ..
   - make -j4

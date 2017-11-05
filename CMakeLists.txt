@@ -36,20 +36,12 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-gnu-zero-variadic-macro-arguments -fexceptions")
 endif()
 
-# Find sodium
-find_package(sodium REQUIRED)
-include_directories(${sodium_INCLUDE_DIR})
-
 # Find Qt5
 set(REQUIRED_QT_VERSION "5.7.0")
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS
         Core Qml Quick Widgets QuickControls2)
 
-# find libelectronpass
-# find_library(ELECTRONPASS_LIB electronpass)
-# find_path(ELECTRONPASS_INCLUDE electronpass)
-include_directories(libelectronpass/include libelectronpass/jsoncpp)
-
+include_directories(dependencies)
 
 add_subdirectory(app)
 add_subdirectory(data)
