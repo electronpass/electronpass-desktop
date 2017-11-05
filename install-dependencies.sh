@@ -1,6 +1,6 @@
 #!/bin/bash
 
-git clone -b develop --depth=1 git@github.com:electronpass/libelectronpass-cpp.git libelectronpass-build
+git clone -b develop --depth=1 https://github.com/electronpass/libelectronpass-cpp.git libelectronpass-build
 cd libelectronpass-build
 chmod +x install-cryptopp.sh
 ./install-cryptopp.sh
