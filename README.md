@@ -34,6 +34,8 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet
 
 You can download pre-build binaries from [releases](https://github.com/electronpass/electronpass-desktop/releases) page of this repository.
 
+There is also a **Arch Linux repository** along with instructions for using it available [here](https://github.com/electronpass/arch-packages).
+
 #### Development
 
 If you want to try latest features, you can go to the latest travis build and select one of the logs. At the bottom of the travis log, there is a curl command which uploads the binary to transfer.sh and outputs the download link. There are 3 different binaries (and 3 different links): AppImage, .deb and .rpm. All three have the needed qt dependencies and libelectronpass bundled in them.
