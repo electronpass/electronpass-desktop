@@ -39,29 +39,32 @@ You can download pre-build binaries from [releases](https://github.com/electronp
 If you want to try latest features, you can go to the latest travis build and select one of the logs. At the bottom of the travis log, there is a curl command which uploads the binary to transfer.sh and outputs the download link. There are 3 different binaries (and 3 different links): AppImage, .deb and .rpm. All three have the needed qt dependencies and libelectronpass bundled in them.
 
 ## Building
+Before building you need to configure dependencies and fill out the api keys for syncing. Look at the syncing section for more information.
+
+You can build the app the hard way or the easy way. For Unix/Linux systems we have provided a build script `build.sh`. This is the easy way that outputs executable in `bin/electronpass`. **Note:** api keys need to be configured before running the script.
+
+The hard way is building it manually. You first need to download and build `libelectronpass-cpp` and `crypto++` as described in the next section. Than you build it with cmake, described in the Compiling section.
 
 ### Configure dependencies
+You can download, compile and move dependencies to correct directories with a `install-dependencies.sh` script, or you can do it by hand.
 
 #### Crypto++
-Crypto library needed for libelectronpass-cpp. Build script for it is provided in libelectronpass-cpp [repo](https://github.com/electronpass/libelectronpass-cpp/tree/develop). You can build it manually and put headers in ```dependencies/cryptopp``` and static file to ```dependencies/libcryptopp.a```. There is also a script that does the moving for you, described in the next section.
+Crypto library needed for libelectronpass-cpp. Build script for it is provided in libelectronpass-cpp [repo](https://github.com/electronpass/libelectronpass-cpp/tree/develop). You can build it manually and put the headers in ```dependencies/cryptopp``` and static library to ```dependencies/libcryptopp.a```.
 
 #### Libelectronpass-cpp
-Libelectronpass is required for this application to work. It will be statically linked. There is a script described in the next section, or you can build it manually, by going to [its repo](https://github.com/electronpass/libelectronpass-cpp/tree/develop) and following the build instructions. Then copy the header from libelectronpass files to ```libelectronpass//electronpass/```, cryptopp and the static library to ```libelectronpass/libelectronpass.a```.
+Libelectronpass is required for this application to work. It will be statically linked. You can build it manually, by going to [its repository](https://github.com/electronpass/libelectronpass-cpp/) and following the build instructions (be careful to use develop branch). Then copy the header from libelectronpass files to ```libelectronpass/electronpass/```, and the static library to ```libelectronpass/libelectronpass.a```.
 
-#### Script
- Script ```./install-dependencies.sh``` will build crypto++ and libelectronpass-cpp for you and move the files to correct places.
+### Compiling
+After you have configured the api keys, and compiled and moved the dependencies in the correct directories you can build the app with the following commands.
 
-### Syncing
-For obvious reasons api keys are not included in the source repository. Copy `app/sync/keys.default.txt` to `app/sync/keys.txt` and change the keys inside the file. Refer to [electronpass/credentials](https://github.com/electronpass/credentials) for more information.
 ```bash
 mkdir build; cd build
 cmake ..
 make electronpass -j8
 ```
-Optionally install ElectronPass:
 
-    sudo make install
-
+### Syncing
+For obvious reasons api keys are not included in the source repository. Copy `app/sync/keys.default.txt` to `app/sync/keys.txt` and change the keys inside the file. Refer to [electronpass/credentials](https://github.com/electronpass/credentials) for more information.
 
 ## Graphical assets
 Icons in this project are displayed as a [Material Icons Font](). To preview and find their unicode representations use [CharacterMap](http://bluejamesbond.github.io/CharacterMap/) tool and load ttf file from app/res/fonts/.
