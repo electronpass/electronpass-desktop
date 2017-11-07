@@ -8,6 +8,7 @@ docs/latex/*
 app/sync/keys.txt
 dependencies/*
 .DS_Store
+.qmake.stash
 
 # Gets created by cmake
 app/sync/keys.hpp
@@ -41,4 +42,3 @@ app/sync/keys.hpp
 *.exe
 *.out
 *.app
-
