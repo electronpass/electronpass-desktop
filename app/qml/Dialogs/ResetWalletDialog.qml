@@ -44,6 +44,9 @@ Dialog {
                 var success = setup.reset()
                 if (success) {
                     setupView.visible = true
+
+                    // Reset sync service (it changed to none)
+                    settingsDialog.setSyncServiceIndex()
                 } else {
                     toolTip.text = "Reset failed."
                     toolTip.show()

@@ -34,6 +34,11 @@ bool Setup::reset() {
     bool success = file_stream::write_file("");
     if (!success) return false;
     globals::settings.reset();
+
+    globals::sync_manager.set_service(
+        // This should be always NONE, unless something will be changed
+        SyncManager::string_to_service(globals::settings.sync_manager_get_service())
+    );
     return true;
 }
 

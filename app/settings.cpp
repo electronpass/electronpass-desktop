@@ -44,12 +44,14 @@ void SettingsManager::init(QSettings &settings_) {
 
     if (!settings->contains(kGdriveAccessToken)) settings->setValue(kGdriveAccessToken, "");
     if (!settings->contains(kGdriveRefreshToken)) settings->setValue(kGdriveRefreshToken, "");
-    if (!settings->contains(kGdriveTokenExpiration)) {
+    if (!settings->contains(kGdriveTokenExpiration) || settings->value(kGdriveTokenExpiration) == "") {
         settings->setValue(kGdriveTokenExpiration, QDateTime::currentDateTimeUtc());
     }
     if (!settings->contains(kDropboxAccessToken)) settings->setValue(kDropboxAccessToken, "");
 
-    if (!settings->contains(kSyncManagerService)) settings->setValue(kSyncManagerService, "none");
+    if (!settings->contains(kSyncManagerService) || settings->value(kSyncManagerService) == "") {
+        settings->setValue(kSyncManagerService, "none");
+    }
 
     settings->sync();
 }
@@ -58,6 +60,7 @@ void SettingsManager::reset() {
     settings->clear();
     settings->sync();
     this->init(*settings);
+    std::cout << "<setting.cpp> Setings reset" << std::endl;
 }
 
 QString SettingsManager::get_data_location() const {

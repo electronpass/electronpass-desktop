@@ -90,7 +90,7 @@ Dialog {
         modal: true
 
         width: Math.min(setupView.width * 0.65, 500)
-        height: Math.min(setupView.height * 0.4, 300)
+        height: Math.min(setupView.height * 0.55, 300)
 
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2

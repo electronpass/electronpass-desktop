@@ -327,6 +327,7 @@ Rectangle {
                           unlockGUI()
                           setup.finish()
                           setupView.visible = false
+                          console.log("Setup for new user finished.")
 
                       } else console.log("[Error] Error in Setup.qml")
                     } else if (setupSwipeView.currentIndex == 2) {
