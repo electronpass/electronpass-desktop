@@ -41,3 +41,5 @@ INCLUDEPATH += dependencies \
                app/sync
 LIBS += $$PWD/dependencies/libcryptopp.a \
         $$PWD/dependencies/libelectronpass.a
+
+DESTDIR = $$PWD/bin
