@@ -1,5 +1,0 @@
-GDRIVE_CLIENT_ID=sample_id
-GDRIVE_CLIENT_SECRET=sample_secret
-DROPBOX_CLIENT_ID=sample_id
-DROPBOX_CLIENT_SECRET=sample_secret
-TOKEN_PASSWORD=token_password

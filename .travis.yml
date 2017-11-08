@@ -46,6 +46,7 @@ before_script:
 
   # clone and decrypt API keys
   # refer to https://github.com/electronpass/credentials for more information
+  - cp app/sync/keys.default.hpp app/sync/keys.hpp
   - git clone https://github.com/electronpass/credentials.git
   - python3 credentials/configure.py credentials/keys.json.asc ${keys_encryption_password} app/sync/keys.hpp
 script:
