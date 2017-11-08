@@ -39,7 +39,7 @@ SOURCES = app/clipboard.cpp \
 INCLUDEPATH += dependencies \
                app \
                app/sync
-LIBS += $$PWD/dependencies/libcryptopp.a \
-        $$PWD/dependencies/libelectronpass.a
+LIBS += $$PWD/dependencies/libelectronpass.a \
+        $$PWD/dependencies/libcryptopp.a
 
 DESTDIR = $$PWD/bin
