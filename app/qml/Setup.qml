@@ -39,6 +39,10 @@ Rectangle {
             lock.visible = false
             lock.removeFocus()
             newUser.forceActiveFocus()
+
+            // Reset settings
+            setup.reset()
+            settingsDialog.setSyncServiceIndex()
         }
     }
 

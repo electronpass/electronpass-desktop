@@ -574,8 +574,13 @@ Dialog {
         }
     }
     onClosed: {
+        // Save lockDelay
         if (lockDelayCheckbox.checked) settings.lockDelay = -1
         else settings.lockDelay = lockDelaySpinBox.value
+        // Clear textfields
+        curr_password.clear()
+        new_password.clear()
+        confirm_password.clear()
     }
 
     Component.onDestruction: {

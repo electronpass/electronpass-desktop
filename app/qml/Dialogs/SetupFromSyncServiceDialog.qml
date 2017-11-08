@@ -145,6 +145,7 @@ Dialog {
                             unlockGUI()
                             setupView.visible = false
                             setup.finish()
+                            settingsDialog.setSyncServiceIndex()
 
                         } else if (error == 1) {
                             errorBar.text = qsTr("Crypto initialization was not successful.")
