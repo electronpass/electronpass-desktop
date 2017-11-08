@@ -55,7 +55,7 @@ script:
   - chmod +x install-dependencies.sh
   - ./install-dependencies.sh
   - cd build
-  - qmake -set prefix appdir/usr/. ..
+  - qmake PREFIX=appdir/usr/. ..
   - make -j4
 after_success:
   #create and upload appimage
