@@ -43,3 +43,19 @@ LIBS += $$PWD/dependencies/libelectronpass.a \
         $$PWD/dependencies/libcryptopp.a
 
 DESTDIR = $$PWD/bin
+
+target.path = $${PREFIX}/usr/local/bin/
+INSTALLS += target
+
+
+desktopfile.path = $${PREFIX}/usr/local/share/applications/
+desktopfile.files = data/electronpass.desktop
+INSTALLS += desktopfile
+
+icon.path = $${PREFIX}/usr/share/icons/hicolor/scalable/apps/
+icon.files = data/electronpass.svg
+INSTALLS += icon
+
+appdata.path = $${PREFIX}/usr/share/metainfo/
+appdata.files = data/electronpass.appdata.xml
+INSTALLS += appdata
