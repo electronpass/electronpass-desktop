@@ -75,7 +75,7 @@ make -j8
 ```
 
 ### Syncing
-For obvious reasons api keys are not included in the source repository. Copy `app/sync/keys.default.txt` to `app/sync/keys.txt` and change the keys inside the file. Refer to [electronpass/credentials](https://github.com/electronpass/credentials) for more information.
+For obvious reasons api keys are not included in the source repository. Copy `app/sync/keys.default.hpp` to `app/sync/keys.hpp` and change the keys inside the file. Refer to [electronpass/credentials](https://github.com/electronpass/credentials) for more information.
 
 ## Graphical assets
 Icons in this project are displayed as a [Material Icons Font](). To preview and find their unicode representations use [CharacterMap](http://bluejamesbond.github.io/CharacterMap/) tool and load ttf file from app/res/fonts/.
