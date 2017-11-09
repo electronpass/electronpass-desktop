@@ -43,8 +43,7 @@ script:
   - cd build
   - qmake -makefile ../electronpass.pro
   - make -j4
-# Commented out, because maybe than the appimage will work...
-# after_success:
+after_success:
   # Create and upload appimage
   - cd ..
   - mkdir appdir
