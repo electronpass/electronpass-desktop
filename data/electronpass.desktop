@@ -6,4 +6,4 @@ Exec=electronpass
 Icon=electronpass
 Terminal=false
 Type=Application
-Categories=Utility;Security;Privacy;Qt;
+Categories=Utility;System;

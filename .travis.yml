@@ -21,24 +21,11 @@ addons:
       - qt58quickcontrols
       - qt58svg
       - qt58declarative
-      - ruby
-      - ruby-dev
-      - rubygems
       - libqt4-opengl-dev
 
 before_install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
   - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.8" CC="clang-3.8"; fi
-
-install:
-  - gem install fpm --conservative
-
-  # install newer cmake
-  - CMAKE_URL="https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.tar.gz"
-  - mkdir cmake
-  - wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
-  - export PATH=${TRAVIS_BUILD_DIR}/cmake/bin:${PATH}
-  - cmake --version
 
 before_script:
   - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
@@ -50,37 +37,26 @@ before_script:
   - git clone https://github.com/electronpass/credentials.git
   - python3 credentials/configure.py credentials/keys.json.asc ${keys_encryption_password} app/sync/keys.hpp
 script:
-  - mkdir appdir
   - mkdir build
   - chmod +x install-dependencies.sh
   - ./install-dependencies.sh
   - cd build
-  - qmake PREFIX=appdir/usr/. ..
+  - qmake -makefile ../electronpass.pro
   - make -j4
 after_success:
-  #create and upload appimage
-  - sudo make install ; sudo chown -R $USER ../appdir ; find ../appdir/
-  - cd ../
+  # Create and upload appimage
+  - cd ..
+  - mkdir appdir
+  - cp bin/electronpass appdir/
+  - cp data/electronpass.desktop appdir/
+  - cp data/electronpass.svg appdir/
+  - cd appdir
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-  - chmod a+x linuxdeployqt*.AppImage
-  - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -bundle-non-qt-libs -qmldir=.
-  - ./linuxdeployqt*.AppImage ./appdir/usr/share/applications/*.desktop -appimage -qmldir=. --appimage-extract
-  - find ./appdir -executable -type f -exec ldd {} \; | grep " => /usr" | cut -d " " -f 2-3 | sort | uniq
-  - chmod a+x ElectronPass-x86_64.AppImage
-
-  # install rpm later. needed for creating rpm package, when installed appimage not working and therefore
-  - sudo apt-get -y -qq install rpm
-
-  # create deb and rpm package with fpm
-  - LOWERAPP=electronpass
-  - VERSION=0.0.1
-  - DIR=appdir
-  - fpm -s dir -t deb -n $LOWERAPP -v $VERSION -C $DIR
-  - fpm -s dir -t rpm -n $LOWERAPP -v $VERSION -C $DIR
-
+  - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
+  - ./linuxdeployqt-continuous-x86_64.AppImage electronpass.desktop -appimage -qmldir=../app/qml/
+  - cd ..
   - mkdir upload
-  - mv ElectronPass*.AppImage *.deb *.rpm upload
+  - mv appdir/ElectronPass*.AppImage upload
   # upload to github releases (many thanks to https://github.com/probonopd)
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
   - bash ./upload.sh upload/*
