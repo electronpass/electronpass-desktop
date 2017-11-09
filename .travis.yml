@@ -14,7 +14,7 @@ addons:
       - sourceline: 'deb http://archive.ubuntu.com/ubuntu xenial main universe'
     packages:
       - clang-3.8
-      - g++-5 extra-cmake-modules
+      - g++-5
       - qt58base
       - qt58graphicaleffects
       - qt58quickcontrols2
@@ -43,7 +43,8 @@ script:
   - cd build
   - qmake -makefile ../electronpass.pro
   - make -j4
-after_success:
+# Commented out, because maybe than the appimage will work...
+# after_success:
   # Create and upload appimage
   - cd ..
   - mkdir appdir
