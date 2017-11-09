@@ -14,12 +14,11 @@ Desktop client written in qml.
     - [qtquickcontrols2](http://code.qt.io/cgit/qt/qtquickcontrols2.git)
     - [qtquickcontrols](http://code.qt.io/cgit/qt/qtquickcontrols.git)
     - [qttools](http://code.qt.io/cgit/qt/qttools.git/)
-- [Extra CMake modules (>=1.7.0)](https://github.com/KDE/extra-cmake-modules) is required for building the project.
 
 To install all dependencies on Arch Linux:
-
-    sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-quickcontrols2 extra-cmake-modules
-
+```
+sudo pacman -S qt5-base qt5-declarative qt5-quickcontrols qt5-quickcontrols2
+```
 Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet).
 
 1. Download and install Qt from their [downloads page](https://www.qt.io/download/).
@@ -69,7 +68,7 @@ qmake -makefile ../electronpass.pro
 make -j8
 ```
 
-You can also use `cmake`, which is now deprecated, but if qmake doesn't work, try this:
+You can also use `cmake`, which is now deprecated, but if qmake doesn't work, try with cmake. Note: `extra-cmake-modules` is needed to build with cmake.
 ```bash
 mkdir build; cd build
 cmake ..
