@@ -53,10 +53,12 @@ after_success:
   - cd appdir
   - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
   - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-  - sudo ./linuxdeployqt-continuous-x86_64.AppImage electronpass.desktop -appimage -qmldir=../app/qml/
+  - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
+  - ./linuxdeployqt-continuous-x86_64.AppImage electronpass.desktop -appimage -qmldir=../app/qml/
   - cd ..
   - mkdir upload
   - mv appdir/ElectronPass*.AppImage upload
+
   # upload to github releases (many thanks to https://github.com/probonopd)
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
   - bash ./upload.sh upload/*
