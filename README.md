@@ -28,7 +28,7 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet
 ## Downloading binaries
 
 ### Note
-**Binaries are probably not working. We are trying to work on that when we have spare time.**
+Binaries are not working.That's because travis does not like us... We are trying to fix it...
 
 #### Releases
 
@@ -38,7 +38,7 @@ There is also a **Arch Linux repository** along with instructions for using it a
 
 #### Development
 
-If you want to try latest features, you can go to the latest travis build and select one of the logs. At the bottom of the travis log, there is a curl command which uploads the binary to transfer.sh and outputs the download link. There are 3 different binaries (and 3 different links): AppImage, .deb and .rpm. All three have the needed qt dependencies and libelectronpass bundled in them.
+If you want to try latest features, you can go to the latest travis build and select one of the logs. At the bottom of the travis log, there is a curl command which uploads the binary to transfer.sh and outputs the download link. There are 3 different binaries (and 3 different links): AppImage. All three have the needed qt dependencies and libelectronpass bundled in them.
 
 ## Building
 The following instructions are for Unix/Linux systems. If you want to build on Windows look at [Building for Windows](https://github.com/electronpass/electronpass-desktop/blob/develop/Build-Win.md)
@@ -47,7 +47,9 @@ Before building you need to configure dependencies and fill out the api keys for
 
 You can build the app the hard way or the easy way. For Unix/Linux systems we have provided a build script `build.sh`. This is the easy way that outputs executable in `bin/electronpass`. **Note:** api keys need to be configured before running the script.
 
-The hard way is building it manually. You first need to download and build `libelectronpass-cpp` and `crypto++` as described in the next section. Than you build it with cmake, described in the Compiling section.
+The hard way is building it manually. You first need to download and build `libelectronpass-cpp` and `crypto++` as described in the next section. Than you build it with cmake or qmake (prefered), described in the Compiling section.
+
+For linux we also provide `create-linux-appimage.sh` script, that will create an AppImage after you have build electronpass.
 
 ### Configure dependencies
 You can download, compile and move dependencies to correct directories with a `install-dependencies.sh` script, or you can do it by hand.
@@ -59,20 +61,23 @@ Crypto library needed for libelectronpass-cpp. Build script for it is provided i
 Libelectronpass is required for this application to work. It will be statically linked. You can build it manually, by going to [its repository](https://github.com/electronpass/libelectronpass-cpp/) and following the build instructions (be careful to use develop branch). Then copy the header from libelectronpass files to ```libelectronpass/electronpass/```, and the static library to ```libelectronpass/libelectronpass.a```.
 
 ### Compiling
-After you have configured the api keys, and compiled and moved the dependencies in the correct directories you can build the app with the following commands.
+After you have configured the api keys, and compiled and moved the dependencies in the correct directories you can build the app with qmake with the following commands.
 
+```bash
+mkdir build; cd build
+qmake -makefile ../electronpass.pro
+make -j8
+```
+
+You can also use `cmake`, which is now deprecated, but if qmake doesn't work, try this:
 ```bash
 mkdir build; cd build
 cmake ..
 make electronpass -j8
 ```
 
-You can also use `qmake` which is for now experimental and only recommended for windows. To build with qmake use the following commands
-```bash
-mkdir build; cd build
-qmake -makefile ../electronpass.pro
-make -j8
-```
+### AppImage
+For linux you can package the application into an AppImage. If you don't know what those are, you can read more on them [here](https://appimage.org/). To build it run the `create-linux-appimage.sh` script. This will create appimage with the help of [`linuxdeployqt`](https://github.com/probonopd/linuxdeployqt), which is a really cool tool that a really cool guy has made. ElectronPass-x86_64.AppImage will be built in `appdir` direcotry (the script will make it automaticly), and than copied to `electronpass-desktop` directory. `linuxdeployqt` will be downloaded automaticly.
 
 ### Syncing
 For obvious reasons api keys are not included in the source repository. Copy `app/sync/keys.default.hpp` to `app/sync/keys.hpp` and change the keys inside the file. Refer to [electronpass/credentials](https://github.com/electronpass/credentials) for more information.

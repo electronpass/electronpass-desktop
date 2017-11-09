@@ -9,6 +9,8 @@ app/sync/keys.txt
 dependencies/*
 .DS_Store
 .qmake.stash
+appdir/*
+*.AppImage
 
 # Gets created by cmake
 app/sync/keys.hpp

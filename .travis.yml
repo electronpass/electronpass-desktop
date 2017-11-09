@@ -9,19 +9,14 @@ compiler:
 addons:
   apt:
     sources:
-      - sourceline: 'ppa:beineri/opt-qt58-trusty'
-      - sourceline: 'ppa:ubuntu-toolchain-r/test'
-      - sourceline: 'deb http://archive.ubuntu.com/ubuntu xenial main universe'
+      - sourceline: 'ppa:beineri/opt-qt591-trusty'
     packages:
-      - clang-3.8
-      - g++-5
-      - qt58base
-      - qt58graphicaleffects
-      - qt58quickcontrols2
-      - qt58quickcontrols
-      - qt58svg
-      - qt58declarative
-      - libqt4-opengl-dev
+      - qt59base
+      - qt59graphicaleffects
+      - qt59quickcontrols2
+      - qt59quickcontrols
+      - qt59svg
+      - qt59declarative
 
 before_install:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
@@ -45,19 +40,10 @@ script:
   - make -j4
 after_success:
   # Create and upload appimage
-  - cd ..
-  - mkdir appdir
-  - cp bin/electronpass appdir/
-  - cp data/electronpass.desktop appdir/
-  - cp data/electronpass.svg appdir/
-  - cd appdir
-  - wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage"
-  - chmod a+x linuxdeployqt-continuous-x86_64.AppImage
-  - unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH
-  - ./linuxdeployqt-continuous-x86_64.AppImage electronpass.desktop -appimage -qmldir=../app/qml/
-  - cd ..
+  - chmod +x create-linux-appimage.sh
+  - ./create-linux-appimage.sh
   - mkdir upload
-  - mv appdir/ElectronPass*.AppImage upload
+  - mv ElectronPass*.AppImage upload
 
   # upload to github releases (many thanks to https://github.com/probonopd)
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
