@@ -32,15 +32,12 @@ before_script:
   - git clone https://github.com/electronpass/credentials.git
   - python3 credentials/configure.py credentials/keys.json.asc ${keys_encryption_password} app/sync/keys.hpp
 script:
-  - mkdir build
+  # - mkdir build
   - chmod +x install-dependencies.sh
-  - ./install-dependencies.sh
-  - cd build
-  - qmake -makefile ../electronpass.pro
-  - make -j4
+  - chmod +x build.sh
+  - ./build.sh
 after_success:
   # Create and upload appimage
-  - cd ..
   - chmod +x create-linux-appimage.sh
   - ./create-linux-appimage.sh
   - mkdir upload

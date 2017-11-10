@@ -1,6 +1,10 @@
 #!/bin/bash
 ./install-dependencies.sh
-mkdir build
+if [ ! -e "build" ]
+then
+    mkdir build
+fi
+
 cd build
-cmake ..
-make electronpass
+qmake -makefile ../electronpass.pro
+make -j4
