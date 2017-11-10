@@ -37,7 +37,7 @@ There is also a **Arch Linux repository** along with instructions for using it a
 
 #### Development
 
-If you want to try latest features, you can go to the latest travis build and select one of the logs. At the bottom of the travis log, there is a curl command which uploads the binary to transfer.sh and outputs the download link. It's in the form of AppImage with needed qt dependencies and libelectronpass bundled in it.
+If you want to try latest features, you can download the current AppImage from continuous release build.
 
 ## Building
 The following instructions are for Unix/Linux systems. If you want to build on Windows look at [Building for Windows](https://github.com/electronpass/electronpass-desktop/blob/develop/Build-Win.md)
