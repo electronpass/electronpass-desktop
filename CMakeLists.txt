@@ -13,19 +13,6 @@ set(CMAKE_AUTORCC ON)
 # Apple-specific configuration
 set(APPLE_SUPPRESS_X11_WARNING ON)
 
-# ECM
-find_package(ECM 1.7.0 REQUIRED NO_MODULE)
-list(APPEND CMAKE_MODULE_PATH
-        "${ECM_MODULE_PATH}"
-        "${ECM_KDE_MODULE_DIR}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/cmake"
-        )
-
-# Macros
-include(KDEInstallDirs)
-include(KDECompilerSettings)
-include(KDECMakeSettings)
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Wextra -Wold-style-cast -pedantic -fexceptions")
@@ -44,4 +31,3 @@ find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS
 include_directories(dependencies)
 
 add_subdirectory(app)
-add_subdirectory(data)

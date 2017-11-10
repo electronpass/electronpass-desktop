@@ -37,7 +37,7 @@ There is also a **Arch Linux repository** along with instructions for using it a
 
 #### Development
 
-If you want to try latest features, you can go to the latest travis build and select one of the logs. At the bottom of the travis log, there is a curl command which uploads the binary to transfer.sh and outputs the download link. There are 3 different binaries (and 3 different links): AppImage. All three have the needed qt dependencies and libelectronpass bundled in them.
+If you want to try latest features, you can go to the latest travis build and select one of the logs. At the bottom of the travis log, there is a curl command which uploads the binary to transfer.sh and outputs the download link. It's in the form of AppImage with needed qt dependencies and libelectronpass bundled in it.
 
 ## Building
 The following instructions are for Unix/Linux systems. If you want to build on Windows look at [Building for Windows](https://github.com/electronpass/electronpass-desktop/blob/develop/Build-Win.md)
@@ -68,7 +68,7 @@ qmake -makefile ../electronpass.pro
 make -j8
 ```
 
-You can also use `cmake`, which is now deprecated, but if qmake doesn't work, try with cmake. Note: `extra-cmake-modules` is needed to build with cmake.
+You can also use `cmake`, which is now deprecated, but if qmake doesn't work, try with cmake. Cmake doesn't have install command and is here primarily for development purposes (we are using CLion).
 ```bash
 mkdir build; cd build
 cmake ..

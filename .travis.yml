@@ -17,6 +17,7 @@ addons:
       - qt59quickcontrols
       - qt59svg
       - qt59declarative
+      - libgl1-mesa-dev
 
 # before_install:
   # - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
