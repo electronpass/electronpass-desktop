@@ -203,6 +203,8 @@ ApplicationWindow {
                         itemsList.model = dataHolder.get_number_of_items()
                         itemsList.setItemIndex(newItemIndex)
                         details.openEditDialog()
+                        // Focus new item's name
+                        editItemDialog.focusTitle()
                     }
 
                     MenuItem {

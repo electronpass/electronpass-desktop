@@ -56,6 +56,11 @@ Dialog {
         detailsTitleLabel.text = title
     }
 
+    function focusTitle() {
+        detailsTitleLabel.forceActiveFocus()
+        detailsTitleLabel.selectAll()
+    }
+
     function addEditDetail(obj){
         editDetailsModel.append({titlevar: obj.titlevar, contentvar: obj.contentvar,
                                  securevar: obj.securevar, typevar: obj.typevar})
