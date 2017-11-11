@@ -122,7 +122,7 @@ public:
     Q_INVOKABLE void lock();
 
     // Saves wallet file to file_url location.
-    Q_INVOKABLE bool backup_wallet(const QString &file_url) const;
+    Q_INVOKABLE bool backup_wallet(const QString &filename) const;
 
     // Restore wallet from backup
     // Returns:
@@ -131,10 +131,10 @@ public:
     //     - 2: invalid json
     //     - 3: could not read file
     //     - 4: cold not copy
-    Q_INVOKABLE int restore_wallet(const QString &file_url, QString password = "");
+    Q_INVOKABLE int restore_wallet(const QString &filename, QString password = "");
 
     // Exports wallet to csv to a given location.
-    Q_INVOKABLE bool export_to_csv(const QString &file_url) const;
+    Q_INVOKABLE bool export_to_csv(const QString &filename) const;
 
     // Different functions for display of items in GUI
     Q_INVOKABLE int get_number_of_items() const;

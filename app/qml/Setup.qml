@@ -336,7 +336,24 @@ Rectangle {
                       } else console.log("[Error] Error in Setup.qml")
                     } else if (setupSwipeView.currentIndex == 2) {
                         if (syncList.currentIndex == 0) {
-                            fileDialog.open()
+                            var filename = fileDialog.open_file()
+                            if (filename != "") {
+                                var error = dataHolder.restore_wallet(filename, "")
+                                if (error == 0) {
+                                    setup.finish()
+                                    setupView.visible = false
+                                    unlockGUI()
+                                } else if (error == 1) {
+                                    passwordDialog.path = filename
+                                    passwordDialog.open()
+                                } else if (error == 2) {
+                                    messageDialog.openWithMsg("Wallet is corrupted",
+                                    "Wallet file seems to be corrupted.")
+                                } else if (error == 3) {
+                                    messageDialog.openWithMsg("File could not be read", "Wallet file seems to be" +
+                                    "missing or it has wrong permissions set.")
+                                }
+                            }
                         } else {
                             if (syncList.currentIndex == 1) setup.set_sync_service("gdrive")
                             if (syncList.currentIndex == 2) setup.set_sync_service("dropbox")
@@ -347,32 +364,6 @@ Rectangle {
                 }
             }
         }
-    }
-
-    FileDialog {
-        id: fileDialog
-        title: qsTr("Please choose a backup wallet file.")
-        folder: shortcuts.home
-        selectMultiple: false
-        onAccepted: {
-            var url = Qt.resolvedUrl(fileDialog.fileUrl)
-            var error = dataHolder.restore_wallet(url, "")
-            if (error == 0) {
-                setup.finish()
-                setupView.visible = false
-                unlockGUI()
-            } else if (error == 1) {
-                passwordDialog.path = url
-                passwordDialog.open()
-            } else if (error == 2) {
-                messageDialog.openWithMsg("Wallet is corrupted",
-                                          "Wallet file seems to be corrupted.")
-            } else if (error == 3) {
-                messageDialog.openWithMsg("File could not be read", "Wallet file seems to be" +
-                                          "missing or it has wrong permissions set.")
-            }
-        }
-        onRejected: {}
     }
 
     Dialog {

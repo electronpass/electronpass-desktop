@@ -31,6 +31,7 @@ along with ElectronPass. If not, see <http://www.gnu.org/licenses/>.
 #include "setup.hpp"
 #include "wallet_merger.hpp"
 #include "sync/sync_manager.hpp"
+#include "file_dialog.hpp"
 
 const char *ORGANIZATION_NAME = "ElectronPass";
 const char *APPLICATION_NAME = "ElectronPass";
@@ -67,6 +68,7 @@ int main(int argc, char *argv[]) {
     globals::sync_manager.init();
     globals::clipboard.init();
 
+    FileDialog file_dialog;
     Passwords passwords;
     Setup setup;
     engine.rootContext()->setContextProperty("clipboard", &globals::clipboard);
@@ -75,6 +77,7 @@ int main(int argc, char *argv[]) {
     engine.rootContext()->setContextProperty("dataHolder", &globals::data_holder);
     engine.rootContext()->setContextProperty("syncManager", &globals::sync_manager);
     engine.rootContext()->setContextProperty("walletMerger", &globals::wallet_merger);
+    engine.rootContext()->setContextProperty("fileDialog", &file_dialog);
 
     engine.load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
 

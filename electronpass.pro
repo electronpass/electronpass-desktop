@@ -12,6 +12,7 @@ HEADERS = app/clipboard.hpp \
           app/settings.hpp \
           app/setup.hpp \
           app/wallet_merger.hpp \
+          app/file_dialog.hpp \
           app/sync/auth_server.hpp \
           app/sync/dropbox.hpp \
           app/sync/gdrive.hpp \
@@ -31,6 +32,7 @@ SOURCES = app/clipboard.cpp \
           app/settings.cpp \
           app/setup.cpp \
           app/wallet_merger.cpp \
+          app/file_dialog.cpp \
           app/sync/auth_server.cpp \
           app/sync/dropbox.cpp \
           app/sync/gdrive.cpp \

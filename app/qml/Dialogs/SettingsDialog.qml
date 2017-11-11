@@ -88,8 +88,16 @@ Dialog {
                         flat: true
                         highlighted: true
                         onClicked: {
-                            setFileDialog(0)
-                            fileDialog.open()
+                            var filename = fileDialog.save("electronpass.wallet")
+                            if (filename != "") {
+                                var success = dataHolder.backup_wallet(filename)
+                                if (success) {
+                                    toolTip.text = "Backup file created successfully."
+                                } else {
+                                    toolTip.text = "Backup failed"
+                                }
+                                toolTip.show()
+                            }
                         }
                     }
                     Button {
@@ -99,8 +107,29 @@ Dialog {
                         flat: true
                         highlighted: true
                         onClicked: {
-                            setFileDialog(2)
-                            fileDialog.open()
+                            var filename = fileDialog.open_file()
+                            if (filename != "") {
+                                var error = dataHolder.restore_wallet(filename, "")
+                                if (error == 0) {
+                                    // Actually weird, wallet encrypted with empty password
+                                    toolTip.text = "Import successful."
+                                    refreshUI()
+                                } else if (error == 1) {
+                                    passwordDialog.path = filename
+                                    passwordDialog.open()
+                                } else if (error ==  2) {
+                                    messageDialog.openWithMsg("Wallet is corrupted",
+                                                              "Wallet file seems to be corrupted.")
+                                    toolTip.text = "Import failed."
+                                    toolTip.show()
+                                } else if (error == 3) {
+                                    messageDialog.openWithMsg("File could not be read",
+                                                              "Wallet file seems to be missing or it has wrong " +
+                                                              "permissions set.")
+                                    toolTip.text = "Import failed."
+                                    toolTip.show()
+                                }
+                            }
                         }
                     }
                 }
@@ -116,8 +145,17 @@ Dialog {
                         highlighted: true
                         flat: true
                         onClicked: {
-                            setFileDialog(1)
-                            fileDialog.open()
+                            // TODO: Close #45
+                            var filename = fileDialog.save("electronpass.csv")
+                            if (filename != "") {
+                                var success = dataHolder.export_to_csv(filename)
+                                if (success) {
+                                    toolTip.text = "Exported to csv successfully."
+                                } else {
+                                    toolTip.text = "Export to csv failed"
+                                }
+                                toolTip.show()
+                            }
                         }
                     }
                     Button {
@@ -428,80 +466,6 @@ Dialog {
                 if (!running) { toolTip.visible = false }
             }
         }
-    }
-
-    function setFileDialog(exportType) {
-        fileDialog.selectMultiple = false
-        fileDialog.selectExisting = false
-        if (exportType == 0) {
-            fileDialog.exportType = 0
-            fileDialog.title = "Please choose a backup location."
-        } else if (exportType == 1) {
-            fileDialog.exportType = 1
-            fileDialog.title = "Please choose a csv export location."
-        } else if (exportType == 2) {
-            fileDialog.exportType = 2
-            fileDialog.title = "Please choose a backup file."
-            fileDialog.selectExisting = true
-        }
-    }
-
-    FileDialog {
-        id: fileDialog
-        title: "This title should be set from setFileDialog function."
-        folder: shortcuts.home
-        selectMultiple: false
-        selectExisting: false
-        property int exportType: 0
-        onVisibleChanged: {
-            if (visible) ignoreNextFocusChanged()  // Do not lock when this dialog is opened
-        }
-        // Backup types:
-        //  0 - create a backup file
-        //  1 - export to csv
-        //  2 - import from backup file
-        onAccepted: {
-            var url = Qt.resolvedUrl(fileDialog.fileUrl)
-            if (exportType == 0) {
-                var success = dataHolder.backup_wallet(url)
-                if (success) {
-                    toolTip.text = "Backup file created successfully."
-                } else {
-                    toolTip.text = "Backup failed"
-                }
-                toolTip.show()
-            } else if (exportType == 1) {
-                var success = dataHolder.export_to_csv(url)
-                if (success) {
-                    toolTip.text = "Exported to csv successfully."
-                } else {
-                    toolTip.text = "Export to csv failed"
-                }
-                toolTip.show()
-            } else if (exportType == 2) {
-                var success = dataHolder.restore_wallet(url, "")
-                if (success == 0) {
-                    // Actually weird, wallet encrypted with empty password
-                    toolTip.text = "Import successful."
-                    refreshUI()
-                } else if (success == 1) {
-                    passwordDialog.path = url
-                    passwordDialog.open()
-                } else if (success ==  2) {
-                    messageDialog.openWithMsg("Wallet is corrupted",
-                                              "Wallet file seems to be corrupted.")
-                    toolTip.text = "Import failed."
-                    toolTip.show()
-                } else if (success == 3) {
-                    messageDialog.openWithMsg("File could not be read",
-                                              "Wallet file seems to be missing or it has wrong " +
-                                              "permissions set.")
-                    toolTip.text = "Import failed."
-                    toolTip.show()
-                }
-            }
-        }
-        onRejected: {}
     }
 
     Dialog {

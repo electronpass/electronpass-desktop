@@ -265,19 +265,16 @@ void DataHolder::open_url(const QString &url) {
     QDesktopServices::openUrl(QUrl::fromUserInput(url));
 }
 
-bool DataHolder::backup_wallet(const QString &file_url) const {
-    QUrl url(file_url);
+bool DataHolder::backup_wallet(const QString &filename) const {
 
-    std::string backup_path = url.toLocalFile().toStdString();
     std::string current_path = globals::settings.get_data_location().toStdString();
 
-    bool success = file_stream::copy_file(current_path, backup_path);
+    bool success = file_stream::copy_file(current_path, filename.toStdString());
     return success;
 }
 
-int DataHolder::restore_wallet(const QString &file_url, QString password) {
-    QUrl url(file_url);
-    std::string path = url.toLocalFile().toStdString();
+int DataHolder::restore_wallet(const QString &filename, QString password) {
+    std::string path = filename.toStdString();
 
     bool read_success;
     std::string data = file_stream::read_file(read_success, path);
@@ -302,11 +299,9 @@ int DataHolder::restore_wallet(const QString &file_url, QString password) {
     return load_error;
 }
 
-bool DataHolder::export_to_csv(const QString &file_url) const {
-    QUrl url(file_url);
+bool DataHolder::export_to_csv(const QString &filename) const {
 
-    std::string export_path = url.toLocalFile().toStdString();
     std::string export_string = electronpass::serialization::csv_export(wallet);
 
-    return file_stream::write_file(export_string, export_path);
+    return file_stream::write_file(export_string, filename.toStdString());
 }

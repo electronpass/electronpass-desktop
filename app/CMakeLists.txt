@@ -11,6 +11,7 @@ set(SOURCES
         convert_field.cpp
         file_stream.cpp
         item_template.cpp
+        file_dialog.cpp
 
         sync/gdrive.cpp
         sync/auth_server.cpp
