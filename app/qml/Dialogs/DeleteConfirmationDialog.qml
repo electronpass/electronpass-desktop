@@ -24,8 +24,11 @@ Dialog {
     standardButtons: Dialog.Ok | Dialog.Cancel
     modal: true
 
-    x: (parent.width - width) / 2
-    y: (parent.height - height) / 2
+    x: (window.width - width) / 2
+    y: (window.height - height) / 2
+
+    width: Math.min(window.width * 0.9, 400)
+    height: Math.min(parent.height * 0.4, 100)
 
     property int index_to_delete: 0
 
