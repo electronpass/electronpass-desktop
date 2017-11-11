@@ -145,17 +145,7 @@ Dialog {
                         highlighted: true
                         flat: true
                         onClicked: {
-                            // TODO: Close #45
-                            var filename = fileDialog.save("electronpass.csv")
-                            if (filename != "") {
-                                var success = dataHolder.export_to_csv(filename)
-                                if (success) {
-                                    toolTip.text = "Exported to csv successfully."
-                                } else {
-                                    toolTip.text = "Export to csv failed"
-                                }
-                                toolTip.show()
-                            }
+                            confirmCsvExport.open()
                         }
                     }
                     Button {
@@ -467,6 +457,38 @@ Dialog {
             }
         }
     }
+
+    Dialog {
+        id: confirmCsvExport
+        modal: true
+        title: qsTr("Export to csv")
+
+        standardButtons: Dialog.Cancel | Dialog.Ok
+
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+
+        ColumnLayout {
+            anchors.fill: parent
+            Label {
+                text: qsTr("Are you REALLY sure that you want to export all your passwords to plain text?")
+                wrapMode: Text.WordWrap
+            }
+        }
+        onAccepted: {
+            var filename = fileDialog.save("electronpass.csv")
+            if (filename != "") {
+                var success = dataHolder.export_to_csv(filename)
+                if (success) {
+                    toolTip.text = "Exported to csv successfully."
+                } else {
+                    toolTip.text = "Export to csv failed"
+                }
+                toolTip.show()
+            }
+        }
+    }
+
 
     Dialog {
         id: passwordDialog
