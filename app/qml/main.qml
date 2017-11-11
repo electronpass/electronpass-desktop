@@ -389,6 +389,10 @@ ApplicationWindow {
         itemsList.model = dataHolder.get_number_of_items()
         if (index < dataHolder.get_number_of_items()) itemsList.setItemIndex(index)
         else itemsList.setItemIndex(-1)
+
+        if (dataHolder.get_number_of_items() == 0) {
+          detailsPane.hideDetails()
+        }
     }
 
     function lockGUI() {
