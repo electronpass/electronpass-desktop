@@ -14,7 +14,7 @@ chmod +x install-dependencies.sh
 chmod +x build.sh
 ./build.sh
 
-# package
+# create package
 chmod +x create-linux-appimage.sh
 ./create-linux-appimage.sh
 mkdir upload
