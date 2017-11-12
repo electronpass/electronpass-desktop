@@ -14,6 +14,12 @@ chmod +x install-dependencies.sh
 chmod +x build.sh
 ./build.sh
 
+# configure fuse
+apt-get install fuse # if not yet installed
+modprobe fuse
+user="$(whoami)"
+usermod -a -G fuse $user
+
 # create package
 chmod +x create-linux-appimage.sh
 ./create-linux-appimage.sh
