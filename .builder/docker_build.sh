@@ -1,8 +1,5 @@
 #!/bin/bash
 
-QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
-source $QT_ENV_SCRIPT
-
 # clone sources
 git clone https://github.com/electronpass/electronpass-desktop.git
 git clone https://github.com/electronpass/credentials.git

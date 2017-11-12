@@ -1,53 +1,14 @@
 language: cpp
-sudo: true
-dist: trusty
+sudo: required
+services:
+  - docker
 
-compiler:
-  - gcc
-  - clang
+before_install:
+  - cd .builder/
+  - docker build -t builder .
 
-addons:
-  apt:
-    sources:
-      - sourceline: 'ppa:beineri/opt-qt591-trusty'
-    packages:
-      - qt59base
-      - qt59graphicaleffects
-      - qt59quickcontrols2
-      - qt59quickcontrols
-      - qt59svg
-      - qt59declarative
-      - libgl1-mesa-dev
-
-# before_install:
-  # - if [ "$CXX" = "g++" ]; then export CXX="g++-5" CC="gcc-5"; fi
-  # - if [ "$CXX" = "clang++" ]; then export CXX="clang++-3.8" CC="clang-3.8"; fi
-
-before_script:
-  - QT_ENV_SCRIPT=$(find /opt -name 'qt*-env.sh')
-  - source $QT_ENV_SCRIPT
-
-  # clone and decrypt API keys
-  # refer to https://github.com/electronpass/credentials for more information
-  - cp app/sync/keys.default.hpp app/sync/keys.hpp
-  - git clone https://github.com/electronpass/credentials.git
-  - python3 credentials/configure.py credentials/keys.json.asc ${keys_encryption_password} app/sync/keys.hpp
 script:
-  # - mkdir build
-  - chmod +x install-dependencies.sh
-  - chmod +x build.sh
-  - ./build.sh
-after_success:
-  # Create and upload appimage
-  - chmod +x create-linux-appimage.sh
-  - ./create-linux-appimage.sh
-  - mkdir upload
-  - mv ElectronPass*.AppImage upload
-
-  # upload to github releases (many thanks to https://github.com/probonopd)
-  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-  - bash ./upload.sh upload/*
-  - curl --upload-file ./upload/* https://transfer.sh
+  - docker run --name builder -e TRAVIS_REPO_SLUG=electronpass/electronpass-desktop -e GITHUB_TOKEN=${GITHUB_TOKEN} -e keys_encryption_password=${keys_encryption_password} -i -t builder
 
 branches:
   except:
