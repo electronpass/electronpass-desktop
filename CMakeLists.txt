@@ -28,6 +28,6 @@ set(REQUIRED_QT_VERSION "5.7.0")
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED COMPONENTS
         Core Qml Quick Widgets QuickControls2)
 
-include_directories(dependencies)
+include_directories(dependencies app)
 
 add_subdirectory(app)
