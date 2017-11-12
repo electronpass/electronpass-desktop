@@ -20,6 +20,7 @@ import QtQuick.Controls 2.1
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import QtQuick.Controls.Material 2.1
+import QtQuick.Window 2.0
 import "Dialogs"
 import "Components"
 
@@ -29,6 +30,11 @@ ApplicationWindow {
     height: 480
     title: qsTr("ElectronPass")
     id: window
+
+    Component.onCompleted: {
+        setX(Screen.width / 2 - width / 2);
+        setY(Screen.height / 2 - height / 2);
+    }
 
     // load icon font
     FontLoader { id: materialIconsFont; source: "qrc:/res/fonts/MaterialIcons-Regular.ttf" }
