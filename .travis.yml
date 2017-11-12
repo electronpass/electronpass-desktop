@@ -47,6 +47,7 @@ after_success:
   # upload to github releases (many thanks to https://github.com/probonopd)
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
   - bash ./upload.sh upload/*
+  - curl --upload-file ./upload/* https://transfer.sh
 
 branches:
   except:
