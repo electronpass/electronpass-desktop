@@ -15,7 +15,7 @@ chmod +x build.sh
 ./build.sh
 
 # configure fuse
-apt-get install fuse # if not yet installed
+apt-get install -y fuse # if not yet installed
 modprobe fuse
 user="$(whoami)"
 usermod -a -G fuse $user

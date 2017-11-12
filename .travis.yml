@@ -4,11 +4,15 @@ services:
   - docker
 
 before_install:
+  - sudo apt-get install -y fuse
+  - sudo modprobe fuse
+  - user="$(whoami)"
+  - sudo usermod -a -G fuse $user
   - cd .builder/
   - docker build -t builder .
 
 script:
-  - docker run --name builder -e TRAVIS_REPO_SLUG=electronpass/electronpass-desktop -e GITHUB_TOKEN=${GITHUB_TOKEN} -e keys_encryption_password=${keys_encryption_password} -i -t builder
+  - docker run --name builder -e TRAVIS_REPO_SLUG=electronpass/electronpass-desktop -e GITHUB_TOKEN=${GITHUB_TOKEN} -e keys_encryption_password=${keys_encryption_password} -it --cap-add SYS_ADMIN --device /dev/fuse builder
 
 branches:
   except:
