@@ -16,7 +16,7 @@ RUN apt-get update
 RUN apt-get update
 
 # Install MongoDB package (.deb)
-RUN apt-get install -y build-essential cmake curl fuse python3 git wget qt5-default qtbase5-dev qml-module-qtgraphicaleffects qtquickcontrols2-5-dev libqt5svg5 qtdeclarative5-dev libgl1-mesa-dev desktop-file-utils
+RUN apt-get install -y build-essential cmake curl fuse python3 git wget libgl1-mesa-dev desktop-file-utils qt5-default qtbase5-dev qtquickcontrols2-5-dev libqt5svg5 qtdeclarative5-dev qml-module-qtgraphicaleffects qml-module-qtquick-controls2 qml-module-qtquick-layouts qml-module-qt-labs-settings qml-module-qtquick-dialogs
 
 ##################### INSTALLATION END #####################
 
