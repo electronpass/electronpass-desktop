@@ -1,0 +1,27 @@
+image: Visual Studio 2017
+
+configuration: Release
+
+install:
+    - set QTDIR=C:\Qt\5.9.3\msvc2015
+    - set PATH=%PATH%;%QTDIR%\bin
+
+before_build:
+    - cp .builder\* .
+    - python prepare_cryptopp.py
+    - git clone https://github.com/electronpass/libelectronpass-cpp
+    - cd libelectronpass-cpp
+    - git checkout develop  # branch should be parameter
+    - cd ..
+
+build_script:
+    - ps: .\build.ps1
+
+after_build:
+    - 7z a ElectronPass.zip ElectronPass\*
+
+test: off
+
+artifacts:
+  - path: ElectronPass.zip
+    name: ElectronPass
