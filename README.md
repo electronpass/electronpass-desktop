@@ -1,5 +1,7 @@
 # ElectronPass
 [![Build Status](https://travis-ci.org/electronpass/electronpass-desktop.svg?branch=develop)](https://travis-ci.org/electronpass/electronpass-desktop)
+[![Build Status](https://ci.appveyor.com/api/projects/status/github/electronpass/electronpass-desktop))](https://ci.appveyor.com/project/electronpass/electronpass-desktop)
+
 
 Desktop client written in qml.
 
