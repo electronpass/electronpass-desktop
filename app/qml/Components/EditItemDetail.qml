@@ -106,6 +106,17 @@ RowLayout {
         font.pixelSize: 18
         Layout.rightMargin: -16
         visible: editItemDetail.secure
+        text: qsTr("\uE417")
+        font.family: materialIconsFont.name
+        Material.foreground: editItemDetail.contentColor
+        onClicked: {
+            editItemDetailContentHolder.children[0].toggleVisibility()
+        }
+    }
+    ToolButton {
+        font.pixelSize: 18
+        Layout.rightMargin: -16
+        visible: editItemDetail.secure
         text: qsTr("\uE8B9")
         font.family: materialIconsFont.name
         Material.foreground: editItemDetail.contentColor

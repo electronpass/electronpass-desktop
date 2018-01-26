@@ -26,6 +26,7 @@ TextField {
     inputMethodHints: Qt.ImhSensitiveData
     Layout.fillWidth: true
     text: content
+    property bool secureTextVisible: false
     font.pixelSize: 14
     color: greyTextColor
     property string content: editItemDetail.content
@@ -33,6 +34,17 @@ TextField {
     background.opacity: bcgOpacity
     placeholderText: "Content"
     validator: (editItemDetail.type == "pin") ? digitsOnlyRegex : titleLabel.validator
+    echoMode: TextInput.Password
+
+    function toggleVisibility() {
+        if (editItemDetail.secure && secureTextVisible) {
+            echoMode = TextInput.Password
+            secureTextVisible = false;
+        } else if (editItemDetail.secure) {
+            echoMode = TextInput.Normal
+            secureTextVisible = true;
+        }
+    }
 
     onActiveFocusChanged: {
         if (activeFocus) {
@@ -57,12 +69,14 @@ TextField {
 
     Component.onCompleted: {
         if (editItemDetail.secure) {
-          font.family = robotoMonoFont.name;
+            font.family = robotoMonoFont.name;
 
-          var component = Qt.createComponent("PassStrengthIndicator.qml");
-          var width = editItemDetailContent.width
-          background = component.createObject(null, {"visible": editItemDetail.secure, "height": editItemDetailContent.height-12, "width": width});
-          editItemDetailContent.width = width;
+            var component = Qt.createComponent("PassStrengthIndicator.qml");
+            var width = editItemDetailContent.width
+            background = component.createObject(null, {"visible": editItemDetail.secure, "height": editItemDetailContent.height-12, "width": width});
+            editItemDetailContent.width = width;
+        } else {
+            echoMode = TextInput.Normal
         }
     }
 }

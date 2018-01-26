@@ -40,7 +40,7 @@ Dialog {
         dataHolder.cancel_edit()
         itemsList.model = dataHolder.get_number_of_items()
     }
-    width: Math.min(parent.width * 0.9, 420)
+    width: Math.min(parent.width * 0.9, 450)
     height: Math.min(parent.height * 0.9, 600)
 
     //timer for destruction
