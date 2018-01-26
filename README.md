@@ -27,9 +27,6 @@ Installation on Ubuntu is harder, since it doesn't have Qt 5.8 in its repos (yet
 
 # Downloading binaries
 
-## Note
-Binaries are not working.That's because travis does not like us... We are trying to fix it...
-
 ### Releases
 
 You can download pre-build binaries from [releases](https://github.com/electronpass/electronpass-desktop/releases) page of this repository.
@@ -37,8 +34,10 @@ You can download pre-build binaries from [releases](https://github.com/electronp
 There is also a **Arch Linux repository** along with instructions for using it available [here](https://github.com/electronpass/arch-packages).
 
 ### Development
+Linux binaries are not working.That's because travis does not like us... We are trying to fix it...
 
-If you want to try latest features, you can download the current AppImage from continuous release build.
+Windows binaries can be downloaded [here](https://ci.appveyor.com/project/electronpass/electronpass-desktop/build/artifacts).
+
 
 # Building
 The following instructions are for Unix/Linux systems. If you want to build on Windows look at [Building for Windows](https://github.com/electronpass/electronpass-desktop/blob/develop/Build-Win.md)

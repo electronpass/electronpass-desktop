@@ -33,4 +33,4 @@ artifacts:
 
 branches:
     except:
-        - /^(?i:continuous)$/
+        - continuous
