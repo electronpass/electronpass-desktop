@@ -7,13 +7,17 @@ install:
     - set PATH=%PATH%;%QTDIR%\bin
 
 before_build:
-    - ls
     - ps: cp .builder\* .
+    - # Download and compile Crypto++
     - python prepare_cryptopp.py
     - git clone https://github.com/electronpass/libelectronpass-cpp
     - cd libelectronpass-cpp
     - git checkout develop  # branch should be parameter
     - cd ..
+    - # setup API keys
+    - git clone https://github.com/electronpass/credentials.git
+    - cp app/sync/keys.default.hpp app/sync/keys.hpp
+    - py credentials/configure.py credentials/keys.json.asc %keys_encryption_password% app/sync/keys.hpp
 
 build_script:
     - ps: .\build.ps1
@@ -26,3 +30,7 @@ test: off
 artifacts:
   - path: ElectronPass.zip
     name: ElectronPass
+
+branches:
+    except:
+        - /^(?i:continuous)$/

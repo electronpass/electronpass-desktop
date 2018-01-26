@@ -57,8 +57,6 @@ copy-item -path $headerFiles -destination dependencies\electronpass\json
 
 Write-Host("Building ElectronPass Desktop")
 
-# TODO: add actual keys, so sync will be possible
-cp app\sync\keys.default.hpp app\sync\keys.hpp
 .\build_helper.bat
 
 cd build
