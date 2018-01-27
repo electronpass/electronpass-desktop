@@ -14,7 +14,7 @@ script:
   - bash build.sh
   - bash create-linux-appdir.sh
   - # create deb
-  - sudo apt-get install ruby ruby-dev rubygems build-essential
+  - sudo apt-get install ruby ruby-dev rubygems-integration build-essential
   - sudo gem install --no-ri --no-rdoc fpm
   - fpm --version # debug
   - fpm -s appdir -t deb
